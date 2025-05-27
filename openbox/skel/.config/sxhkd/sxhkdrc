@@ -1,24 +1,26 @@
 alt + shift + Return
 	st
-alt + w
-	brave-browser-stable
-alt + m
-	geary
+alt + b
+	wswap-X
+alt + c
+	better-control
+alt + d
+	rofi -show drun
 alt + e
 	mousepad
 alt + f
 	pcmanfm
-alt + d
-	rofi -show drun
 alt + j
 	jgmenu_run
-alt + p
-	scrot
-alt + x
-	rofi -show power-menu -modi power-menu:rofi-power-menu
 alt + l
 	slock
-alt + b
-	wswap-X
+alt + m
+	geary
+alt + p
+	scrot
 alt + r
 	gmrun
+alt + w
+	brave-browser-stable
+alt + x
+	rofi -show power-menu -modi power-menu:rofi-power-menu
