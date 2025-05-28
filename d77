@@ -220,7 +220,7 @@ build_variant() {
     A11Y_PKGS="espeakup void-live-audio brltty"
     PKGS="dialog cryptsetup lvm2 mdadm void-docs-browse xtools-minimal xmirror chrony tmux $A11Y_PKGS $GRUB_PKGS"
     FONTS="font-misc-misc terminus-font dejavu-fonts-ttf"
-    WAYLAND_PKGS="$GFX_WL_PKGS $FONTS orca nwg-launchers"
+    WAYLAND_PKGS="$GFX_WL_PKGS $FONTS orca"
     XORG_PKGS="$GFX_PKGS $FONTS xorg-minimal xorg-input-drivers setxkbmap xauth orca"
     SERVICES="sshd chronyd"
 
@@ -240,14 +240,14 @@ build_variant() {
 	    COMMON=yes
 	    X11=yes
 	    POLY=yes
-            PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE base-devel bspwm dmenu dunst polybar redshift redshift-gtk scrot slock slstatus sxhkd st volumeicon xautolock xcompmgr"
+            PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE bspwm dmenu dunst polybar redshift redshift-gtk scrot slock sxhkd st volumeicon xautolock xcompmgr"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
         ;;
 	dwm)
 	    COMMON=yes
 	    X11=yes
 	    DWM=yes
-            PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE base-devel dwm dmenu fontconfig-devel freetype-devel gcr-devel gcr4-devel glibc-devel gtk+3-devel harfbuzz-devel imlib2-devel libX11-devel libXft-devel libXinerama-devel webkit2gtk-devel dunst redshift scrot slock slstatus sxhkd st xautolock xcompmgr"
+            PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE dwm dmenu dunst redshift scrot slock slstatus sxhkd st xautolock xcompmgr"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
         ;;
 	fluxbox)
@@ -259,7 +259,7 @@ build_variant() {
 	hyprland)
 	    COMMON=yes
 	    WAY=yes
-            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $CALAMARES $D77_CORE grim hyprland hyprland-qtutils hyprlock hyprpaper ImageMagick pavucontrol qt5-wayland qt6-wayland swaybg swayidle swayimg swaylock SwayNotificationCenter wayland-devel wayland-protocols Waybar wlsunset wmenu xorg-server-xwayland xwayland-satellite"
+            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $CALAMARES $D77_CORE grim hyprland hyprland-qtutils hyprlock hyprpaper ImageMagick nwg-launchers pavucontrol qt5-wayland qt6-wayland swaybg swayidle swayimg swaylock SwayNotificationCenter wayland-devel wayland-protocols Waybar wlsunset wmenu xorg-server-xwayland xwayland-satellite"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
         ;;
 	i3wm)
@@ -272,7 +272,7 @@ build_variant() {
 	labwc)
 	    COMMON=yes
 	    WAY=yes
-            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $CALAMARES $D77_CORE grim ImageMagick labwc labwc-menu-generator labwc-tweaks-qt pavucontrol qt5-wayland qt6-wayland swaybg swayidle swayimg swaylock SwayNotificationCenter Waybar wlsunset xorg-server-xwayland xwayland-satellite"
+            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $CALAMARES $D77_CORE grim ImageMagick labwc labwc-menu-generator labwc-tweaks-qt nwg-launchers pavucontrol qt5-wayland qt6-wayland swaybg swayidle swayimg swaylock SwayNotificationCenter Waybar wlsunset xorg-server-xwayland xwayland-satellite"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
         ;;
 	leftwm)
@@ -293,7 +293,7 @@ build_variant() {
 	    COMMON=yes
 	    WAY=yes
 	    NIRI=yes
-            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $CALAMARES $D77_CORE fuzzel gnome-keyring grim ImageMagick niri pavucontrol qt5-wayland qt6-wayland swayidle swaylock swww xdg-desktop-portal-gnome xdg-desktop-portal-gtk Waybar wlsunset xorg-server-xwayland xwayland-satellite"
+            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $CALAMARES $D77_CORE fuzzel gnome-keyring grim ImageMagick niri nwg-launchers pavucontrol qt5-wayland qt6-wayland swayidle swaylock swww xdg-desktop-portal-gnome xdg-desktop-portal-gtk Waybar wlsunset xorg-server-xwayland xwayland-satellite"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
         ;;
 	openbox)
@@ -313,7 +313,7 @@ build_variant() {
 	sway)
 	    COMMON=yes
 	    WAY=yes
-            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $CALAMARES $D77_CORE grim ImageMagick pavucontrol qt5-wayland qt6-wayland sway swaybg swayidle swayimg swaylock SwayNotificationCenter Waybar wlsunset wmenu xorg-server-xwayland xwayland-satellite"
+            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $CALAMARES $D77_CORE grim ImageMagick nwg-launchers pavucontrol qt5-wayland qt6-wayland sway swaybg swayidle swayimg swaylock SwayNotificationCenter Waybar wlsunset wmenu xorg-server-xwayland xwayland-satellite"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
         ;;
 	xfce)
