@@ -13,7 +13,7 @@ changelog="https://github.com/FreeTubeApp/FreeTube/releases/tag/v${version}"
 distfiles="https://github.com/FreeTubeApp/Freetube/releases/download/v${version}-beta/${pkgname%-bin}_${version}_amd64.deb
  https://github.com/FreeTubeApp/FreeTube/blob/v${version}-beta/LICENSE"
 checksum="0cf6605b489493752946b7bf995a4dbcaf95b8df9f6c42f9ad181ed007ad87b2
- 8dafa64b70ea50aba4e750b9e14b96dd804ecb6e32cb7ed076162bdd362821ec"
+ 82d6f3984855afca9e708a49ec69a4cbd41c3c18e212e2060af0896abafc802a"
 nopie=yes
 
 do_install() {
