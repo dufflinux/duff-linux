@@ -1,0 +1,30 @@
+#!/bin/bash
+
+printf "Installing packages........\n"
+sudo xbps-install xorg-minimal xterm git cabal-install ghc libX11-devel libXft-devel libXinerama-devel libXrandr-devel libXScrnSaver-devel pkg-config dmenu slock trayer-srg ncurses-devel xmobar
+
+printf "Install Cabal........\n"
+cabal update
+
+printf "Install XMonad........\n"
+cabal install --lib xmonad xmonad-contrib X11
+cabal install xmonad
+
+printf "Adding Cabal's BIN dir to PATH......\n"
+echo "export PATH="$HOME/.cabal/bin:$PATH"" >> ~/.bashrc
+source ~/.bashrc
+
+printf "XMonad session........\n"
+sudo mkdir -p /usr/share/xsessions
+sudo tee /usr/share/xsessions/xmonad.desktop > /dev/null << EOF
+[Desktop Entry]
+Name=XMonad
+Comment=Lightweight tiling window manager
+Exec=dbus-launch /home/dani77/.cabal/bin/xmonad
+Type=Application
+EOF
+
+printf "XMonad configs........\n"
+cp -r xmonad/ .config/
+cp -r xmobar/ .config/
+
