@@ -55,7 +55,7 @@ myLayout = tiled ||| Mirror tiled ||| Full ||| threeCol
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawnOnce "feh --bg-fill ~/Wallpaper/Haskell.png"
+  spawnOnce "feh --bg-fill --randomize ~/Wallpaper/"
   spawnOnce "synclient TapButton1=1"
   spawnOnce "synclient TapButton2=3"
   spawnOnce "synclient TapButton3=2"
