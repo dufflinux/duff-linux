@@ -159,11 +159,12 @@ EOF
 	cp -r xmo*/ ~/.config/
 	cp -r Wallpaper/ ~/
 	cp -r ../common/config/rofi ~/.config/
+	cp -r ../common/config/dunst ~/.config/
 
 # XMonad Extra
     echo
     echo "Xmonad Dependencies"
-        pkg="dbus dmenu gmrun NetworkManager rofi st slock sddm trayer-srg xmobar"
+        pkg="dbus dmenu dunst feh gmrun NetworkManager redshift rofi st slock sddm trayer-srg udiskie xautolock xcompmgr xf86-input-synaptics xmobar"
         svs="sddm dbus NetworkManager"
         install_pkg "$pkg"
         enable_svs "$svs"
