@@ -165,10 +165,11 @@ EOF
 # XMonad Configs
     echo
     echo "XMonad and Xmobar configs"
-	cp -r xmo*/ ~/.config/
-	cp -r Wallpaper/ ~/
-	cp -r ../common/config/rofi ~/.config/
-	cp -r ../common/config/dunst ~/.config/
+	cp -r ./xmonad /home/$username/.config/
+	cp -r ./xmobar /home/$username/.config/
+	cp -r ./Wallpaper /home/$username/
+	cp -r ../common/config/rofi /home/$username/.config/
+	cp -r ../common/config/dunst /home/$username/.config/
 
 # XMonad Extra
     echo
