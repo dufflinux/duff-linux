@@ -1,21 +1,17 @@
 import XMonad
-
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
-
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Util.SpawnOnce
-
 import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
-
 import XMonad.Layout.Magnifier
 import XMonad.Layout.ThreeColumns
-
-import XMonad.Hooks.EwmhDesktops
-
+import XMonad.Layout.Spacing
+import XMonad.Layout.Gaps
 
 main :: IO ()
 main = xmonad
@@ -29,14 +25,17 @@ myConfig = def
     , layoutHook = myLayout      -- Use custom layouts
     , manageHook = myManageHook  -- Match on certain windows
     , startupHook = myStartupHook -- Autostart apps
+    , focusedBorderColor = "#d4d4d4"
+    , normalBorderColor  = "#3c4043"
     }
   `additionalKeysP`
     [ ("M-d", spawn "rofi -show drun")
     , ("M-x", spawn "rofi -show powermenu -modi powermenu:rofi-power-menu")
-    , ("M-C-p", unGrab *> spawn "scrot -s"        )
-    , ("M-S-b"  , spawn "brave-browser-stable"                   )
-    , ("M-c"  , spawn "better-control"                   )
-    , ("M-C-t"  , spawn "slock"                   )
+    , ("M-C-p", unGrab *> spawn "scrot -s")
+    , ("M-S-b"  , spawn "brave-browser-stable")
+    , ("M-c"  , spawn "better-control")
+    , ("M-C-t"  , spawn "slock")
+    , ("M-S-r", spawn "xmonad --recompile --restart")
     ]
 
 myManageHook :: ManageHook
@@ -45,7 +44,7 @@ myManageHook = composeAll
     , isDialog            --> doFloat
     ]
 
-myLayout = tiled ||| Mirror tiled ||| Full ||| threeCol
+myLayout = spacingWithEdge 5 $ gaps [(U, 5)] $ tiled ||| Mirror tiled ||| Full ||| threeCol
   where
     threeCol = magnifiercz' 1.3 $ ThreeColMid nmaster delta ratio
     tiled    = Tall nmaster delta ratio
