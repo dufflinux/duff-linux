@@ -222,7 +222,7 @@ do
                         ;;
 
 			"quit")
-				#. "$LIBDIR/fini"
+				. $LIBDIR/fini
 				printf "\033c"
 				exit
 			;;
