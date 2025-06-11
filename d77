@@ -132,7 +132,8 @@ include_dwm() {
 	cp ./common/power_menu "$INCLUDEDIR"/usr/bin/
 }
 
-include_openbox() {
+include_box() {
+    	PKGS="cbatticon conky jgmenu jq redshift-gtk volumeicon"
 	mkdir -p "$INCLUDEDIR"/usr/share/applications
 	cp ./common/jgmenu.desktop "$INCLUDEDIR"/usr/share/applications/
 }
@@ -199,7 +200,7 @@ build_variant() {
 	    DWM=
 	    NIRI=
 	    LXQT=
-	    OPENBOX=
+	    BOX=
 	    POLY=
 	    XFCE=
 	    ;;
@@ -258,7 +259,7 @@ build_variant() {
 	fluxbox)
 	    COMMON=yes
 	    X11=yes
-            PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE cbatticon conky fluxbox jgmenu jq redshift-gtk volumeicon"
+            PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE fluxbox"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
         ;;
 	hyprland)
@@ -303,9 +304,9 @@ build_variant() {
         ;;
 	openbox)
 	    COMMON=yes
-	    OPENBOX=yes
+	    BOX=yes
 	    X11=yes
-            PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE cbatticon conky jgmenu jq lxappearance-obconf menumaker obconf openbox redshift-gtk sxhkd tint2 tint2conf volumeicon"
+            PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE lxappearance-obconf menumaker obconf openbox sxhkd tint2 tint2conf"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
         ;;        
 	qtile)
@@ -361,8 +362,8 @@ EOF
         include_lxqt
     fi
 
-    if [ "$OPENBOX" = yes ]; then
-        include_openbox
+    if [ "$BOX" = yes ]; then
+        include_box
     fi
 
     if [ "$NIRI" = yes ]; then
