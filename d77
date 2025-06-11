@@ -258,6 +258,7 @@ build_variant() {
         ;;
 	fluxbox)
 	    COMMON=yes
+	    BOX=yes
 	    X11=yes
             PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE fluxbox"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
