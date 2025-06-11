@@ -77,8 +77,6 @@ update ()
 }
 
 # Questions
-read -p "Choose your language (us, de, fr, ...): " lang
-while true; do
     userlist="$(cut -d ":" -f1 /etc/passwd)"
     found=0
     read -p "Enter your username (lower_case): " username
@@ -92,7 +90,7 @@ while true; do
     done
     if [ "$found" -eq 1 ]; then
         echo -e "user found: \"$username\""
-        break
+
     else
         echo -"no user \"$username\""
         while true; do
@@ -107,7 +105,6 @@ while true; do
             esac
         done
     fi
-done
 
 # Sync & Update
     echo
@@ -149,7 +146,7 @@ done
 	cabal install --lib xmonad xmonad-contrib X11
     # Cabal's BIN dir to PATH
     echo "Adding Cabal's BIN dir to PATH"
-	echo "export PATH="$HOME/.cabal/bin:$PATH"" >> ~/.bashrc
+	echo export PATH="$HOME/.cabal/bin:$PATH" >> ~/.bashrc
 	source ~/.bashrc
     # XMonad Session
     echo "Creating XMonad Session"
