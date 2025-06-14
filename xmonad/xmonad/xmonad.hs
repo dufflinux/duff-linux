@@ -25,8 +25,9 @@ myConfig = def
     , layoutHook = myLayout      -- Use custom layouts
     , manageHook = myManageHook  -- Match on certain windows
     , startupHook = myStartupHook -- Autostart apps
-    , focusedBorderColor = "#d4d4d4"
-    , normalBorderColor  = "#3c4043"
+    , focusedBorderColor = "#bd93f9"
+    , normalBorderColor  = "#ff79c6"
+    , borderWidth = 3
     }
   `additionalKeysP`
     [ ("M-d", spawn "rofi -show drun")
@@ -44,7 +45,7 @@ myManageHook = composeAll
     , isDialog            --> doFloat
     ]
 
-myLayout = spacingWithEdge 5 $ gaps [(U, 5)] $ tiled ||| Mirror tiled ||| Full ||| threeCol
+myLayout = spacingWithEdge 3 $ gaps [(U, 3)] $ tiled ||| Mirror tiled ||| Full ||| threeCol
   where
     threeCol = magnifiercz' 1.3 $ ThreeColMid nmaster delta ratio
     tiled    = Tall nmaster delta ratio
