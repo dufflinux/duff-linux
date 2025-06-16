@@ -1,8 +1,7 @@
 #!/bin/bash
 #viyoriya
+#dani-77
 
-#DMENU_OPT=" -i -nb #2E3440 -nf #929496 -sb #929496 -sf #2E3440 -fn Iosevka:style=Regular:size=10"    
-#DMENU="dmenu -p   $DMENU_OPT"
 DMENU="dmenu -p   "
 
 SESSON_ID=$(loginctl session-status | awk 'NR==1{print $1}')
