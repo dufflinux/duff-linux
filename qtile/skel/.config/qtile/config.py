@@ -38,7 +38,23 @@ import colors
 import subprocess
  
 mod = "mod4"
-terminal = "kitty"
+
+def dynamic_launcher(qtile):
+	if qtile.core.name == "x11":
+		qtile.spawn("rofi -show drun")
+	elif qtile.core.name == "wayland":
+		qtile.spawn("nwggrid")
+
+def dynamic_wall(qtile):
+	if qtile.core.name == "x11":
+		qtile.spawn("wswap-X")
+	elif qtile.core.name == "wayland":
+		qtile.spawn("wswap-way")
+
+if qtile.core.name == "x11":
+	terminal = "st"
+elif qtile.core.name == "wayland":
+	terminal = "kitty"
 
 @hook.subscribe.startup_once
 def autostart():
@@ -92,13 +108,12 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     Key([mod], "i", lazy.widget["keyboardlayout"].next_keyboard(), desc="Next keyboard layout."),
-
-    Key([mod], "a", lazy.spawn("rofi -show drun"), desc="Rofi Menu"),
-    Key([mod], "b", lazy.spawn("wswap-way"), desc="Swap Wallpaper"),
+    Key([mod], "a", lazy.spawn("rofi -show drun"), desc="Menu"),
+    Key([mod], "b", lazy.function(dynamic_wall), desc="Swap Wallpaper"),
     Key([mod], "c", lazy.spawn("better-control"), desc="Control Panel"),
     Key([mod], "d", lazy.spawn("pcmanfm"), desc="Filemanager"),
     Key([mod], "m", lazy.spawn("geary"), desc="Web browser"),
-    Key([mod], "n", lazy.spawn("nwggrid"), desc="NWG Launcher"),
+    Key([mod], "n", lazy.function(dynamic_launcher)),
     Key([mod], "x", lazy.spawn("rofi -show power-menu -modi power-menu:rofi-power-menu"), desc="Rofi PowerMenu"),
     Key([mod], "y", lazy.spawn("slock"), desc="screen locker"),
     Key([mod], "w", lazy.spawn("brave-browser-stable"), desc="Web browser"),
@@ -123,7 +138,7 @@ for vt in range(1, 8):
     )
 workspaces = [
     {"name": " ", "key": "1", "matches": [Match(wm_class='kitty'), Match(wm_class='mousepad'), Match(wm_class='ranger'), Match(wm_class='geany')], "layout": "monadtall"},
-    {"name": " ", "key": "2", "matches": [Match(wm_class='Firefox'), Match(wm_class='brave-browser-stable'), Match(wm_class='org.gnome.Evolution-alarm-notify.desktop'), Match(wm_class='transmission-gtk.desktop'), Match(wm_class='geary')], "layout": "max"},
+    {"name": " ", "key": "2", "matches": [Match(wm_class='librewolf'), Match(wm_class='brave-browser-stable'), Match(wm_class='org.gnome.Evolution-alarm-notify.desktop'), Match(wm_class='transmission-gtk.desktop'), Match(wm_class='geary')], "layout": "max"},
     {"name": " ", "key": "3", "matches": [Match(wm_class='mpv'), Match(wm_class='deadbeef'),  Match(wm_class='cmus')], "layout": "monadtall"},
     {"name": " ", "key": "4", "matches": [Match(wm_class='abiword'), Match(wm_class='gimp,desktop'), Match(wm_class='Gnumeric')], "layout": "max"},
     {"name": " ", "key": "5", "matches": [Match(wm_class='telegram-desktop'), Match(wm_class='discord')], "layout": "monadtall"},
@@ -160,7 +175,7 @@ layouts = [
 widget_defaults = dict(
     font="hack",
     fontsize=12,
-    padding=3,
+    padding=2,
 )
 
 extension_defaults = widget_defaults.copy()
@@ -172,8 +187,8 @@ screens = [
     	wallpaper_mode='fill',        
 	top=bar.Bar(
             [	
-		widget.Image(filename='/usr/share/pixmaps/d77void.png', mouse_callbacks={'Button1': lazy.spawn('rofi -show drun')}),
-		widget.CurrentLayoutIcon(scale=0.7),
+		widget.Image(filename='/usr/share/pixmaps/d77void.png', scale = True, margin=3, rotate=45, mouse_callbacks={'Button1': lazy.function(dynamic_launcher)}),
+		widget.CurrentLayoutIcon(scale=0.6),
                 widget.CurrentLayout(),
                 widget.GroupBox(
 		highlight_method='block',
@@ -192,17 +207,17 @@ screens = [
                 widget.Clock(format=" %A, %d-%m-%Y %H:%M %p"),
 		widget.Spacer(),
 		#widget.StatusNotifier(),
-		#widget.HDD(),
+		widget.HDD(format=" {HDDPercent}%"),
 		widget.CPU(format=" {load_percent}%",
                 mouse_callbacks={'Button1': lazy.spawn(terminal + ' --class floating_shell -e htop')}),
-		widget.Memory(format="  {MemUsed:.0f}{mm}",interval=1.0,
+		widget.Memory(format=" {MemUsed:.0f}{mm}",interval=1.0,
                 mouse_callbacks={'Button1': lazy.spawn(terminal + ' --class floating_shell -e htop')}),
 		widget.Net(format='  {down:.0f}{down_suffix} ↓↑ {up:.0f}{up_suffix}',update_interval=1.0,
                 mouse_callbacks={'Button1': lazy.spawn(terminal + ' --class floating_shell -e nmtui')}),
 		widget.Volume(fmt="  {}",
                 mouse_callbacks={'Button3': lazy.spawn('pavucontrol')}),
 		widget.Battery(format = '  {percent:2.0%} {hour:d}:{min:02d}'),
-		widget.KeyboardLayout(configured_keyboards = ["de deadtilde", "pt", "us"],font = "Hack",fontsize = "12",fmt = '  {}'),
+		widget.KeyboardLayout(configured_keyboards = ["us", "de deadtilde", "pt"],font = "Hack",fontsize = "12",fmt = '  {}'),
 		widget.CheckUpdates(distro = 'Void',no_update_string=' No updates',update_interval=600,
 		mouse_callbacks={'Button1': lazy.spawn('qt-sudo xbps-install -Su -y')}),
 		widget.TextBox(text=" ", fontsize = 12,
