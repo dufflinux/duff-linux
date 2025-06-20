@@ -26,7 +26,7 @@
 
 from libqtile import bar, layout, qtile, widget, hook
 from libqtile.backend.wayland import InputConfig
-from libqtile.config import Click, Drag, Group, Key, Match, Screen, Rule
+from libqtile.config import Click, Drag, Group, Key, Match, Screen, Rule, ScratchPad, DropDown
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from qtile_extras.widget.decorations import GradientDecoration, BorderDecoration  # type: ignore
@@ -59,7 +59,7 @@ elif qtile.core.name == "wayland":
 @hook.subscribe.startup_once
 def autostart():
     home = os.path.expanduser('~/.config/qtile/autostart.sh')
-    subprocess.call(home)
+    subprocess.call([home])
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -122,6 +122,8 @@ keys = [
     Key([], "XF86AudioMute",lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ toggle")),
     Key([], "XF86MonBrightnessUp", lazy.spawn("xbacklight -inc 5")),
     Key([], "XF86MonBrightnessDown", lazy.spawn("xbacklight -dec 5")),
+    Key([], 'F12', lazy.group['scratchpad'].dropdown_toggle('term')),
+    Key([], 'F11', lazy.group['htop'].dropdown_toggle('term')),
 ]
 
 # Add key bindings to switch VTs in Wayland.
@@ -145,7 +147,13 @@ workspaces = [
 ]
 
 
-groups = []
+groups = [ ScratchPad("scratchpad", [
+        DropDown("term", "kitty", width=0.5, height=0.5, x=0.25, y=0.25, opacity=0.9),
+    ]),
+	ScratchPad("htop", [
+        DropDown("term", "kitty -e htop", width=0.5, height=0.5, x=0.25, y=0.25, opacity=0.9),
+    ])]
+
 for workspace in workspaces:
     matches = workspace["matches"] if "matches" in workspace else None
     layouts = workspace["layout"] if "layout" in workspace else None
@@ -155,7 +163,7 @@ for workspace in workspaces:
 
 qtile_colors = colors.d77
 
-layout_theme = {"border_width": 5, "border_focus": qtile_colors[33], "border_normal": qtile_colors[32], "margin": 5}
+layout_theme = {"border_width": 3, "border_focus": qtile_colors[32], "border_normal": qtile_colors[33], "margin": 5}
 
 layouts = [
      #layout.Columns(border_focus_stack=["#4d235c", "#686714"]),
@@ -217,7 +225,7 @@ screens = [
 		widget.Volume(fmt="  {}",
                 mouse_callbacks={'Button3': lazy.spawn('pavucontrol')}),
 		widget.Battery(format = '  {percent:2.0%} {hour:d}:{min:02d}'),
-		widget.KeyboardLayout(configured_keyboards = ["us", "de deadtilde", "pt"],font = "Hack",fontsize = "12",fmt = '  {}'),
+		widget.KeyboardLayout(configured_keyboards = ["de deadtilde", "pt", "us"],font = "Hack",fontsize = "12",fmt = ' 󰌌 {}'),
 		widget.CheckUpdates(distro = 'Void',no_update_string=' No updates',update_interval=600,
 		mouse_callbacks={'Button1': lazy.spawn('qt-sudo xbps-install -Su -y')}),
 		widget.TextBox(text=" ", fontsize = 12,
