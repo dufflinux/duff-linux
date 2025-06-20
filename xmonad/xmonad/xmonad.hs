@@ -5,9 +5,10 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.Hooks.EwmhDesktops
-import XMonad.Util.SpawnOnce
 import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
+import XMonad.Util.NamedScratchpad
+import XMonad.Util.SpawnOnce
 import XMonad.Layout.Magnifier
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.Spacing
@@ -37,12 +38,18 @@ myConfig = def
     , ("M-c"  , spawn "better-control")
     , ("M-C-t"  , spawn "slock")
     , ("M-S-r", spawn "xmonad --recompile --restart")
+    , ("M-S-s", namedScratchpadAction myScratchPads "terminal")
     ]
+
+myScratchPads :: [NamedScratchpad]
+myScratchPads = [ NS "terminal" "xterm -name scratchpad" (title =? "scratchpad") nonFloating ]
 
 myManageHook :: ManageHook
 myManageHook = composeAll
     [ className =? "Gimp" --> doFloat
     , isDialog            --> doFloat
+    , className =? "scratchpad" --> doFloat
+    , isDialog		  --> doFloat
     ]
 
 myLayout = spacingWithEdge 3 $ gaps [(U, 3)] $ tiled ||| Mirror tiled ||| Full ||| threeCol
@@ -55,7 +62,7 @@ myLayout = spacingWithEdge 3 $ gaps [(U, 3)] $ tiled ||| Mirror tiled ||| Full |
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawnOnce "feh --bg-fill --randomize ~/Wallpaper/"
+  spawnOnce "feh --bg-fill ~/Wallpaper/Haskell2.png"
   spawnOnce "synclient TapButton1=1"
   spawnOnce "synclient TapButton2=3"
   spawnOnce "synclient TapButton3=2"
