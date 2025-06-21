@@ -182,7 +182,7 @@ layouts = [
 
 widget_defaults = dict(
     font="hack",
-    fontsize=12,
+    fontsize=10,
     padding=2,
 )
 
@@ -225,10 +225,10 @@ screens = [
 		widget.Volume(fmt="  {}",
                 mouse_callbacks={'Button3': lazy.spawn('pavucontrol')}),
 		widget.Battery(format = '  {percent:2.0%} {hour:d}:{min:02d}'),
-		widget.KeyboardLayout(configured_keyboards = ["de deadtilde", "pt", "us"],font = "Hack",fontsize = "12",fmt = ' 󰌌 {}'),
+		widget.KeyboardLayout(configured_keyboards = ["de deadtilde", "pt", "us"],fmt = ' 󰌌 {}'),
 		widget.CheckUpdates(distro = 'Void',no_update_string=' No updates',update_interval=600,
 		mouse_callbacks={'Button1': lazy.spawn('qt-sudo xbps-install -Su -y')}),
-		widget.TextBox(text=" ", fontsize = 12,
+		widget.TextBox(text=" ",
 		mouse_callbacks={'Button1': lazy.spawn('rofi -show power-menu -modi power-menu:rofi-power-menu')}),
             ], 
             25,

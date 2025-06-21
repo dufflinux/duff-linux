@@ -5,6 +5,7 @@
 
 alias ls='ls --color=auto'
 PS1='[\u@\h \W]\$ '
+[ -n "$XTERM_VERSION" ] && transset --id "$WINDOWID" >/dev/null
 
 # If not running interactively, don't do anything
 case $- in
