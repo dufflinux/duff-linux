@@ -214,7 +214,7 @@ screens = [
 		widget.Volume(fmt="  {}",
                 mouse_callbacks={'Button3': lazy.spawn('pavucontrol')}),
 		widget.Battery(format = '  {percent:2.0%} {hour:d}:{min:02d}'),
-		##widget.KeyboardLayout(configured_keyboards = ["gb intl", "de deadtilde", "pt", "us"],fmt = ' 󰌌 {}'),
+		widget.KeyboardLayout(configured_keyboards = ["us", "de deadtilde", "pt"],fmt = ' 󰌌 {}'),
 		widget.CheckUpdates(distro = 'Void',no_update_string=' No updates',update_interval=600,
 		mouse_callbacks={'Button1': lazy.spawn('qt-sudo xbps-install -Su -y')}),
 		widget.TextBox(text=" ",
