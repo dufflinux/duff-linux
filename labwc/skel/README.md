@@ -50,7 +50,7 @@ super + r -> gmrun
 
 super + t -> lock screen
 
-super + w -> firefox
+super + w -> brave
 
 super + x -> powermenu
 
