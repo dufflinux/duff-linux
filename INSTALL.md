@@ -32,10 +32,10 @@ instead of the usual mkiso.sh command; it is needed to accept a new outside repo
 
 ## side note *labwc*
 
-To use it properly, compile sfwbar, labwc-menu-generator and labwc-tweaks-qt using cereus-pkgs and run this:
+To use it properly, compile sfwbar, labwc-menu-generator and labwc-tweaks-qt using void-packages and run this:
 
 ```
-sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs/cereus-extra -b labwc -- -T d77void -v linux6.11
+sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs -b labwc -- -T d77void -v linux6.11
 ```
 
 instead of the usual mkiso.sh command; it is needed to accept a local repo or to remove labwc-menu-generator, labwc-tweaks-qt and sfwbar packages from the d77 labwc variant.
