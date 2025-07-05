@@ -1,9 +1,7 @@
 (
     rules: "",
     model: "",
-    layout: "de",
-    variant: "deadtilde",
+    layout: "de,pt,us",
+    variant: "deadtilde,,",
     options: None,
-    repeat_delay: 600,
-    repeat_rate: 25,
 )

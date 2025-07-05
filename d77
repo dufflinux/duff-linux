@@ -252,7 +252,7 @@ build_variant() {
 	cosmic)
 	    COMMON=yes
 	    X11=yes
-            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $CALAMARES $D77_CORE cosmic-desktop"
+            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $CALAMARES $D77_CORE cosmic-desktop ImageMagick"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
         ;;
 	dwm)
