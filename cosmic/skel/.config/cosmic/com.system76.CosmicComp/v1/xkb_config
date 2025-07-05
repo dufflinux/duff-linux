@@ -1,7 +1,7 @@
 (
     rules: "",
     model: "",
-    layout: "de,pt,us",
-    variant: "deadtilde,,",
+    layout: "us,pt,de",
+    variant: ",,deadtilde",
     options: None,
 )
