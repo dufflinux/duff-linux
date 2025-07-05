@@ -320,7 +320,7 @@ build_variant() {
 	    COMMON=yes
 	    X11=yes
 	    WAY=yes
-    	    PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $CALAMARES $D77_CORE grim ImageMagick pavucontrol python3-psutil python3-qtile-extras qt5-wayland qt6-wayland qtile qtile-wayland wlroots"
+    	    PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $CALAMARES $D77_CORE grim ImageMagick pavucontrol-qt python3-psutil python3-qtile-extras qt5-wayland qt6-wayland qtile qtile-wayland wlroots"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
         ;;
 	sway)
