@@ -6,7 +6,7 @@ set -eu
 
 PROGNAME=$(basename "$0")
 ARCH=$(uname -m)
-IMAGES="awesome base bspwm dwm fluxbox hyprland i3wm labwc leftwm lxqt niri openbox qtile sway xfce"
+IMAGES="awesome base bspwm cosmic dwm fluxbox hyprland i3wm labwc leftwm lxqt niri openbox qtile sway xfce"
 TRIPLET=
 REPO=
 DATE=$(date -u +%Y%m%d)
@@ -247,6 +247,12 @@ build_variant() {
 	    X11=yes
 	    POLY=yes
             PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE bspwm dmenu redshift-gtk sxhkd"
+            SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
+        ;;
+	cosmic)
+	    COMMON=yes
+	    X11=yes
+            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $CALAMARES $D77_CORE cosmic-desktop"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
         ;;
 	dwm)

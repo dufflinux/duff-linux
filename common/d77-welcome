@@ -144,7 +144,7 @@ fi
 
 # Run through steps
 # STEPS_BASIC=('update' 'dist-upgrade' 'office' 'media-graphics' 'install-gimp' 'install-libreoffice')
-STEPS_MAIN=('set-root-password' 'update' 'dist-upgrade' 'office' 'media-graphics' 'bluetooth' 'browser' 'flatpak' 'steam' 'd77void-repo' 'hyprland' 'calamares' 'quit' )
+STEPS_MAIN=('set-root-password' 'update' 'dist-upgrade' 'office' 'media-graphics' 'bluetooth' 'browser' 'flatpak' 'steam' 'd77void-repo' 'hyprland' 'cosmic' 'calamares' 'quit' )
 STEPS_OFFICE=('install-libreoffice' 'install-abignu' 'back' )
 STEPS_MEDIA_GRAPHICS=('install-gimp' 'install-deadbeef' 'back')
 STEPS_BLUETOOTH=('install-bluetooth' 'back')
@@ -154,6 +154,7 @@ STEPS_STEAM=('install-steam' 'back')
 STEPS_FLATPAK=('install-flatpak' 'add-user' 'install-store' 'back')
 STEPS_D77VOID=('d77void-repo' 'back')
 STEPS_HYPRLAND=('hyprland' 'back')
+STEPS_COSMIC=('cosmic' 'back')
 
 # . "$LIBDIR/intro"
 connection-test
@@ -213,6 +214,11 @@ do
 
                         "hyprland")
 				submenu "hyprland" STEPS_HYPRLAND
+				break
+                        ;;
+
+                        "cosmic")
+				submenu "cosmic" STEPS_COSMIC
 				break
                         ;;
 

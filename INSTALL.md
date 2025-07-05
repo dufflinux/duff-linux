@@ -30,6 +30,16 @@ sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs/ -r https://raw.githubus
 
 instead of the usual mkiso.sh command; it is needed to accept a new outside repo.
 
+## side note *cosmic*
+
+To use it properly, run this:
+
+```
+sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs/ -r https://mtfbella109.github.io/void-cosmic-repo/repo/x86_64 -b cosmic -- -T d77void -v linux6.11
+```
+
+instead of the usual mkiso.sh command; it is needed to accept a new outside repo.
+
 ## side note *labwc*
 
 To use it properly, compile sfwbar, labwc-menu-generator and labwc-tweaks-qt using void-packages and run this:
