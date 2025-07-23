@@ -25,7 +25,7 @@ texts[reboot]="reboot"
 texts[shutdown]="shut down"
 
 declare -A icons
-icons[suspend]=""
+icons[suspend]="󰒲"
 icons[logout]="󰍃"
 icons[reboot]="󱞳"
 icons[shutdown]="󰤆"
