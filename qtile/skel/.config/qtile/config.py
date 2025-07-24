@@ -46,7 +46,7 @@ elif qtile.core.name == "wayland":
 
 def dynamic_launcher(qtile):
 	if qtile.core.name == "x11":
-		qtile.spawn("jgmenu")
+		qtile.spawn("jgmenu_run")
 	elif qtile.core.name == "wayland":
 		qtile.spawn("nwggrid")
 
