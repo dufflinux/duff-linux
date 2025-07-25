@@ -215,7 +215,7 @@ build_variant() {
             WANT_INSTALLER=yes
             TARGET_ARCH="$ARCH"
 	    D77_CORE="acpi apulse alsa-plugins-pulseaudio alsa-tools alsa-utils arc-theme bash-completion bc better-control brave-bin brightnessctl ca-certificates cmus cups cups-browsed curl elogind ethtool fastfetch feh font-awesome font-awesome5 font-awesome6 font-hack-ttf font-iosevka geary gettext git gmrun htop inxi kitty kvantum mousepad mpv nano NetworkManager network-manager-applet nerd-fonts-symbols-ttf neofetch octoxbps oranchelo-icon-theme papirus-icon-theme pcmanfm polkit qt5ct qt6ct qt5-graphicaleffects ranger sddm smartmontools system-config-printer tlp tlp-rdw transmission-qt udiskie ufw uget unzip usbutils util-linux vim void-repo-multilib void-repo-multilib-nonfree void-repo-nonfree wget xdg-user-dirs xdg-user-dirs-gtk xdg-utils xf86-input-synaptics xarchiver xcalc xinit xorg xorg-server xpdf xterm yt-dlp zathura zathura-pdf-poppler"
-	    D77_WAYFIRE="acpi apulse alsa-plugins-pulseaudio alsa-tools alsa-utils arc-theme bash-completion bc better-control brave-bin brightnessctl ca-certificates cmus cups cups-browsed curl elogind ethtool fastfetch feh font-awesome font-awesome5 font-awesome6 font-hack-ttf geary gettext git gmrun htop inxi kitty kvantum mousepad mpv nano NetworkManager network-manager-applet nerd-fonts-symbols-ttf neofetch nwg-look octoxbps oranchelo-icon-theme papirus-icon-theme pcmanfm polkit qt5ct qt6ct qt5-graphicaleffects ranger rofi sddm smartmontools system-config-printer tlp tlp-rdw transmission-gtk udiskie ufw uget unzip usbutils util-linux vim void-repo-multilib void-repo-multilib-nonfree void-repo-nonfree wget xdg-user-dirs xdg-user-dirs-gtk xdg-utils xf86-input-synaptics xarchiver xcalc xinit xorg xorg-server xpdf xterm yt-dlp zathura zathura-pdf-poppler"
+	    D77_WAYFIRE="acpi apulse alsa-plugins-pulseaudio alsa-tools alsa-utils arc-theme bash-completion bc better-control brave-bin brightnessctl ca-certificates cmus cups cups-browsed curl elogind ethtool fastfetch feh font-awesome font-awesome5 font-awesome6 font-hack-ttf geary gettext git gmrun htop inxi kitty kvantum mousepad mpv nano NetworkManager network-manager-applet nerd-fonts-symbols-ttf neofetch nwg-look octoxbps oranchelo-icon-theme papirus-icon-theme pcmanfm polkit qt5ct qt6ct qt5-graphicaleffects ranger sddm smartmontools system-config-printer tlp tlp-rdw transmission-gtk udiskie ufw uget unzip usbutils util-linux vim void-repo-multilib void-repo-multilib-nonfree void-repo-nonfree wget xdg-user-dirs xdg-user-dirs-gtk xdg-utils xf86-input-synaptics xarchiver xcalc xinit xorg xorg-server xpdf xterm yt-dlp zathura zathura-pdf-poppler"
 	    D77_EXTRA="abook automake calcurse cargo epson-inkjet-printer-escpr gcc isync make ncspot nextcloud-client neomutt pass pcsc-ccid pcsc-tools pcsclite python3-pip rust"
             CALAMARES="calamares grub rsync"
 	    COMMON=
@@ -274,7 +274,7 @@ build_variant() {
 	    X11=yes
 	    POLY=yes
 	    ROFI=yes
-            PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE bspwm dmenu redshift-gtk sxhkd"
+            PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE bspwm redshift-gtk sxhkd"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
         ;;
 	cosmic)
@@ -359,7 +359,7 @@ build_variant() {
 	    WAY=yes
 	    FUZZEL=yes
 	    ROFI=yes
-    	    PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $CALAMARES $D77_CORE grim ImageMagick jgmenu pavucontrol-qt python3-psutil python3-qtile-extras qt5-wayland qt6-wayland qtile qtile-wayland wlroots wofi"
+    	    PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $CALAMARES $D77_CORE grim ImageMagick jgmenu pavucontrol-qt python3-psutil python3-qtile-extras qt5-wayland qt6-wayland qtile qtile-wayland wlroots"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
         ;;
 	sway)
