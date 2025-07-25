@@ -32,7 +32,7 @@ calamares
 
 super + return -> terminal
 
-super + a -> rofi
+super + a -> menu
 
 super + b -> swap wallpaper
 

@@ -16,7 +16,7 @@
       <action name="Execute" command="kitty"/>
     </keybind>
     <keybind key="W-a">
-      <action name="Execute" command="rofi -show drun"/>
+      <action name="Execute" command="fuzzel"/>
     </keybind>
     <keybind key="W-b">
       <action name="Execute" command="wswap-way"/>
@@ -46,7 +46,7 @@
       <action name="Execute" command="brave-browser-stable"/>
     </keybind>
     <keybind key="W-x">
-      <action name="Execute" command="rofi -show power-menu -modi power-menu:rofi-power-menu"/>
+      <action name="Execute" command="fuzzel-power-menu"/>
     </keybind>
     <!--
       Remove a previously defined keybind
