@@ -54,13 +54,13 @@ def dynamic_menu(qtile):
 	if qtile.core.name == "x11":
 		qtile.spawn("rofi -show drun")
 	elif qtile.core.name == "wayland":
-		qtile.spawn("wofi --show drun")
+		qtile.spawn("fuzzel")
 
 def dynamic_power(qtile):
 	if qtile.core.name == "x11":
 		qtile.spawn("rofi -show power-menu -modi power-menu:rofi-power-menu")
 	elif qtile.core.name == "wayland":
-		qtile.spawn("wofi-power-menu")
+		qtile.spawn("fuzzel-power-menu")
 
 def dynamic_locker(qtile):
 	if qtile.core.name == "x11":
