@@ -273,6 +273,7 @@ build_variant() {
 	    COMMON=yes
 	    X11=yes
 	    POLY=yes
+	    DMENU=yes
 	    ROFI=yes
             PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE bspwm redshift-gtk sxhkd"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
@@ -302,7 +303,7 @@ build_variant() {
 	hyprland)
 	    COMMON=yes
 	    WAY=yes
-	    ROFI=yes
+	    FUZZEL=yes
             PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $CALAMARES $D77_CORE grim hyprland hyprland-qtutils hyprlock hyprpaper ImageMagick pavucontrol qt5-wayland qt6-wayland wayland-devel wayland-protocols"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
         ;;
