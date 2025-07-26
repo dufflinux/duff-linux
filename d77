@@ -6,7 +6,7 @@ set -eu
 
 PROGNAME=$(basename "$0")
 ARCH=$(uname -m)
-IMAGES="awesome base bspwm cosmic dwm fluxbox hyprland i3wm labwc leftwm lxqt niri openbox qtile sway xfce"
+IMAGES="awesome base bspwm cosmic dwm fluxbox herbstluftwm hyprland i3wm labwc leftwm lxqt niri openbox qtile sway xfce"
 TRIPLET=
 REPO=
 DATE=$(date -u +%Y%m%d)
@@ -22,7 +22,7 @@ usage() {
 
 	OPTIONS
 	 -a <arch>     Set architecture (or platform) in the image
-	 -b <variant>  One of base, awesome, bspwm, dwm, fluxbox, hyprland, i3wm, labwc, leftwm, niri, openbox, qtile or sway. 
+	 -b <variant>  One of base, awesome, bspwm, dwm, fluxbox, herbstluftwm, hyprland, i3wm, labwc, leftwm, niri, openbox, qtile or sway. 
                May be specified multiple times to build multiple variants.
 	 -d <date>     Override the datestamp on the generated image (YYYYMMDD format)
 	 -t <arch-date-variant>
@@ -127,7 +127,7 @@ include_common() {
 }
 
 include_box() {
-    	PKGS="$PKGS cbatticon conky jgmenu jq redshift-gtk volumeicon"
+    	PKGS="$PKGS cbatticon conky jgmenu jq redshift-gtk volumeicon network-manager-applet"
 	mkdir -p "$INCLUDEDIR"/usr/share/applications
 	cp ./common/jgmenu.desktop "$INCLUDEDIR"/usr/share/applications/
 }
@@ -148,7 +148,7 @@ include_niri() {
 } 
 
 include_poly() {
-    	PKGS="$PKGS polybar volumeicon"
+    	PKGS="$PKGS polybar cbatticon volumeicon network-manager-applet"
 	mkdir -p "$INCLUDEDIR"/etc/skel/.local/share
 	cp -r ./common/fonts "$INCLUDEDIR"/etc/skel/.local/share/
 }
@@ -214,7 +214,7 @@ build_variant() {
             GFX_WL_PKGS="mesa-dri"
             WANT_INSTALLER=yes
             TARGET_ARCH="$ARCH"
-	    D77_CORE="acpi apulse alsa-plugins-pulseaudio alsa-tools alsa-utils arc-theme bash-completion bc better-control brave-bin brightnessctl ca-certificates cmus cups cups-browsed curl elogind ethtool fastfetch feh font-awesome font-awesome5 font-awesome6 font-hack-ttf font-iosevka geary gettext git gmrun htop inxi kitty kvantum mousepad mpv nano NetworkManager network-manager-applet nerd-fonts-symbols-ttf neofetch octoxbps oranchelo-icon-theme papirus-icon-theme pcmanfm polkit qt5ct qt6ct qt5-graphicaleffects ranger sddm smartmontools system-config-printer tlp tlp-rdw transmission-qt udiskie ufw uget unzip usbutils util-linux vim void-repo-multilib void-repo-multilib-nonfree void-repo-nonfree wget xdg-user-dirs xdg-user-dirs-gtk xdg-utils xf86-input-synaptics xarchiver xcalc xinit xorg xorg-server xpdf xterm yt-dlp zathura zathura-pdf-poppler"
+	    D77_CORE="acpi apulse alsa-plugins-pulseaudio alsa-tools alsa-utils arc-theme bash-completion bc better-control brave-bin brightnessctl ca-certificates cmus cups cups-browsed curl elogind ethtool fastfetch feh font-awesome font-awesome5 font-awesome6 font-hack-ttf font-iosevka geary gettext git gmrun htop inxi kitty kvantum mousepad mpv nano NetworkManager nerd-fonts-symbols-ttf neofetch octoxbps oranchelo-icon-theme papirus-icon-theme pcmanfm polkit qt5ct qt6ct qt5-graphicaleffects ranger sddm smartmontools system-config-printer tlp tlp-rdw transmission-qt udiskie ufw uget unzip usbutils util-linux vim void-repo-multilib void-repo-multilib-nonfree void-repo-nonfree wget xdg-user-dirs xdg-user-dirs-gtk xdg-utils xf86-input-synaptics xarchiver xcalc xinit xorg xorg-server xpdf xterm yt-dlp zathura zathura-pdf-poppler"
 	    D77_WAYFIRE="acpi apulse alsa-plugins-pulseaudio alsa-tools alsa-utils arc-theme bash-completion bc better-control brave-bin brightnessctl ca-certificates cmus cups cups-browsed curl elogind ethtool fastfetch feh font-awesome font-awesome5 font-awesome6 font-hack-ttf geary gettext git gmrun htop inxi kitty kvantum mousepad mpv nano NetworkManager network-manager-applet nerd-fonts-symbols-ttf neofetch nwg-look octoxbps oranchelo-icon-theme papirus-icon-theme pcmanfm polkit qt5ct qt6ct qt5-graphicaleffects ranger sddm smartmontools system-config-printer tlp tlp-rdw transmission-gtk udiskie ufw uget unzip usbutils util-linux vim void-repo-multilib void-repo-multilib-nonfree void-repo-nonfree wget xdg-user-dirs xdg-user-dirs-gtk xdg-utils xf86-input-synaptics xarchiver xcalc xinit xorg xorg-server xpdf xterm yt-dlp zathura zathura-pdf-poppler"
 	    D77_EXTRA="abook automake calcurse cargo epson-inkjet-printer-escpr gcc isync make ncspot nextcloud-client neomutt pass pcsc-ccid pcsc-tools pcsclite python3-pip rust"
             CALAMARES="calamares grub rsync"
@@ -298,6 +298,14 @@ build_variant() {
 	    X11=yes
 	    ROFI=yes
             PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE fluxbox"
+            SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
+        ;;
+	herbstluftwm)
+	    COMMON=yes
+	    POLY=yes
+	    X11=yes
+	    ROFI=yes
+            PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE herbstluftwm sxhkd"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
         ;;
 	hyprland)
