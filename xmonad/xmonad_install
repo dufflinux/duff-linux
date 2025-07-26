@@ -56,5 +56,5 @@ printf "XMonad configs........\n"
 cp -r xmonad/ ~/.config/
 cp -r xmobar/ ~/.config/
 cp -r Wallpaper/ ~/
-cp -r ../common/config/rofi/ ~/.config/
+cp -r ../common/rofi_c/rofi/ ~/.config/
 cp -r ../common/config/dunst/ ~/.config/

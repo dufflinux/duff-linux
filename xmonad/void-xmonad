@@ -166,7 +166,7 @@ EOF
 	cp -r ./xmonad /home/$username/.config/
 	cp -r ./xmobar /home/$username/.config/
 	cp -r ./Wallpaper /home/$username/
-	cp -r ../common/config/rofi /home/$username/.config/
+	cp -r ../common/rofi_c/rofi /home/$username/.config/
 	cp -r ../common/config/dunst /home/$username/.config/
 
 # XMonad Extra
