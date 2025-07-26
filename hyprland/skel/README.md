@@ -64,8 +64,6 @@ super + f -> file manager
 
 super + n -> nwg-grid
 
-super + x -> run command
-
 super + t -> lock screen
 
 super + w -> web browser
