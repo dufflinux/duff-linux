@@ -21,6 +21,7 @@ udiskie -at &
 octoxbps-notifier &
 nm-applet &
 cbatticon &
+redshift-gtk &
 
 # remove all existing keybindings
 hc keyunbind --all

@@ -305,7 +305,7 @@ build_variant() {
 	    POLY=yes
 	    X11=yes
 	    ROFI=yes
-            PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE herbstluftwm jgmenu"
+            PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE herbstluftwm jgmenu redshift-gtk"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
         ;;
 	hyprland)
