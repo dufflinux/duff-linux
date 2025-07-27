@@ -14,14 +14,13 @@ feh --bg-fill ~/Wallpaper/wall_macos3.jpg &
 dunst &
 polybar &
 xcompmgr -c -f -n &
-sxhkd -c ~/.config/sxhkd/sxhkdrc &
 synclient TapButton1=1 &
 synclient TapButton2=3 &
 synclient TapButton3=2 &
 udiskie -at &
 octoxbps-notifier &
 nm-applet &
-#cbatticon &
+cbatticon &
 
 # remove all existing keybindings
 hc keyunbind --all
@@ -30,6 +29,23 @@ hc keyunbind --all
 # if you have a super key you will be much happier with Mod set to Mod4
 Mod=Mod1    # Use alt as the main modifier
 #Mod=Mod4   # Use the super key as the main modifier
+
+# d77 keybinds
+
+hc keybind $Mod-b spawn wswap-X
+hc keybind Mod4-c spawn better-control
+hc keybind $Mod-d spawn rofi -show drun
+hc keybind $Mod-e spawn mousepad
+hc keybind Mod4-f spawn pcmanfm
+hc keybind Mod4-j spawn jgmenu_run
+hc keybind $Mod-m spawn geary
+hc keybind Mod4-p spawn scrot
+hc keybind Mod4-r spawn gmrun
+hc keybind $Mod-t spawn slock
+hc keybind $Mod-w spawn brave-browser-stable
+hc keybind $Mod-x spawn rofi -show power-menu -modi power-menu:rofi-power-menu
+
+## general
 
 hc keybind $Mod-Shift-q quit
 hc keybind $Mod-Shift-r reload
