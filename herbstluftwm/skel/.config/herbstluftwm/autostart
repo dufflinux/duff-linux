@@ -22,6 +22,7 @@ octoxbps-notifier &
 nm-applet &
 cbatticon &
 redshift-gtk &
+xautolock -time 5 -locker slock &
 
 # remove all existing keybindings
 hc keyunbind --all
