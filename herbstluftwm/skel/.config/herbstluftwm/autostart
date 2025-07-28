@@ -10,7 +10,7 @@ hc emit_hook reload
 
 #xsetroot -solid '#5A8E3A'
 TERMINAL=st
-feh --bg-scale ~/Wallpaper/wall_macos.jpg &
+feh --bg-scale ~/Wallpaper/wall_macos3.jpg &
 dunst &
 polybar &
 xcompmgr -c -f -n &
@@ -18,7 +18,7 @@ synclient TapButton1=1 &
 synclient TapButton2=3 &
 synclient TapButton3=2 &
 udiskie -at &
-/usr/bin/octopi-notifier &
+octoxbps-notifier &
 nm-applet &
 cbatticon &
 redshift-gtk -l 41.6:-8.62  &
