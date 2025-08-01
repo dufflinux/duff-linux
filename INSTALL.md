@@ -17,7 +17,7 @@ example
 terminal example)
 
 ```
-sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs/ -b fluxbox -- -T d77void -v linux6.11
+sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs/ -b fluxbox -- -T d77void
 ```
 
 ## side note *hyprland*
@@ -25,7 +25,7 @@ sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs/ -b fluxbox -- -T d77voi
 To use it properly, run this:
 
 ```
-sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs/ -r https://raw.githubusercontent.com/Makrennel/hyprland-void/repository-x86_64-glibc -b hyprland -- -T d77void -v linux6.11
+sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs/ -r https://raw.githubusercontent.com/Makrennel/hyprland-void/repository-x86_64-glibc -b hyprland -- -T d77void
 ```
 
 instead of the usual mkiso.sh command; it is needed to accept a new outside repo.
@@ -35,14 +35,14 @@ instead of the usual mkiso.sh command; it is needed to accept a new outside repo
 To use it properly, run this:
 
 ```
-sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs/ -r https://mtfbella109.github.io/void-cosmic-repo/repo/x86_64 -b cosmic -- -T d77void -v linux6.11
+sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs/ -r https://bellawagner.de/repo/x86_64 -b cosmic -- -T d77void
 ```
 
 instead of the usual mkiso.sh command; it is needed to accept a new outside repo.
 
 ## side note *labwc*
 
-To use it properly, compile sfwbar, labwc-menu-generator and labwc-tweaks-qt using void-packages and run this:
+To use it properly, compile labwc-menu-generator and labwc-tweaks-qt using void-packages and run this:
 
 ```
 sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs -b labwc -- -T d77void -v linux6.11
