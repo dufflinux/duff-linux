@@ -149,7 +149,9 @@ include_niri() {
 
 include_poly() {
     	PKGS="$PKGS polybar cbatticon network-manager-applet redshift-gtk volumeicon"
+	mkdir -p "$INCLUDEDIR"/etc/skel/.config
 	mkdir -p "$INCLUDEDIR"/etc/skel/.local/share
+	cp -r ./common/config/* "$INCLUDEDIR"/etc/skel/.config/
 	cp -r ./common/fonts "$INCLUDEDIR"/etc/skel/.local/share/
 }
 
