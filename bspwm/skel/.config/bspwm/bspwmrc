@@ -1,5 +1,19 @@
 #! /bin/sh
 
+dunst &
+xcompmgr -c -f -n &
+polybar &
+redshift-gtk &
+feh --bg-scale ~/Wallpaper/wall_macos1.jpg &
+xautolock -time 5 -locker slock &
+nm-applet &
+volumeicon &
+octoxbps-notifier &
+udiskie -at &
+synclient TapButton1=1 &
+synclient TapButton2=3 &
+synclient TapButton3=2 &
+
 pgrep -x sxhkd > /dev/null || sxhkd &
 
 bspc monitor -d I II III IV V VI VII VIII IX X
