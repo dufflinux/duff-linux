@@ -14,6 +14,10 @@ super + x
 super + Return
 	st
 
+# scratchpad
+F12
+	~/.config/bspwm/scratchpad.sh toggle
+
 # program launcher
 super + @space
 	dmenu_run
