@@ -54,7 +54,7 @@
     layout_mode: Tag,
     insert_behavior: Bottom,
     scratchpad: [
-        (name: "st", args: None, value: "st", x: 860, y: 390, height: 300, width: 200),
+        (name: "kitty", args: None, value: "kitty", x: 300, y: 50, height: 400, width: 800),
     ],
     window_rules: [],
     disable_current_tag_swap: false,
@@ -69,7 +69,8 @@
     disable_cursor_reposition_on_resize: false,
     window_hiding_strategy: MoveOnly,
     keybind: [
-        (command: Execute, value: "brave-browser-stable", modifier: ["modkey"], key: "b"),
+	(command: ToggleScratchPad, value: "kitty" ,modifier: ["modkey"],key: "s"),        
+	(command: Execute, value: "brave-browser-stable", modifier: ["modkey"], key: "b"),
         (command: Execute, value: "rofi -show drun", modifier: ["modkey"], key: "a"),
         (command: Execute, value: "better-control", modifier: ["modkey"], key: "c"),
         (command: Execute, value: "rofi -show power-menu -modi power-menu:rofi-power-menu", modifier: ["modkey"], key: "x"),

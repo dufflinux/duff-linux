@@ -44,4 +44,6 @@ super + m -> geary
 
 super + p -> scrot
 
+super + s -> scratchpad
+
 Have fun!
