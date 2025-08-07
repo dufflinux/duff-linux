@@ -1,0 +1,264 @@
+(defpoll clock_time :interval "5m" "date +\%I")
+(defpoll clock_minute :interval "5s" "date +\%M")
+(defpoll clock_date :interval "10h" "date '+%d/%m'")
+(defpoll volume_percent :interval "3s" :initial "100" "~/.config/leftwm/themes/current/eww_bar/scripts/volume get-sink-volume")
+(defpoll volume_muted :interval "1s" :initial "no" "~/.config/leftwm/themes/current/eww_bar/scripts/volume get-sink-mute")
+(defpoll speaker_name :interval "3s" :initial "" "~/.config/leftwm/themes/current/eww_bar/scripts/volume get-sink-name")
+(defpoll mic_percent :interval "3s" :initial "100" "~/.config/leftwm/themes/current/eww_bar/scripts/volume get-source-volume")
+(defpoll mic_muted :interval "1s" :initial "no" "~/.config/leftwm/themes/current/eww_bar/scripts/volume get-source-mute")
+(defpoll mic_name :interval "3s" :initial "" "~/.config/leftwm/themes/current/eww_bar/scripts/volume get-source-name")
+(defpoll brightness_percent :interval "5s" :initial "100" "brightnessctl -m -d intel_backlight | awk -F, '{print substr($4, 0, length($4)-1)}' | tr -d '%'")
+(defpoll memory_used_mb :interval "2m" "scripts/mem-ad used")
+(defpoll memory_total_mb :interval "2m" "scripts/mem-ad total")
+(defpoll memory_free_mb :interval "2m" "scripts/mem-ad free")
+(defpoll COL_WLAN :initial "#a1bdce" :interval "1m" "~/.config/leftwm/themes/current/eww_bar/scripts/wifi --COL")
+(defpoll ESSID_WLAN :initial "" :interval "1m" "~/.config/leftwm/themes/current/eww_bar/scripts/wifi --ESSID")
+(defpoll WLAN_ICON :initial "" :interval "1m" "~/.config/leftwm/themes/current/eww_bar/scripts/wifi --ICON")
+(defpoll calendar_day :interval "20h" :initial "1" "date '+%d'")
+(defpoll calendar_year :interval "20h" :initial "2023" "date '+%Y'")
+
+(defvar vol_reveal false)
+(defvar br_reveal false)
+(defvar music_reveal false)
+(defvar wifi_rev false)
+(defvar time_rev false)
+
+;; widgets
+(defwidget wifi []
+  (eventbox :onhover "${eww} update wifi_rev=true"
+			      :onhoverlost "${eww} update wifi_rev=false"
+		(box :vexpand "false" :hexpand "false" :space-evenly "false"
+      (button :class "module-wif" :onclick "networkmanager_dmenu" :style "color: ${COL_WLAN};" WLAN_ICON)
+      (revealer :transition "slideright"
+			          :reveal wifi_rev
+			          :duration "350ms"
+        (label :class "module_essid"
+               :text ESSID_WLAN)
+      )
+    )
+  )
+)
+
+(defwidget bat []
+  (box :class "bat_module" :vexpand "false" :hexpand "false"
+    (circular-progress :value {EWW_BATTERY.BAT0.capacity}
+                       :class "batbar"
+                       :thickness 4
+      (button :class "iconbat"
+              :tooltip "battery on ${EWW_BATTERY.BAT0.capacity}%"
+              :onclick "$HOME/.config/leftwm/themes/current/eww_bar/scripts/pop system" "")
+    )
+  )
+)
+
+(defwidget mem []
+  (box :class "mem_module" :vexpand "false" :hexpand "false"
+    (circular-progress :value {EWW_RAM.used_mem_perc}
+                       :class "membar"
+                       :thickness 4
+      (button :class "iconmem"
+              :tooltip "using ${EWW_RAM.used_mem_perc}% ram"
+              :onclick "$HOME/.config/leftwm/themes/current/eww_bar/scripts/pop system" "")
+    )
+  )
+)
+
+(defwidget clock_module []
+  (eventbox :onhover "${eww} update time_rev=true"
+            :onhoverlost "${eww} update time_rev=false"
+    (box :class "module" :space-evenly "false" :orientation "h" :spacing "3"
+      (label :text clock_time :class "clock_time_class" )
+      (label :text "" :class "clock_time_sep" )
+      (label :text clock_minute :class "clock_minute_class")
+      (revealer :transition "slideleft"
+                :reveal time_rev
+                :duration "350ms"
+        (button :class "clock_date_class"
+               :onclick "$HOME/.config/leftwm/themes/current/eww_bar/scripts/pop calendar" clock_date)
+      )
+    )
+  )
+)
+
+(defwidget volume []
+  (eventbox :onhover "${eww} update vol_reveal=true"
+            :onhoverlost "${eww} update vol_reveal=false"
+    (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3"
+      (button   :onclick "scripts/pop audio" :class "volume_icon" {volume_muted=="no"?"":""})
+      (revealer :transition "slideleft"
+			          :reveal vol_reveal
+			          :duration "350ms"
+        (scale :class "volbar"
+			         :value volume_percent
+			         :orientation "h"
+			         :tooltip "${volume_percent}%"
+			         :max 100
+			         :min 0
+			         :onchange "~/.config/leftwm/themes/current/eww_bar/scripts/volume set-sink-volume {}")
+      )
+    )
+  )
+)
+
+(defwidget bright []
+  (eventbox :onhover "${eww} update br_reveal=true" :onhoverlost "${eww} update br_reveal=false"
+    (box :class "module-2" :space-evenly "false" :orientation "h" :spacing "3"
+      (label :text "" :class "bright_icon" :tooltip "brightness")
+      (revealer :transition "slideleft"
+			          :reveal br_reveal
+			          :duration "350ms"
+        (scale :class "brightbar"
+			         :value brightness_percent
+			         :orientation "h"
+			         :tooltip "${brightness_percent}%"
+			         :max 100
+			         :min 0
+			         :onchange "brightnessctl set {}%")
+      )
+    )
+  )
+)
+
+(defwidget system []
+  (box :class "sys_win" :orientation "v" :space-evenly "false" :hexpand "false" :vexpand "false" :spacing 0
+    (box :class "sys_bat_box" :orientation "h" :space-evenly "false"
+      (circular-progress :value {EWW_BATTERY.BAT0.capacity}
+                         :class "sys_bat"
+                         :thickness 9
+        (eventbox
+          :onclick "~/.config/leftwm/themes/current/scripts/menus -p"
+          (label :text ""
+                 :class "sys_icon_bat"
+                 :limit-width 2
+                 :wrap false)
+        )
+      )
+      (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
+        (label :text "battery"
+               :halign "start"
+               :class "sys_text_bat"
+               :limit-width 9
+               :wrap false)
+        (label :text "${EWW_BATTERY.BAT0.capacity}%"
+               :halign "start"
+               :class "sys_text_bat_sub"
+               :limit-width 22
+               :wrap false)
+        (label :text "${EWW_BATTERY.BAT0.status}"
+               :halign "start"
+               :class "sys_text_bat_sub"
+               :limit-width 22
+               :wrap false)
+      )
+    )
+    (label :text "" :class "sys_sep" :halign "center")
+    (box :class "sys_mem_box" :orientation "h" :space-evenly "false" :halign "start"
+      (circular-progress :value {EWW_RAM.used_mem_perc}
+                         :class "sys_mem"
+                         :thickness 9
+        (label :text ""
+               :class "sys_icon_mem"
+               :limit-width 2
+               :wrap false
+               :angle 0.0)
+      )
+      (box :orientation "v" :space-evenly "false" :spacing 0 :hexpand "false" :vexpand "false"
+        (label :text "memory"
+               :halign "start"
+               :class "sys_text_mem"
+               :limit-width 9
+               :wrap false)
+        (label :text "${memory_used_mb} | ${memory_total_mb}mb "
+               :halign "start"
+               :class "sys_text_mem_sub"
+               :limit-width 22
+               :wrap false)
+        (label :text "${memory_free_mb}mb free"
+               :halign "start"
+               :class "sys_text_mem_sub"
+               :limit-width 22
+               :wrap false)
+      )
+    )
+  )
+)
+
+(defwindow system
+	:geometry (geometry :x "-20px"
+                      :y "7%"
+                      :anchor "top right"
+                      :width "290px"
+                      :height "120px")
+  (system)
+)
+
+(defwidget cal []
+	(box :class "cal"
+       :orientation "v"
+	(box :class "cal-in"
+    (calendar :class "cal"
+              :day calendar_day
+              :year calendar_year)
+    )
+  )
+)
+
+(defwindow calendar
+	:geometry (geometry :x "-20px"
+						          :y "7%"
+                      :anchor "top right"
+						          :width "270px"
+						          :height "60px")
+  (cal)
+)
+
+(defwidget audio []
+	(box :class "audio-box" :orientation "v" :space-evenly "false" :vexpand "false" :hexpand "false"
+    (box :halign "start" :space-evenly "false" :hexpand "false" :vexpand "false"
+      (eventbox
+        :onscroll "~/.config/leftwm/themes/current/eww_bar/scripts/volume switch-sink"
+        (button :class "speaker_${volume_muted=="no"?"icon":"muted"}" :onclick "~/.config/leftwm/themes/current/eww_bar/scripts/volume toggle-sink-mute")
+      )
+      (box :orientation "v" :halign "center" :vexpand "false" :hexpand "false"
+        (label :class "speaker_text" :text speaker_name :valign "center" :halign "start" :limit-width 20 )
+        (box :class "speaker_bar" :halign "center" :vexpand "false" :hexpand "false"
+          (scale
+            :value volume_percent
+            :orientation "h"
+            :onchange "~/.config/leftwm/themes/current/eww_bar/scripts/volume set-sink-volume {}"
+            :tooltip "volume on ${volume_percent}%"
+            :max 100
+            :min 0
+          )
+        )
+      )
+    )
+    (label :text "" :class "audio_sep" :halign "center")
+    (box :halign "start" :space-evenly "false" :hexpand "false" :vexpand "false"
+      (eventbox
+        :onscroll "~/.config/leftwm/themes/current/eww_bar/scripts/volume switch-source"
+        (button :class "mic_${mic_muted=="no"?"icon":"muted"}" :onclick "~/.config/leftwm/themes/current/eww_bar/scripts/volume toggle-source-mute")
+      )
+      (box :orientation "v" :halign "center" :vexpand "false" :hexpand "false"
+        (label :class "mic_text" :text mic_name :valign "center" :halign "start" :limit-width 20 )
+        (box :class "mic_bar" :halign "center" :vexpand "false" :hexpand "false"
+          (scale :value mic_percent
+            :orientation "h"
+            :tooltip "mic on ${mic_percent}%"
+            :onchange "~/.config/leftwm/themes/current/eww_bar/scripts/volume set-source-volume {}"
+            :max 100
+            :min 0)
+        )
+      )
+    )
+  )
+)
+
+(defwindow audio_ctl
+	:geometry (geometry :x "-30px"
+						          :y "7%"
+                      :anchor "top right"
+						          :width "450px"
+						          :height "60px")
+  (audio)
+)

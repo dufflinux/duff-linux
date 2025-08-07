@@ -19,12 +19,6 @@ if [ -x "$(command -v feh)" ]; then
     feh --bg-scale $WALLPAPER
 fi
 
-# start eww daemon
-eww daemon &
-
-#open eww windows
-eww open-many left tags right
-
 polybar &
 xcompmgr -c -f -n &
 exec dunst &

@@ -1,0 +1,203 @@
+#!/usr/bin/env bash
+
+function sourceOrSink() {
+  if [ "$1" = "@DEFAULT_SINK@" ]; then
+    echo sink
+  else
+    echo source
+  fi
+}
+
+function getNumberVol() {
+  DEVICE=$(sourceOrSink $1)
+  WPCTL=$(pactl get-${DEVICE}-volume $1)
+  VOL=$(echo $WPCTL | awk -F' ' '{ print $5 }' | sed s/%//)
+  echo $VOL
+}
+
+function getSourceNumberVol() {
+  echo "$(getNumberVol @DEFAULT_SOURCE@)"
+}
+
+function getSinkNumberVol() {
+  echo "$(getNumberVol @DEFAULT_SINK@)"
+}
+
+function getMuteStatus() {
+  DEVICE=$(sourceOrSink $1)
+  WPCTL=$(pactl get-${DEVICE}-mute $1)
+  MUTED=$(echo $WPCTL | awk -F' ' '{ print $2 }')
+  echo $MUTED
+}
+
+function getSourceVol() {
+  MUTED=$(getMuteStatus @DEFAULT_SOURCE@)
+  if [ "$MUTED" == "yes" ]; then
+    echo 0
+    exit 0
+  fi
+  VOL=$(getSourceNumberVol)
+  echo "$VOL"
+}
+
+function getSinkVol() {
+  MUTED=$(getMuteStatus @DEFAULT_SINK@)
+  if [ "$MUTED" == "yes" ]; then
+    echo 0
+    exit 0
+  fi
+  VOL=$(getSinkNumberVol)
+  echo "$VOL"
+}
+
+function incSinkVol() {
+  VOL=$(getSinkNumberVol)
+  if [ "$VOL" -gt "95" ]; then
+    exit 0
+  fi
+  pactl set-sink-volume @DEFAULT_SINK@ +5%
+}
+
+function decSinkVol() {
+  VOL=$(getSinkNumberVol)
+  if [ "$VOL" -lt "5" ]; then
+    exit 0
+  fi
+  pactl set-sink-volume @DEFAULT_SINK@ -5%
+}
+
+function incSourceVol() {
+  VOL=$(getSourceNumberVol)
+  if [ "$VOL" -gt "95" ]; then
+    exit 0
+  fi
+  pactl set-source-volume @DEFAULT_SOURCE@ +5%
+}
+
+function decSourceVol() {
+  VOL=$(getSourceNumberVol)
+  if [ "$VOL" -lt "5" ]; then
+    exit 0
+  fi
+  pactl set-source-volume @DEFAULT_SOURCE@ -5%
+}
+
+function toggleMute() {
+  DEVICE=$(sourceOrSink $1)
+  MUTED=$(pactl get-${DEVICE}-mute  $1 | awk -F' ' '{ print $2 }')
+  TOGGLE_VALUE=0
+  if [ "no" == "$MUTED" ]; then
+    TOGGLE_VALUE=1
+    MUTED="yes"
+  else
+    MUTED="no"
+  fi
+  while read source
+  do
+    pactl set-${DEVICE}-mute $source 1
+  done < <(pactl list short ${DEVICE}s | cut -f2)
+  pactl set-${DEVICE}-mute $1 $TOGGLE_VALUE
+  NAME=$(getDefaultSourceName)
+  notify-send "Mute" "${DEVICE} $NAME muted: $MUTED"
+}
+
+function switch() {
+  DEVICE=$(sourceOrSink $1)
+  CUR_SOURCE=$(pactl get-default-${DEVICE})
+  SET_NEXT=""
+  while read source
+  do
+    if [ -z "$NEXT_SOURCE" ]; then
+      NEXT_SOURCE=$source
+    fi
+    if [ -n "$SET_NEXT" ]; then
+      NEXT_SOURCE=$source
+      break
+    fi
+    if [ "$source" == "$CUR_SOURCE" ]; then
+      SET_NEXT="true"
+    fi
+  done < <(pactl list short ${DEVICE}s| cut -f2)
+  if [ "$CUR_SOURCE" == "$NEXT_SOURCE" ]; then
+    notify-send "Switch" "Só há um ${DEVICE} disponível"
+  else
+    pactl set-default-${DEVICE} $NEXT_SOURCE
+    NAME=$(getDefaultSourceName $1)
+    notify-send "Switch" "Definindo ${DEVICE} $NAME"
+  fi
+  exit 0
+}
+
+function getDefaultSourceName() {
+  DEVICE=$(sourceOrSink $1)
+  SOURCE_NAME=$(pactl get-default-${DEVICE})
+  NAME=$(pactl -f json list ${DEVICE}s 2> /dev/null | jq -r ".[] | select(.name==\"${SOURCE_NAME}\") | .properties.\"device.description\"")
+  echo $NAME
+}
+
+function setSinkVol() {
+  pactl set-sink-volume @DEFAULT_SINK@ "${1}%"
+}
+
+function setSourceVol() {
+  pactl set-source-volume @DEFAULT_SOURCE@ "${1}%"
+}
+
+
+export LC_ALL=C
+
+case "$1" in
+  set-sink-volume)
+    setSinkVol "$2"
+    ;;
+  get-sink-volume)
+    getSinkVol
+    ;;
+  sink-volume-down)
+    decSinkVol
+    ;;
+  sink-volume-up)
+    incSinkVol
+    ;;
+  toggle-sink-mute)
+    toggleMute @DEFAULT_SINK@
+    ;;
+  switch-sink)
+    switch @DEFAULT_SINK@
+    ;;
+  get-sink-name)
+    getDefaultSourceName @DEFAULT_SINK@
+    ;;
+  get-sink-mute)
+    getMuteStatus @DEFAULT_SINK@
+    ;;
+  set-source-volume)
+    setSourceVol "$2"
+    ;;
+  get-source-volume)
+    getSourceVol
+    ;;
+  source-volume-down)
+    decSourceVol
+    ;;
+  source-volume-up)
+    incSourceVol
+    ;;
+  toggle-source-mute)
+    toggleMute @DEFAULT_SOURCE@
+    ;;
+  switch-source)
+    switch @DEFAULT_SOURCE@
+    ;;
+  get-source-mute)
+    getMuteStatus @DEFAULT_SOURCE@
+    ;;
+  get-source-name)
+    getDefaultSourceName @DEFAULT_SOURCE@
+    ;;
+  *)
+    echo "Unrecognised action: $1" >&2
+    exit 1
+    ;;
+esac
+

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+current() {
+  xkb-switch | awk -F'(' '{ print $1 }'
+}
+
+nextLayout() {
+  xkb-switch -n
+}
+
+if [ "$1" = "--current" ]; then
+  current
+elif [ "$1" = "--next" ]; then
+  nextLayout
+fi

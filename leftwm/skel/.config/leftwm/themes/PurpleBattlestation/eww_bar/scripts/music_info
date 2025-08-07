@@ -1,0 +1,109 @@
+#!/bin/bash
+# scripts by adi1090x
+
+## Get data
+STATUS="$(playerctl status)"
+# COVER="/tmp/.music_cover.png"
+# MUSIC_DIR="$HOME/Music"
+# echo $STATUS
+
+
+## Get status
+get_status() {
+	if [[ $STATUS == "Playing" ]]; then
+		echo "󰏦"
+	else
+		echo "󰐍"
+	fi
+}
+
+## Get song
+get_song() {
+	playerctl --follow metadata --format '{{ artist }} - {{ title }}' || true
+}
+
+## Get artist
+get_artist() {
+	artist=`playerctl metadata --format '{{ artist }}'`
+	if [[ -z "$artist" ]]; then
+		echo ""
+	else
+		echo "$artist"
+	fi
+}
+
+## Get time in percent
+get_time() {
+	ctime=`playerctl metadata --format "{{position}}"`
+  ttime=$(playerctl metadata --format "{{mpris:length}}")
+  time=$(( (${ctime%.*} * 100) / ${ttime%.*} ))
+	if [[ -z "$time" ]]; then
+		echo "0"
+	else
+		echo "$time"
+	fi
+}
+
+get_ctime() {
+	ctime=`playerctl position --format "{{ duration(position) }}"`
+	if [[ -z "$ctime" ]]; then
+		echo "0:00"
+	else
+		echo "$ctime"
+	fi
+}
+
+get_ttime() {
+	ttime=`playerctl metadata --format "{{ duration(mpris:length) }}"`
+	if [[ -z "$ttime" ]]; then
+		echo "0:00"
+	else
+		echo "$ttime"
+	fi
+}
+
+## Get cover
+get_cover() {
+	# ffmpeg -i "${MUSIC_DIR}/$(mpc current -f %file%)" "${COVER}" -y &> /dev/null
+  COVER=$(playerctl metadata mpris:artUrl 2> /dev/null)
+	STATUS=$?
+
+	# Check if the file has a embbeded album art
+	if [ "$STATUS" -eq 0 ];then
+		echo "$COVER"
+	else
+		echo "images/music.png"
+	fi
+}
+
+## Set position
+set_position() {
+  ttime=$(playerctl metadata --format "{{mpris:length}}")
+  SECONDS=$((($1*$ttime)/100000000))
+  playerctl position $SECONDS
+}
+
+# ## Execute accordingly
+if [[ "$1" == "--song" ]]; then
+	get_song
+elif [[ "$1" == "--artist" ]]; then
+	get_artist
+elif [[ "$1" == "--status" ]]; then
+	get_status
+elif [[ "$1" == "--time" ]]; then
+	get_time
+elif [[ "$1" == "--ctime" ]]; then
+	get_ctime
+elif [[ "$1" == "--ttime" ]]; then
+	get_ttime
+elif [[ "$1" == "--cover" ]]; then
+	get_cover
+elif [[ "$1" == "--toggle" ]]; then
+	playerctl play-pause
+elif [[ "$1" == "--next" ]]; then
+	playerctl next
+elif [[ "$1" == "--prev" ]]; then
+  playerctl previous
+elif [[ "$1" == "--set" ]]; then
+  set_position "$2"
+fi

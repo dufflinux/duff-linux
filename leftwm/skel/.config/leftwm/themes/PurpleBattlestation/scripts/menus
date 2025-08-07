@@ -1,0 +1,68 @@
+#!/bin/bash
+
+uptime=$(uptime -p | sed -e 's/up //g')
+
+
+function run_rofi() {
+  rofi -i -show drun -theme ~/.config/leftwm/themes/current/scripts/rofi.launcher.rasi "$@"
+}
+
+function application() {
+  run_rofi
+}
+
+function layout() {
+  echo_layouts() {
+    echo -e "MainAndDeck\nMonocle\nMainAndVertStack\nMainAndHorizontalStack\nGridHorizontal\nFibonacci\nLeftMain" | run_rofi -dmenu
+  }
+  chosen="$(echo_layouts)"
+  leftwm-command "SetLayout $chosen"
+}
+
+function power() {
+  shutdown=" Shutdown"
+  reboot=" Restart"
+  lock=" Lock"
+  suspend=" Sleep"
+  logout=" Logout"
+  options="$lock\n$suspend\n$logout\n$reboot\n$shutdown"
+
+  chosen="$(echo -e "$options" | run_rofi -p "Uptime: $uptime" -dmenu -selected-row 0)"
+  if [[ $chosen == "" ]]; then
+    exit 0
+  fi
+  ans="$(echo -e "Yes\nNo" | run_rofi -p "Are You Sure?:" -dmenu -selected-row 0)"
+  if [[ $ans == "Yes" ]]; then
+    case $chosen in
+      $shutdown)
+        systemctl poweroff
+        ;;
+      $reboot)
+        systemctl reboot
+        ;;
+      $lock)
+        playerctl pause -p playerctld
+        slock
+        ;;
+      $suspend)
+        playerctl pause -p playerctld
+        slock &
+        systemctl suspend
+        ;;
+      $logout)
+        loginctl kill-session $XDG_SESSION_ID
+        ;;
+    esac
+  fi
+}
+
+while getopts alp flag
+do
+    case "${flag}" in
+      a) application;;
+      l) layout;;
+      p) power;;
+      *) echo;;
+    esac
+done
+
