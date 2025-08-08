@@ -1,0 +1,397 @@
+focus_behaviour = "ClickTo" # Can be Sloppy, ClickTo, or Driven
+focus_new_windows = true
+
+modkey = "Mod4"
+workspaces = []
+tags = ["", "", "", "", "輸", "", "", "", ""]
+
+window_rules = [
+  {window_class = "Brave-browser", spawn_on_tag = 2},
+  {window_class = "gimp-2.10", spawn_on_tag = 7},
+  {window_class = "krita", spawn_on_tag = 7},
+  {window_class = "inkstitch", spawn_floating = true},
+  {window_class = "inkstitch-gui", spawn_floating = true},
+  {window_class = "kcalc", spawn_floating = true},
+  {window_class = "plexamp", spawn_floating = true},
+  {window_title = "Plexamp", spawn_floating = true},
+  {window_class = "ibabycare.exe", spawn_floating = true},
+  {window_class = "Alacritty", spawn_floating = true},
+  {window_class = "xivlauncher.exe", spawn_on_tag = 6, spawn_floating = true},
+  {window_class = "lutris", spawn_on_tag = 6},
+]
+
+[[scratchpad]]
+name = "Kitty"
+value = "kitty"
+
+[[scratchpad]]
+name = "pavucontrol"
+value = "pavucontrol"
+
+[[scratchpad]]
+name = "dolphin"
+value = "dolphin"
+
+[[keybind]]
+command = "ToggleScratchPad"
+value = "Kitty"
+modifier = ["modkey"]
+key = "grave"
+
+[[keybind]]
+command = "ToggleScratchPad"
+value = "pavucontrol"
+modifier = ["modkey", "Shift"]
+key = "v"
+
+[[keybind]]
+command = "ToggleScratchPad"
+value = "dolphin"
+modifier = ["modkey"]
+key = "c"
+
+[[keybind]]
+command = "Execute"
+value = "bwmenu -- -no-default-config"
+modifier = ["modkey"]
+key = "p"
+
+[[keybind]]
+command = "Execute"
+value = "$HOME/pss_convert/pss-convert-dmenu ~/Documents/PSS Pricing/"
+modifier = ["modkey", "Control"]
+key = "p"
+
+[[keybind]]
+command = "Execute"
+value = "rofi -no-default-config -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"
+modifier = ["modkey"]
+key = "v"
+
+[[keybind]]
+command = "Execute"
+value = "QT_QPA_PLATFORMTHEME=qt5ct rofi -no-config -no-lazy-grab -show drun -theme $HOME/.config/leftwm/themes/current/rofi/launcher.rasi"
+modifier = ["modkey"]
+key = "d"
+
+[[keybind]]
+command = "Execute"
+value = "rofi -show 'Global Search' -modi 'Global Search':$HOME/.config/bspwm/rofi/global/rofi-spotlight.sh -theme $HOME/.config/bspwm/rofi/global/rofi.rasi"
+modifier = ["modkey"]
+key = "space"
+
+[[keybind]]
+command = "Execute"
+value = "leftwm-command 'SendWorkspaceToTag 0 1' && $BROWSER"
+modifier = ["modkey", "Shift"]
+key = "b"
+
+[[keybind]]
+command = "Execute"
+value = "kitty"
+modifier = ["modkey"]
+key = "Return"
+
+[[keybind]]
+command = "Execute"
+value = "$HOME/.config/leftwm/themes/current/default_app"
+modifier = ["modkey", "Shift"]
+key = "Return"
+
+[[keybind]]
+command = "CloseWindow"
+modifier = ["modkey"]
+key = "q"
+
+[[keybind]]
+command = "SoftReload"
+modifier = ["modkey", "Shift"]
+key = "r"
+
+[[keybind]]
+command = "Execute"
+value = "pkill leftwm"
+modifier = ["modkey", "Shift"]
+key = "x"
+
+[[keybind]]
+command = "Execute"
+value = "slock"
+modifier = ["modkey", "Control"]
+key = "l"
+
+[[keybind]]
+command = "ToggleFullScreen"
+modifier = ["modkey"]
+key = "f"
+
+[[keybind]]
+command = "ToggleFloating"
+modifier = ["modkey"]
+key = "t"
+
+[[keybind]]
+command = "MoveToLastWorkspace"
+modifier = ["modkey", "Shift"]
+key = "w"
+
+[[keybind]]
+command = "SwapTags"
+modifier = ["modkey"]
+key = "w"
+
+[[keybind]]
+command = "MoveWindowUp"
+modifier = ["modkey", "Shift"]
+key = "Up"
+
+[[keybind]]
+command = "MoveWindowDown"
+modifier = ["modkey", "Shift"]
+key = "Down"
+
+[[keybind]]
+command = "IncreaseMainWidth"
+value = "5"
+modifier = ["modkey", "Shift"]
+key = "Right"
+
+[[keybind]]
+command = "DecreaseMainWidth"
+value = "5"
+modifier = ["modkey", "Shift"]
+key = "Left"
+
+[[keybind]]
+command = "FocusWindowUp"
+modifier = ["modkey"]
+key = "Up"
+
+[[keybind]]
+command = "FocusWindowDown"
+modifier = ["modkey"]
+key = "Down"
+
+[[keybind]]
+command = "NextLayout"
+modifier = ["modkey", "Control"]
+key = "Up"
+
+[[keybind]]
+command = "PreviousLayout"
+modifier = ["modkey", "Control"]
+key = "Down"
+
+[[keybind]]
+command = "FocusWorkspaceNext"
+modifier = ["modkey"]
+key = "Right"
+
+[[keybind]]
+command = "FocusWorkspacePrevious"
+modifier = ["modkey"]
+key = "Left"
+
+[[keybind]]
+command = "GotoTag"
+value = "1"
+modifier = ["modkey"]
+key = "1"
+
+[[keybind]]
+command = "GotoTag"
+value = "2"
+modifier = ["modkey"]
+key = "2"
+
+[[keybind]]
+command = "GotoTag"
+value = "3"
+modifier = ["modkey"]
+key = "3"
+
+[[keybind]]
+command = "GotoTag"
+value = "4"
+modifier = ["modkey"]
+key = "4"
+
+[[keybind]]
+command = "GotoTag"
+value = "5"
+modifier = ["modkey"]
+key = "5"
+
+[[keybind]]
+command = "GotoTag"
+value = "6"
+modifier = ["modkey"]
+key = "6"
+
+[[keybind]]
+command = "GotoTag"
+value = "7"
+modifier = ["modkey"]
+key = "7"
+
+[[keybind]]
+command = "GotoTag"
+value = "8"
+modifier = ["modkey"]
+key = "8"
+
+[[keybind]]
+command = "GotoTag"
+value = "9"
+modifier = ["modkey"]
+key = "9"
+
+[[keybind]]
+command = "MoveToTag"
+value = "1"
+modifier = ["modkey", "Shift"]
+key = "1"
+
+[[keybind]]
+command = "MoveToTag"
+value = "2"
+modifier = ["modkey", "Shift"]
+key = "2"
+
+[[keybind]]
+command = "MoveToTag"
+value = "3"
+modifier = ["modkey", "Shift"]
+key = "3"
+
+[[keybind]]
+command = "MoveToTag"
+value = "4"
+modifier = ["modkey", "Shift"]
+key = "4"
+
+[[keybind]]
+command = "MoveToTag"
+value = "5"
+modifier = ["modkey", "Shift"]
+key = "5"
+
+[[keybind]]
+command = "MoveToTag"
+value = "6"
+modifier = ["modkey", "Shift"]
+key = "6"
+
+[[keybind]]
+command = "MoveToTag"
+value = "7"
+modifier = ["modkey", "Shift"]
+key = "7"
+
+[[keybind]]
+command = "MoveToTag"
+value = "8"
+modifier = ["modkey", "Shift"]
+key = "8"
+
+[[keybind]]
+command = "MoveToTag"
+value = "9"
+modifier = ["modkey", "Shift"]
+key = "9"
+
+[[keybind]]
+command = "Execute"
+value = "light -A 10"
+modifier = []
+key = "XF86XK_MonBrightnessUp"
+
+[[keybind]]
+command = "Execute"
+value = "light -U 10"
+modifier = []
+key = "XF86XK_MonBrightnessDown"
+
+[[keybind]]
+command = "Execute"
+value = "kcalc"
+modifier = []
+key = "XF86XK_Calculator"
+
+[[keybind]]
+command = "Execute"
+value = "amixer -D pulse sset Master 5%-"
+modifier = []
+key = "XF86XK_AudioLowerVolume"
+
+[[keybind]]
+command = "Execute"
+value = "amixer -D pulse sset Master 5%+"
+modifier = []
+key = "XF86XK_AudioRaiseVolume"
+
+[[keybind]]
+command = "Execute"
+value = "amixer -D pulse set Master 1+ toggle"
+modifier = []
+key = "XF86XK_AudioMute"
+
+[[keybind]]
+command = "Execute"
+value = "ffxivrecord.sh hw"
+modifier = ["Alt"]
+key = "r"
+
+[[keybind]]
+command = "Execute"
+value = "ffxivrecord.sh kill"
+modifier = ["Alt", "Shift"]
+key = "r"
+
+[[keybind]]
+command = "Execute"
+value = "screenshot.sh"
+modifier = []
+key = "Print"
+
+[[keybind]]
+command = "Execute"
+value = "screenshot.sh -s"
+modifier = ["modkey", "Shift"]
+key = "s"
+
+[[keybind]]
+command = "Execute"
+value = "rofi_mpvtube"
+modifier = ["modkey"]
+key = "y"
+
+[[keybind]]
+command = "Execute"
+value = "networkmanager_dmenu -no-default-config"
+modifier = ["modkey"]
+key = "n"
+
+[[keybind]]
+command = "Execute"
+value = "pkill noafk || noafk"
+modifier = ["modkey", "Shift"]
+key = "grave"
+
+[[keybind]]
+command = "Execute"
+value = "kitty -e ncmpcpp"
+modifier = ["modkey"]
+key = "F2"
+
+[[keybind]]
+command = "Execute"
+value = "dm-radio"
+modifier = ["modkey", "Shift"]
+key = "F2"
+
+[[keybind]]
+command = "Execute"
+value = "eww state | grep : && eww close-all || eww open-many weather_side time_side smol_calendar player_side sliders_side"
+modifier = ["modkey"]
+key = "z"
