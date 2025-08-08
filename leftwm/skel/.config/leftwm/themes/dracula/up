@@ -25,6 +25,11 @@ fi
 
 dunst &
 nm-applet &
+xcompmgr -c -f -n &
+/usr/bin/octoxbps-notifier &
+volumeicon &
+cbatticon &
+redshift-gtk &
 
 index=0
 monitors=($(polybar -m | sed s/:.*//))
@@ -34,3 +39,4 @@ do
   monitor=${monitors[index]} width=$(( width - 16 )) polybar -c "$SCRIPTPATH"/polybar.config $barname &> /dev/null &
   let index=index+1
 done
+

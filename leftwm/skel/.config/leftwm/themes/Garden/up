@@ -33,8 +33,13 @@ dunst -conf "$SCRIPTPATH"/dunst/dunstrc &
 blueman-applet &
 nm-applet &
 lxqt-policykit-agent &
-xfce4-power-manager &
+xcompmgr -c -f -n &
 numlockx on 
+/usr/bin/octoxbps-notifier &
+volumeicon &
+cbatticon &
+redshift-gtk &
+
 
 #Start Polybar
 export index=0

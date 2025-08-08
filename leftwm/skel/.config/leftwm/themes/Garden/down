@@ -9,8 +9,13 @@ fi
 
 leftwm-command UnloadTheme
 
-pkill compton
-pkill picom
-pkill polybar
-pkill dunst
-#pkill xss-lock
+pkill polybar &
+pkill xcompmgr &
+pkill dunst &
+pkill redshift-gtk &
+pkill nm-applet &
+pkill volumeicon &
+pkill octoxbps-notifier &
+pkill udiskie &
+pkill xautolock &
+pkill cabtticon &
