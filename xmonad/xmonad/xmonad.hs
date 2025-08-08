@@ -5,16 +5,17 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.Hooks.EwmhDesktops
-import XMonad.Util.EZConfig
-import XMonad.Util.Loggers
-import XMonad.Util.NamedScratchpad
-import XMonad.Util.SpawnOnce
 import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.IndependentScreens
 import XMonad.Layout.Magnifier
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.Spacing
 import XMonad.Layout.Gaps
+import XMonad.ManageHook
+import XMonad.Util.EZConfig
+import XMonad.Util.Loggers
+import XMonad.Util.NamedScratchpad
+import XMonad.Util.SpawnOnce
 import qualified XMonad.StackSet as W
 
 main :: IO ()
@@ -46,17 +47,18 @@ myConfig = def
     , ("M-n", namedScratchpadAction myScratchPads "nano") ]
 
 myScratchPads :: [NamedScratchpad]
-myScratchPads = [ NS "terminal" "xterm -name scratchpad" (title =? "scratchpad")   nonFloating 
-		, NS "htop" "xterm -e htop" (title =? "htop") (customFloating $ W.RationalRect (1/4) (1/4) (1/2) (1/2))
-                , NS "nano" "xterm -e nano" (title =? "nano") (customFloating $ W.RationalRect (1/4) (1/4) (1/2) (1/2)) ]
+myScratchPads = [ NS "terminal" "xterm -name scratchpad" (title =? "scratchpad") (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3))
+		, NS "htop" "xterm -e htop" (title =? "htop") (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3))
+                , NS "nano" "xterm -e nano" (title =? "nano") (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3))
+		]
 
 myManageHook :: ManageHook
 myManageHook = composeAll
     [ className =? "Gimp" --> doFloat
-    , className =? "scratchpad" --> nonFloating
-    , className =? "htop" --> nonFloating
-    , className =? "nano" --> doFloat
     , isDialog            --> doFloat
+    , title =? "scratchpad" --> doCenterFloat
+    , title =? "nano" --> doCenterFloat
+    , title =? "htop" --> doCenterFloat
     ]
 
 myLayout = spacingWithEdge 3 $ gaps [(U, 3)] $ emptyBSP ||| tiled ||| Mirror tiled ||| Full ||| threeCol
