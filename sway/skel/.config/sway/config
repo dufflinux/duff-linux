@@ -3,7 +3,6 @@
 # Copy this to ~/.config/sway/config and edit it to your liking.
 #
 # Read `man 5 sway` for a complete reference.
-
 ### Variables
 #
 # Logo key. Use Mod1 for Alt.
@@ -25,14 +24,27 @@ set $menu wmenu-run
 
 ### Visuals
 
-# Dracula theme
-# class                 border  bground text    indicator child_border
-client.focused          #01d6b6 #01d6b6 #F8F8F2 #ff92df   #01d6b6
-client.focused_inactive #44475A #44475A #F8F8F2 #44475A   #44475A
-client.unfocused        #44475A #1d212a #BFBFBF #1d212a   #1d212a
-client.urgent           #44475A #f05c8e #F8F8F2 #f05c8e   #f05c8e
-client.placeholder      #1d212a #1d212a #F8F8F2 #1d212a   #1d212a
-client.background       #F8F8F2
+include catppuccin-mocha
+
+## Catppuccin
+## target                 title     bg    text   indicator  border
+
+client.focused           $lavender $base $text  $rosewater $lavender
+client.focused_inactive  $overlay0 $base $text  $rosewater $overlay0
+client.unfocused         $overlay0 $base $text  $rosewater $overlay0
+client.urgent            $peach    $base $peach $overlay0  $peach
+client.placeholder       $overlay0 $base $text  $overlay0  $overlay0
+client.background        $base
+
+## Dracula theme
+## class                 border  bground text    indicator child_border
+
+#client.focused          #01d6b6 #01d6b6 #F8F8F2 #ff92df   #01d6b6
+#client.focused_inactive #44475A #44475A #F8F8F2 #44475A   #44475A
+#client.unfocused        #44475A #1d212a #BFBFBF #1d212a   #1d212a
+#client.urgent           #44475A #f05c8e #F8F8F2 #f05c8e   #f05c8e
+#client.placeholder      #1d212a #1d212a #F8F8F2 #1d212a   #1d212a
+#client.background       #F8F8F2
 
 ### GTK Theme
 exec_always {
@@ -42,8 +54,9 @@ exec_always {
 
 ## Gaps
 gaps inner 10
-gaps outer 10
+gaps outer 5
 smart_gaps on
+smart_borders on
 
 ## Borders
 for_window [class="^.*"] border pixel 5
@@ -59,9 +72,6 @@ exec wlsunset -g 0.8 -l 41.6 -L -8.62 &
 ### Automount
 exec udiskie -at &
 
-### Bar
-exec waybar &
-
 ### Start SwayNotificationCenter
 exec swaync &
 
@@ -73,7 +83,7 @@ exec octoxbps-notifier &
 
 # Keyboard layout
 input type:keyboard {
-    xkb_layout ""
+    xkb_layout "pt"
     xkb_variant ""
 }
 
@@ -299,18 +309,25 @@ bindsym $mod+r mode "resize"
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
-#bar {
-#    position top
-#
+bar {
+    swaybar_command waybar
     # When the status_command prints a new line to stdout, swaybar updates.
     # The default just shows the current date and time.
+#    position top
 #    status_command while date +'%Y-%m-%d %X'; do sleep 1; done
 #
-#    colors {
-#        statusline #ffffff
-#        background #323232
-#        inactive_workspace #32323200 #32323200 #5c5c5c
-#    }
-#}
+#  colors {
+#    background         $base
+#    statusline         $text
+#    focused_statusline $text
+#    focused_separator  $base
+#
+#    # target           border bg        text
+#    focused_workspace  $base  $mauve    $crust
+#    active_workspace   $base  $surface2 $text
+#    inactive_workspace $base  $base     $text
+#    urgent_workspace   $base  $red      $crust
+#  }
+}
 
 include /etc/sway/config.d/*
