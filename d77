@@ -191,7 +191,7 @@ include_xfce() {
 }
 
 include_way() {
-    	PKGS="$PKGS nwg-look nwg-launchers Waybar wlsunset xorg-server-xwayland xwayland-satellite"
+    	PKGS="$PKGS network-manager-applet nwg-look nwg-launchers Waybar wlsunset xorg-server-xwayland xwayland-satellite"
 	cp ./common/wswap-way "$INCLUDEDIR"/usr/bin/
 }	
 
