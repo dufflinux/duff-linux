@@ -357,6 +357,7 @@ binds {
     Mod+O { spawn "gmrun"; }
     Mod+P { spawn "pcmanfm"; }
     Mod+T { spawn "swaylock"; }
+    Mod+X { spawn "fuzzel-power-menu"; }
 
     // You can also use a shell. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument in the end.
