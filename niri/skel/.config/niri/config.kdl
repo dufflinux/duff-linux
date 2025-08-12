@@ -13,7 +13,7 @@ input {
             // For more information, see xkeyboard-config(7).
 
             // For example:
-            // layout "pt"
+            layout "pt"
             // variant "deadtilde"
             // options "grp:win_space_toggle,compose:ralt,ctrl:nocaps"
         }
@@ -260,9 +260,9 @@ spawn-at-startup "dunst"
 spawn-at-startup "waybar"
 spawn-at-startup "nm-applet"
 spawn-at-startup "udiskie" "-at"
-spawn-at-startup "octoxbps-notifier"
+spawn-at-startup "/usr/bin/octoxbps-notifier"
 spawn-at-startup "screenlock"
-//spawn-at-startup "wlsunset" "-l 41,6" "-L -8,62" Porto, Portugal
+spawn-at-startup "wlsunset" "-l 41,6" "-L -8,62" //Porto, Portugal
 
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
@@ -314,6 +314,23 @@ window-rule {
     open-floating true
 }
 
+// Open the Gmrun as floating by default.
+window-rule {
+    match app-id="gmrun"
+    open-floating true
+}
+
+window-rule {
+    match app-id="^dropdown$"
+    open-floating true
+    default-floating-position x=0 y=15 relative-to="top"
+    default-column-width { proportion 0.8; }
+    default-window-height { proportion 0.5; }
+    opacity 0.95
+    geometry-corner-radius 12
+    clip-to-geometry true
+}
+
 // Example: block out two password managers from screen capture.
 // (This example rule is commented out with a "/-" in front.)
 /-window-rule {
@@ -356,6 +373,7 @@ binds {
     Mod+N { spawn "nwggrid"; }
     Mod+O { spawn "gmrun"; }
     Mod+P { spawn "pcmanfm"; }
+    Mod+S { spawn "kitty" "--class" "dropdown"; }
     Mod+T { spawn "swaylock"; }
     Mod+X { spawn "fuzzel-power-menu"; }
 
