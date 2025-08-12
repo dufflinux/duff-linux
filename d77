@@ -236,6 +236,7 @@ build_variant() {
 	    XFCE=
 	    DMENU=
 	    FUZZEL=
+	    RIVER=
 	    ROFI=
 	    WOFI=
 	    ;;
