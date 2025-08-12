@@ -33,10 +33,15 @@ riverctl spawn "screenlock"
 riverctl map normal Super D spawn fuzzel
 riverctl map normal Super M spawn geary
 riverctl map normal Super N spawn nwggrid
+riverctl map normal Super O spawn gmrun
 riverctl map normal Super W spawn brave-browser-stable
 riverctl map normal Super T spawn swaylock
 riverctl map normal Super X spawn fuzzel-power-menu
 riverctl map normal Super+Shift F spawn pcmanfm
+
+# d77 window rules
+riverctl rule-add -app-id 'gmrun' float
+
 
 # Note: the "Super" modifier is also known as Logo, GUI, Windows, Mod4, etc.
 
