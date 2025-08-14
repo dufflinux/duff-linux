@@ -327,8 +327,8 @@ build_variant() {
 	i3wm)
 	    COMMON=yes
 	    X11=yes
-	    POLY=yes
 	    ROFI=yes
+	    DMENU=yes
             PKGS="$PKGS $XORG_PKGS $CALAMARES $D77_CORE i3-gaps i3lock i3status"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd"
         ;;
