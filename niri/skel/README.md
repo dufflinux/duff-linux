@@ -41,6 +41,8 @@ super + p -> file manager
 
 super + q -> close window
 
+super + s -> scratchpad
+
 ## niri tweaks
 
 To alter the autostart programs, add/swap keybinds and keyboard layout configure ~/.config/niri/config.kdl ; the file is self explanatory and with several examples already configured.
