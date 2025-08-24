@@ -94,6 +94,7 @@ include_common() {
 	mkdir -p "$INCLUDEDIR"/etc/skel/.config
 	mkdir -p "$INCLUDEDIR"/etc/skel/.local/share
 	mkdir -p "$INCLUDEDIR"/etc/default
+	mkdir -p "$INCLUDEDIR"/etc/skel/.local/share
 	mkdir -p "$INCLUDEDIR"/usr/bin
 	mkdir -p "$INCLUDEDIR"/usr/lib
 	mkdir -p "$INCLUDEDIR"/usr/share/applications
@@ -117,6 +118,7 @@ include_common() {
 	cp ./common/d77void.png "$INCLUDEDIR"/usr/share/pixmaps/
 	cp ./common/splash.png "$INCLUDEDIR"/usr/share/void-artwork/
 	cp ./common/anon.face.icon "$INCLUDEDIR"/usr/share/sddm/faces/
+	cp -r ./common/gtksourceview-4 "$INCLUDEDIR"/etc/skel/.local/share/
 	cp -r ./common/config/* "$INCLUDEDIR"/etc/skel/.config/
 	cp -r ./common/themes "$INCLUDEDIR"/etc/skel/.local/share/
 	cp -r ./common/.icons "$INCLUDEDIR"/etc/skel/
