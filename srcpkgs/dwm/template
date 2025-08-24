@@ -1,6 +1,6 @@
 # Template file for 'dwm_icon'
 pkgname=dwm
-version=6.5
+version=6.6
 revision=77
 #archs="i686 x86_64"
 #build_wrksrc=
@@ -19,7 +19,7 @@ license="MIT"
 homepage="https://suckless.org"
 #changelog="https://github.com/dani-77/dwm/releases/tag/dwm-${version}"
 distfiles="https://dl.suckless.org/$pkgname/$pkgname-$version.tar.gz"
-checksum=00db32d3427d70e56a5481cee7b5b9ca284761e79f9cdabab95edbc35c04c413
+checksum=7cfc2c6d9386c07c49e2c906f209c18ba3364ce0b4872eae39f56efdb7fc00a3
 
 do_build() {
 	[ -e ${FILESDIR}/config.h ] && cp ${FILESDIR}/config.h config.h

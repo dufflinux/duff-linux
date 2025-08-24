@@ -1,6 +1,6 @@
 # Template file for 'st'
 pkgname=st
-version=0.9.2
+version=0.9.3
 revision=77
 #archs="i686 x86_64"
 #build_wrksrc=
@@ -17,12 +17,13 @@ short_desc="st patched with alpha and dracula"
 maintainer="Daniel Azevedo <daniazevedo77@posteo.net>"
 license="MIT"
 homepage="https://suckless.org"
-changelog="https://github.com/dani-77/st/releases/tag/st-${version}"
-distfiles="https://github.com/dani-77/st/archive/refs/tags/${version}.tar.gz"
-checksum=126d24872320d5083677a7766823a449847166f7ecc446b8c86b7c7030cb4e16
+#changelog=""
+distfiles="https://dl.suckless.org/st/st-0.9.3.tar.gz"
+checksum=9ed9feabcded713d4ded38c8cebf36a3b08f0042ef7934a0e2b2409da56e649b
 
 pre_build() {
 	mkdir -p ${DESTDIR}/usr/share/terminfo
+	sed -i 's|Liberation Mono|Hack|' config.def.h
 }
 
 pre_install() {
@@ -33,6 +34,7 @@ post_install() {
 	vdoc README
 	vdoc FAQ
 	vlicense LICENSE
+	vinstall ${FILESDIR}/st.desktop 644 usr/share/applications/
 }
 
 st-terminfo_package() {

@@ -1,6 +1,6 @@
 # Template file for 'slock'
 pkgname=slock
-version=1.5
+version=1.6
 revision=77
 #archs="i686 x86_64"
 #build_wrksrc=
@@ -17,9 +17,9 @@ short_desc="slock with patches"
 maintainer="Daniel Azevedo <daniazevedo77@posteo.net>"
 license="MIT"
 homepage="https://suckless.org"
-changelog="https://github.com/dani-77/slock/releases/tag/slock-${version}"
-distfiles="https://github.com/dani-77/slock/archive/refs/tags/slock-${version}.tar.gz"
-checksum=59397a98a24397a09f08fe4ea1d51e6e32a9f70fbbeba89525091d0be317d4d6
+#changelog=""
+distfiles="https://dl.suckless.org/tools/slock-1.6.tar.gz"
+checksum=233d22b8fa65fbdf8a05302863ee5b768ef425c57c88d12059ff15133ebc0e5c
 
 if [ "$XBPS_TARGET_LIBC" = "glibc" ]; then
 	makedepends+=" libxcrypt-devel"
