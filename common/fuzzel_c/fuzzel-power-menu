@@ -28,7 +28,7 @@ case $SELECTION in
 		loginctl suspend
 		;;
 	"logout")
-		loginctl terminate-user $USER
+		kill -9 -1
 		;;
 	"reboot")
 		loginctl reboot

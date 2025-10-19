@@ -6,7 +6,7 @@ DMENU="dmenu -p   "
 
 SESSON_ID=$(loginctl session-status | awk 'NR==1{print $1}')
 Lock_command="slock"
-Exit_command="loginctl terminate-user $USER"
+Exit_command="kill -9 -1"
 Reboot_command="loginctl reboot"
 Shutdown_command="loginctl poweroff"
 
