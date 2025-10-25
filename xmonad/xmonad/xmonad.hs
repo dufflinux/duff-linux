@@ -38,18 +38,20 @@ myConfig = def
     [ ("M-d", spawn "rofi -show drun")
     , ("M-x", spawn "power_menu")
     , ("M-C-p", unGrab *> spawn "scrot -s")
-    , ("M-S-b"  , spawn "brave-browser-stable")
+    , ("M-S-b"  , spawn "qutebrowser")
     , ("M-c"  , spawn "better-control")
     , ("M-C-t"  , spawn "slock")
-    , ("M-S-r", spawn "xmonad --recompile --restart")
+    , ("M-S-r", spawn "xmonad --recompile")
     , ("M-s", namedScratchpadAction myScratchPads "terminal")
     , ("M-h", namedScratchpadAction myScratchPads "htop")
-    , ("M-n", namedScratchpadAction myScratchPads "nano") ]
+    , ("M-a", namedScratchpadAction myScratchPads "alsamixer")
+    , ("M-n", namedScratchpadAction myScratchPads "nmtui") ]
 
 myScratchPads :: [NamedScratchpad]
 myScratchPads = [ NS "terminal" "xterm -name scratchpad" (title =? "scratchpad") (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3))
 		, NS "htop" "xterm -e htop" (title =? "htop") (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3))
-                , NS "nano" "xterm -e nano" (title =? "nano") (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3))
+                , NS "alsamixer" "xterm -e alsamixer" (title =? "alsamixer") (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3))
+                , NS "nmtui" "xterm -e nmtui" (title =? "nmtui") (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3))
 		]
 
 myManageHook :: ManageHook
@@ -57,7 +59,8 @@ myManageHook = composeAll
     [ className =? "Gimp" --> doFloat
     , isDialog            --> doFloat
     , title =? "scratchpad" --> doCenterFloat
-    , title =? "nano" --> doCenterFloat
+    , title =? "alsamixer" --> doCenterFloat
+    , title =? "nmtui" --> doCenterFloat
     , title =? "htop" --> doCenterFloat
     ]
 
