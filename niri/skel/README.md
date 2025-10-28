@@ -4,13 +4,6 @@ Thank you for trying d77void.
 
 ## Installer
 
-To install with Calamares:
-
-```
-su
-
-calamares
-```
 
 To run the tui installer just open a terminal and type:
 
