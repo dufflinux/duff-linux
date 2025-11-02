@@ -15,6 +15,7 @@ function _set_pkg_aliases() {
 		alias pkgsig='xbps-rindex --sign-pkg --privkey privkey.pem hostdir/binpkgs/*.xbps'
 
 		alias srcbuild='./xbps-src pkg'
+		alias isobuild='sudo ./d77 -r /home/dani77/d77void-pkgs/hostdir/binpkgs/ -r /home/dani77/calamares/'
 	fi
 }
 
