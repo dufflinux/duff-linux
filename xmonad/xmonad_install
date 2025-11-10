@@ -48,7 +48,7 @@ sudo tee /usr/share/xsessions/xmonad.desktop > /dev/null << EOF
 [Desktop Entry]
 Name=XMonad
 Comment=Lightweight tiling window manager
-Exec=dbus-launch /home/$username/.cabal/bin/xmonad
+Exec=dbus-launch /home/$username/.local/bin/xmonad
 Type=Application
 EOF
 
