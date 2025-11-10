@@ -6,7 +6,7 @@ GRUB_DEFAULT=0
 #GRUB_HIDDEN_TIMEOUT_QUIET=false
 GRUB_TIMEOUT=5
 GRUB_DISTRIBUTOR='d77void'
-GRUB_CMDLINE_LINUX_DEFAULT='quiet resume=UUID=c02130cc-70c3-4b7a-90b4-1999561d3f77 loglevel=4'
+GRUB_CMDLINE_LINUX_DEFAULT='quiet splash resume=UUID=c02130cc-70c3-4b7a-90b4-1999561d3f77 loglevel=4'
 # Uncomment to use basic console
 #GRUB_TERMINAL_INPUT="console"
 # Uncomment to disable graphical terminal
