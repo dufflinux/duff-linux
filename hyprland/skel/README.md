@@ -23,18 +23,9 @@ Note: To maintain the configuration of the live iso, during install, choose loca
 
 During install, add your user to the storage group. That way udiskie will automount disks.
 
-# NEWS
+## News
 
-- Brave browser is now the default browser;
-
-- Hyprlock configured;
-
-- new d77-welcome script available and corrected;
-
-- some minor changes in keybinds;
-
-- to use calamares just call rofi and select installer
-
+Now with Noctalia-shell installed.
 
 ## 1st run:
 
@@ -54,15 +45,11 @@ super + q -> close window
 
 super + shift + q -> logout
 
-super + b -> swap background
+super + a -> apps menu
 
-super + c -> control pannel
-
-super + d -> menu
+super + shift + c -> control pannel
 
 super + f -> file manager
-
-super + n -> nwg-grid
 
 super + t -> lock screen
 
