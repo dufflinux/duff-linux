@@ -47,7 +47,7 @@ super + shift + q -> logout
 
 super + a -> apps menu
 
-super + shift + c -> control pannel
+super + c -> control pannel
 
 super + f -> file manager
 

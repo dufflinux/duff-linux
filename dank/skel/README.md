@@ -37,24 +37,4 @@ d77-welcome
 
 That way the hyprland repo will be added to /etc/xbps.d and you can add easily other things like steam, flatpak, etc.
 
-# Keybinds
-
-super + return -> terminal
-
-super + q -> close window
-
-super + shift + q -> logout
-
-super + a -> apps menu
-
-super + shift + c -> control pannel
-
-super + f -> file manager
-
-super + t -> lock screen
-
-super + w -> web browser
-
-super + x -> powermenu
-
 Have fun!
