@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 import gi
 
 gi.require_version('EDataServer', '1.2')
