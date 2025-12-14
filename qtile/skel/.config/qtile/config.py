@@ -74,6 +74,12 @@ def dynamic_locker(qtile):
 	elif qtile.core.name == "wayland":
 		qtile.spawn("swaylock")
 
+def dynamic_screen(qtile):
+	if qtile.core.name == "x11":
+		qtile.spawn("scrot")
+	elif qtile.core.name == "wayland":
+		qtile.spawn("grim")
+
 def dynamic_wall(qtile):
 	if qtile.core.name == "x11":
 		qtile.spawn("wswap-X")
@@ -129,6 +135,7 @@ keys = [
     Key([mod], "m", lazy.spawn("geary"), desc="Web browser"),
     Key([mod], "n", lazy.function(dynamic_launcher)),
     Key([mod, "control"], "t", lazy.function(dynamic_locker), desc="Lock Screen"),
+    Key([mod], "p", lazy.function(dynamic_screen)),
     Key([mod], "x", lazy.function(dynamic_power)),
     Key([mod], "y", lazy.spawn("slock"), desc="screen locker"),
     Key([mod], "w", lazy.spawn("brave-browser-stable"), desc="Web browser"),
