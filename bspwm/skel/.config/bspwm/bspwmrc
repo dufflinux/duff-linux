@@ -2,7 +2,7 @@
 
 dunst &
 xcompmgr -c -f -n &
-polybar &
+bspwmbar &
 redshift-gtk &
 feh --bg-scale ~/Wallpaper/background3.png &
 xautolock -time 5 -locker slock &

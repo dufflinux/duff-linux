@@ -297,7 +297,7 @@ build_variant() {
 	    POLY=yes
 	    DMENU=yes
 	    ROFI=yes
-            PKGS="$PKGS $XORG_PKGS $D77_CORE $CALAMARES bspwm sxhkd"
+            PKGS="$PKGS $XORG_PKGS $D77_CORE $CALAMARES bspwm bspwmbar sxhkd"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd power-profiles-daemon"
         ;;
 	cosmic)
