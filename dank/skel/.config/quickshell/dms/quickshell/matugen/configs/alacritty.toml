@@ -1,3 +1,0 @@
-[templates.dmsalacritty]
-input_path = 'SHELL_DIR/matugen/templates/alacritty.toml'
-output_path = '~/.config/alacritty/dank-theme.toml'

@@ -137,11 +137,6 @@ include_common() {
 	cp -r ./common/Wallpaper "$INCLUDEDIR"/usr/share/
 }
 
-include_dank() {
-	mkdir -p "$INCLUDEDIR"/usr/bin
-	cp ./common/dms "$INCLUDEDIR"/usr/bin/
-}
-
 include_dmenu() {
     	PKGS="$PKGS dmenu"
 	mkdir -p "$INCLUDEDIR"/usr/bin
@@ -239,7 +234,6 @@ build_variant() {
 	    D77_EXTRA="abook automake calcurse cargo epson-inkjet-printer-escpr gcc isync make ncspot nextcloud-client neomutt pass pcsc-ccid pcsc-tools pcsclite python3-pip rust"
 	    CALAMARES="calamares grub rsync"
 	    COMMON=
-	    DANK=
 	    X11=
 	    WAY=
 	    NIRI=
@@ -308,8 +302,12 @@ build_variant() {
         ;;
 	dank)
 	    COMMON=yes
-	    DANK=yes
-            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $D77_CORE $CALAMARES cliphist dgop hyprland hyprland-qtutils hyprpaper mate-polkit matugen nwg-look pavucontrol qt5-wayland qt6-multimedia qt6-wayland quickshell xwayland-satellite wayland-devel wayland-protocols wlsunset xdg-desktop-portal-hyprland xorg-server-xwayland"
+            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $D77_CORE $CALAMARES cliphist dankmaterial-shelldgop hyprland hyprland-qtutils hyprpaper mate-polkit matugen nwg-look pavucontrol qt5-wayland qt6-multimedia qt6-wayland quickshell xwayland-satellite wayland-devel wayland-protocols wlsunset xdg-desktop-portal-hyprland xorg-server-xwayland"
+            SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd power-profiles-daemon"
+        ;;
+	dms)
+	    COMMON=yes
+            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $D77_CORE $CALAMARES cliphist dankmaterial-shell dgop gnome-keyring grim ImageMagick mate-polkit matugen nwg-look niri pavucontrol qt5-wayland qt6-multimedia qt6-wayland quickshell swaybg swayidle swayimg SwayNotificationCenter xdg-desktop-portal-gnome xdg-desktop-portal-gtk  xwayland-satellite wayland-devel wayland-protocols wlsunset xorg-server-xwayland xwayland-satellite"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd power-profiles-daemon"
         ;;
 	dwm)
