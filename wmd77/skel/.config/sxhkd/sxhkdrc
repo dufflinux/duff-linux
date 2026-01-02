@@ -1,0 +1,12 @@
+super + a
+	rofi -show drun
+super + b
+	better-control
+super + p
+	scrot
+super + r
+	gmrun
+super + t
+	slock
+super + x
+	rofi -show power -modi power:rofi-power-menu

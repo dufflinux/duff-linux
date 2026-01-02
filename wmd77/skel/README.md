@@ -36,6 +36,8 @@ super + return -> st (terminal)
 
 super + a -> rofi
 
+super + b -> better-control
+
 super + d -> dmenu
 
 super + j/k -> swap focused window
