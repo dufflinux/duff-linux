@@ -36,7 +36,7 @@ super + return -> st (terminal)
 
 super + a -> rofi
 
-super + b -> better-control
+super + b -> swap wallpaper
 
 super + d -> dmenu
 
