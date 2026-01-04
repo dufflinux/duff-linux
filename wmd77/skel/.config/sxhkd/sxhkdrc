@@ -1,7 +1,7 @@
 super + a
 	rofi -show drun
 super + b
-	better-control
+	wswap-X
 super + p
 	scrot
 super + r
