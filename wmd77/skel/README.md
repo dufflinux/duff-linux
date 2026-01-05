@@ -8,6 +8,13 @@ it ships my WM, developed with Penrose Libs and written in Rust.
 Also, I swapped the usual apps nano and ranger for fresh and joshuto, using some new 
 Rust apps.
 
+## Side Note
+
+The config files for startup programs and info on the bar are available at /etc/xdg/wmd77/ ;
+
+If you want to dig more on the WM configurations, download a tarball from Github or clone the repository 
+https://github.com/dani-77/wmd77 and play with it.
+
 ## Installer
 
 To run the tui installer:
