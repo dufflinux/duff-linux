@@ -6,9 +6,9 @@ horizontal_padding  : 0
 text_padding        : 0
 border              : false
 border_width        : 0
-background_colour   : #000000
+background_colour   : #171717
 foreground_colour   : #7abccd
-border_colour       : #005577
+border_colour       : #717394
 font                : iosevka
 font_size           : 14
 
@@ -67,3 +67,13 @@ module.10.name       : date
 module.10.cmd        : date '+%Y-%m-%d'
 module.10.enabled    : true
 module.10.interval   : 60
+
+workspaces.labels              : one two three four five six seven eight nine
+workspaces.active_background   : #717394
+workspaces.active_foreground   : #7abccd
+workspaces.inactive_background : #171717
+workspaces.inactive_foreground : #7abccd
+workspaces.padding_left        : 10
+workspaces.padding_right       : 10
+workspaces.spacing             : 0
+workspaces.position            : left
