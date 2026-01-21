@@ -836,10 +836,8 @@ tag.connect_signal("property::selected", backham)
 autorun = true
 autorunApps =
 {
-   "redshift-gtk",
-   "dunst",
-   "nm-applet",
-   "udiskie -at",
+   "redshift",
+   "udiskie -a",
    "octoxbps-notifier",
    "xcompmgr -c -f -n",
    "synclient TapButton1=1",
