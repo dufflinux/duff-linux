@@ -162,7 +162,6 @@ include_gnome() {
 	mkdir -p "$INCLUDEDIR"/usr/lib
 	mkdir -p "$INCLUDEDIR"/usr/share/applications
 	mkdir -p "$INCLUDEDIR"/usr/share/pixmaps
-	mkdir -p "$INCLUDEDIR"/usr/share/gnome-shell
 	mkdir -p "$INCLUDEDIR"/usr/share/plymouth/themes
 	mkdir -p "$INCLUDEDIR"/usr/share/polkit-1/rules.d
 	mkdir -p "$INCLUDEDIR"/usr/share/void-artwork
