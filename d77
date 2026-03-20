@@ -172,6 +172,7 @@ include_gnome() {
 	cp -r ./common/gnome-shell "$INCLUDEDIR"/etc/skel/.local/share/
 	cp -r ./common/.bash_it "$INCLUDEDIR"/etc/skel/
 	cp -r $variant/skel "$INCLUDEDIR"/etc/
+	cp -r ./common/dconf "$INCLUDEDIR"/etc/
 	cp ./common/asound.conf "$INCLUDEDIR"/etc/
 	cp ./common/grub "$INCLUDEDIR"/etc/default/
 	cp ./common/.gtkrc-2.0 "$INCLUDEDIR"/etc/skel/
