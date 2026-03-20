@@ -161,6 +161,7 @@ include_gnome() {
 	mkdir -p "$INCLUDEDIR"/usr/bin
 	mkdir -p "$INCLUDEDIR"/usr/lib
 	mkdir -p "$INCLUDEDIR"/usr/share/applications
+	mkdir -p "$INCLUDEDIR"/usr/share/backgrounds
 	mkdir -p "$INCLUDEDIR"/usr/share/pixmaps
 	mkdir -p "$INCLUDEDIR"/usr/share/plymouth/themes
 	mkdir -p "$INCLUDEDIR"/usr/share/polkit-1/rules.d
@@ -189,7 +190,7 @@ include_gnome() {
 	cp -r ./common/.icons "$INCLUDEDIR"/etc/skel/
 	cp -r ./common/Wallpaper "$INCLUDEDIR"/etc/skel/
 	cp -r ./common/lib-d77-welcome "$INCLUDEDIR"/usr/lib/
-	cp -r ./common/Wallpaper "$INCLUDEDIR"/usr/share/
+	cp -r ./common/Wallpaper "$INCLUDEDIR"/usr/share/backgrounds/
 }
 
 include_lxqt() {
