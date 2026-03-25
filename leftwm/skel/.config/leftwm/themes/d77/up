@@ -19,15 +19,11 @@ if [ -x "$(command -v feh)" ]; then
     feh --bg-scale $WALLPAPER
 fi
 
-#polybar &
 xcompmgr -c -f -n &
 exec dunst &
-redshift-gtk -l 41.6:-8.62 &
-xautolock -time 5 - locker slock &
-nm-applet &
-volumeicon &
-octoxbps-notifier &
-udiskie -at &
+redshift -l 41.6:-8.62 &
+xautolock -time 15 - locker slock &
+udiskie -a &
 synclient TapButton1=1 &
 synclient TapButton2=3 &
 synclient TapButton3=2 &
