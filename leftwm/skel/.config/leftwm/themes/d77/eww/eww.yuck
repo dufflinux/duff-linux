@@ -21,7 +21,7 @@
 
 (defwidget ram-widget []
   (box :class "metric"
-    (label :text "")
+    (label :text " ")
     (label :text "${round(EWW_RAM.used_mem_perc, 0)}%")))
 
 (defwidget battery-widget []
