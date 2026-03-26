@@ -462,7 +462,7 @@ build_variant() {
 	    X11=yes
 	    DMENU=yes
 	    ROFI=yes
-            PKGS="$PKGS $XORG_PKGS $D77_CORE $CALAMARES eww leftwm leftwm-theme polybar wmctrl"
+            PKGS="$PKGS $XORG_PKGS $D77_CORE $CALAMARES eww leftwm leftwm-theme nerd-fonts-ttf polybar wmctrl"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd power-profiles-daemon"
         ;;
 	lxqt)
