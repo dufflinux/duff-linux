@@ -42,6 +42,8 @@ super + l -> slock
 
 super + m -> geary
 
+super + o -> run
+
 super + p -> scrot
 
 super + s -> scratchpad
