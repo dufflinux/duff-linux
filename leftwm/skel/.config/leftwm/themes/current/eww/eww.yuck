@@ -7,12 +7,14 @@
 
 (defwidget workspaces []
   (box :class "workspaces" :orientation "h" :spacing 5
+    (button :class "ws-btn ws-focused" :onclick "rofi -show powermenu -modi powermenu:rofi-power-menu -config ~/.config/leftwm/themes/current/rofi/config.rasi" (label :text ""))    
     (button :class "ws-btn ws-empty" :onclick "wmctrl -s 0" "1")
     (button :class "ws-btn ws-empty" :onclick "wmctrl -s 1" "2")
     (button :class "ws-btn ws-empty" :onclick "wmctrl -s 2" "3")
     (button :class "ws-btn ws-empty" :onclick "wmctrl -s 3" "4")
     (button :class "ws-btn ws-empty" :onclick "wmctrl -s 4" "5")
-    (button :class "ws-btn ws-empty" :onclick "wmctrl -s 5" "6")))
+    (button :class "ws-btn ws-empty" :onclick "wmctrl -s 5" "6")
+    (button :class "ws-btn ws-busy" :onclick "rofi -show drun -config ~/.config/leftwm/themes/current/rofi/config.rasi" (label :text ""))))
 
 (defwidget cpu-widget []
   (box :class "metric"
@@ -70,7 +72,6 @@
     (volume-widget)
     (clock-widget)))
 
-
 (defwidget bar []
   (centerbox :orientation "h"
     (workspaces)
@@ -89,3 +90,4 @@
     :anchor "top center")
   :reserve (struts :side "top" :distance "26px")
   (bar))
+
