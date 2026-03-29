@@ -14,5 +14,5 @@ configuration{
     font: "Hack 14";
 }
 
-@theme "Arc-Dark"
+@theme "solarized"
 
