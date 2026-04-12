@@ -371,6 +371,7 @@ binds {
     Mod+D { spawn "fuzzel"; }
     Mod+N { spawn "nwggrid"; }
     Mod+O { spawn "gmrun"; }
+    Mod+Shift+O { toggle-overview; }
     Mod+P { spawn "pcmanfm"; }
     Mod+S { spawn "kitty" "--class" "dropdown"; }
     Mod+T { spawn "swaylock"; }
