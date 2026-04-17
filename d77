@@ -98,12 +98,12 @@ include_common() {
 }
 
 include_plasma() {
-    # 1. Create essential directory structure [cite: 13]
+    # 1. Create essential directory structure
     mkdir -p "$INCLUDEDIR"/etc/skel/.config
     mkdir -p "$INCLUDEDIR"/etc/xdg/autostart
     mkdir -p "$INCLUDEDIR"/usr/share/polkit-1/rules.d
 
-    # 2. Keep functional configurations for the installer and audio [cite: 14]
+    # 2. Keep functional configurations for the installer and audio
     cp -r ./common/calamares "$INCLUDEDIR"/etc/
     cp ./common/asound.conf "$INCLUDEDIR"/etc/
     cp ./common/50-udisks.rules "$INCLUDEDIR"/usr/share/polkit-1/rules.d/
