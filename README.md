@@ -3,7 +3,7 @@
 > [!NOTE]
 > This project would not be possible without the use of d77void. Please go check it out here: https://github.com/dani-77/d77void
 
-A personal/opinionated distro based off dani-77's d77void Linux distribution, coming in two flavours: Niri with Noctalia Shell, and KDE Plasma. Please note this is still heavily work-in-progress.
+A personal/opinionated distro based off dani-77's d77void Linux distribution, focused on KDE Plasma. Please note this is still heavily work-in-progress.
 
 # ISO Generation Guide
 
@@ -21,7 +21,7 @@ cd void-packages
 ./xbps-src pkg calamares
 ```
 
-3. Assuming everything went well, step three is to create the ISO 🎉. In a terminal in this directory/repository, run the following command (using KDE Plasma as an example):
+3. Assuming everything went well, step three is to create the ISO 🎉. In a terminal in this directory/repository, run the following command:
 
 ```
 sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs/ -b plasma -- -T d77void
