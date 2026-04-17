@@ -1,6 +1,6 @@
 ###############################################################################
 
-Welcome to the d77void Linux Live system. Two users are available to log in:
+Welcome to the duff-linux Live system. Two users are available to log in:
 
 	- root:voidlinux
 	- anon:voidlinux
@@ -21,8 +21,8 @@ sure to configure your network interface and then use:
 The Void Linux Handbook is also available for offline access in multiple
 formats, and can be accessed with the `void-docs(1)` utility.
 
-Thanks for using d77void Linux.
+Thanks for using duff-linux.
 
-    https://d77void.sourceforge.io
+    https://github.com/duffnshmrt/duff-linux
 
 ###############################################################################

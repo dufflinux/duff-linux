@@ -97,7 +97,7 @@ WIDGET_SIZE="10 70"
 DIALOG() {
     rm -f $ANSWER
     dialog --colors --keep-tite --no-shadow --no-mouse \
-        --backtitle "${BOLD}${WHITE}d77void Linux installation -- https://d77void.sourceforge.io (0.26 97416b7)${RESET}" \
+        --backtitle "${BOLD}${WHITE}duff-linux installation -- https://github.com/duffnshmrt/duff-linux (0.26 97416b7)${RESET}" \
         --cancel-label "Back" --aspect 20 "$@" 2>$ANSWER
     return $?
 }
@@ -105,7 +105,7 @@ DIALOG() {
 INFOBOX() {
     # Note: dialog --infobox and --keep-tite don't work together
     dialog --colors --no-shadow --no-mouse \
-        --backtitle "${BOLD}${WHITE}d77void Linux installation -- https://d77void.sourceforge.io (0.26 97416b7)${RESET}" \
+        --backtitle "${BOLD}${WHITE}duff-linux installation -- https://github.com/duffnshmrt/duff-linux (0.26 97416b7)${RESET}" \
         --title "${TITLE}" --aspect 20 --infobox "$@"
 }
 
@@ -640,7 +640,7 @@ menu_hostname() {
 
 set_hostname() {
     local hostname="$(get_option HOSTNAME)"
-    echo "${hostname:-d77void}" > $TARGETDIR/etc/hostname
+    echo "${hostname:-duff-linux}" > $TARGETDIR/etc/hostname
 }
 
 menu_rootpassword() {
@@ -686,7 +686,7 @@ menu_useraccount() {
 
     while true; do
         _preset=$(get_option USERLOGIN)
-        [ -z "$_preset" ] && _preset="d77void"
+        [ -z "$_preset" ] && _preset="duff-linux"
         DIALOG --inputbox "Enter a primary login name:" ${INPUTSIZE} "$_preset"
         if [ $? -eq 0 ]; then
             _userlogin="$(cat $ANSWER)"
@@ -1474,7 +1474,7 @@ ${BOLD}Do you want to continue?${RESET}" 20 80 || return
     umount_filesystems
 
     # installed successfully.
-    DIALOG --yesno "${BOLD}d77oid  has been installed successfully!${RESET}\n
+    DIALOG --yesno "${BOLD}duff-linux has been installed successfully!${RESET}\n
 Do you want to reboot the system?" ${YESNOSIZE}
     if [ $? -eq 0 ]; then
         shutdown -r now
@@ -1518,7 +1518,7 @@ menu() {
         AFTER_HOSTNAME="Timezone"
         DIALOG --default-item $DEFITEM \
             --extra-button --extra-label "Settings" \
-            --title " d77void installation menu " \
+            --title " duff-linux installation menu " \
             --menu "$MENULABEL" 10 70 0 \
             "Keyboard" "Set system keyboard" \
             "Network" "Set up the network" \
@@ -1537,7 +1537,7 @@ menu() {
         AFTER_HOSTNAME="Locale"
         DIALOG --default-item $DEFITEM \
             --extra-button --extra-label "Settings" \
-            --title " d77void installation menu " \
+            --title " duff-linux installation menu " \
             --menu "$MENULABEL" 10 70 0 \
             "Keyboard" "Set system keyboard" \
             "Network" "Set up the network" \

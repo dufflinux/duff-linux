@@ -1,5 +1,5 @@
 ---
-componentName:  d77void
+componentName:  duff-linux
 
 welcomeStyleCalamares:   true
 welcomeExpandingLogo:   true
@@ -13,17 +13,17 @@ navigation: widget
 
 strings:
     productName:         "${NAME}"
-    shortProductName:    d77void
+    shortProductName:    duff-linux
     version:             Rolling
     shortVersion:        Rolling
-    versionedName:       d77void
-    shortVersionedName:  d77void
-    bootloaderEntryName: d77void
+    versionedName:       duff-linux
+    shortVersionedName:  duff-linux
+    bootloaderEntryName: duff-linux
 
-    productUrl:          https://d77void.sourceforge.io
-    supportUrl:          https://discord.gg/Q2u3T7b9Ny
+    productUrl:          https://github.com/duffnshmrt/duff-linux
+    supportUrl:          https://github.com/duffnshmrt/duff-linux
     knownIssuesUrl:      https://github.com/calamares/calamares/issues
-    releaseNotesUrl:     https://d77void.sourceforge.io
+    releaseNotesUrl:     https://github.com/duffnshmrt/duff-linux
     donateUrl:           https://kde.org/community/donations/index.php
 
 images:

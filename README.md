@@ -24,5 +24,5 @@ cd void-packages
 3. Assuming everything went well, step three is to create the ISO 🎉. In a terminal in this directory/repository, run the following command:
 
 ```
-sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs/ -b plasma -- -T d77void
+sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs/ -b plasma -- -T duff-linux
 ```
