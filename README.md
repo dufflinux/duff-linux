@@ -1,4 +1,4 @@
-# Duff Linux 🍺 (WIP)
+# Duff-Linux 🍺 (WIP)
 
 > [!NOTE]
 > This project would not be possible without the use of d77void. Please go check it out here: https://github.com/dani-77/d77void
