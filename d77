@@ -257,7 +257,7 @@ build_variant() {
         ;;      
 	plasma)
 	    PLASMA=yes
-            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $D77_GNOME $CALAMARES ark kde5 kde5-baseapps kmail qt5-graphicaleffects sddm yakuake"
+            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $CALAMARES ark kde5 kde5-baseapps kmail qt5-graphicaleffects sddm yakuake"
             SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd power-profiles-daemon"
         ;;
         *)
@@ -265,11 +265,6 @@ build_variant() {
             exit 1
         ;;
     esac
-
-[greeter]
-indicators = ~host;~spacer;~clock;~spacer;~layout;~session;~a11y;~power
-EOF
-    fi
 
     if [ "$COMMON" = yes ]; then
         include_common
