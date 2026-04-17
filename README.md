@@ -3,7 +3,7 @@
 > [!NOTE]
 > This project would not be possible without the use of d77void. Please go check it out here: https://github.com/dani-77/d77void
 
-A personal/opinionated distro based off dani-77's d77void Linux distribution, focused on KDE Plasma. Please note this is still heavily work-in-progress.
+A personal/opinionated distro based off dani-77's d77void Linux distribution, focused on KDE Plasma with BTRFS. Please note this is still heavily work-in-progress.
 
 # ISO Generation Guide
 
