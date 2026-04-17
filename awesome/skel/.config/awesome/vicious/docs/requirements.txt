@@ -1,3 +1,0 @@
-Sphinx >= 3
-sphinx_rtd_theme >= 1
-sphinxcontrib-luadomain

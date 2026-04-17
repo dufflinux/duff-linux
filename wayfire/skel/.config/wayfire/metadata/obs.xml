@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<wayfire>
-	<plugin name="obs">
-	<_short>OBS</_short>
-	<_long>Change the opacity, brightness and saturation of windows using ipc scripts</_long>
-	<category>Effects</category>
-	</plugin>
-</wayfire>

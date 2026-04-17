@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<wayfire>
-	<plugin name="gtk-shell">
-		<_short>GTK Shell Protocol</_short>
-		<_long>An implementation of the gtk-shell protocol.</_long>
-		<category>Utility</category>
-	</plugin>
-</wayfire>

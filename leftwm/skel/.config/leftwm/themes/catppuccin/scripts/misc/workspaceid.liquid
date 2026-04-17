@@ -1,9 +1,0 @@
-{% for ws in workspaces %}
-{% for tag in ws.tags %}
-{% if  tag.mine %}
-{% if tag.focused %}
-{{ ws.index }}
-{% endif %}
-{% endif %}
-{% endfor %}
-{% endfor %}

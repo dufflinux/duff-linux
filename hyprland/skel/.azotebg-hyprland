@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-pkill swaybg
-swaybg -i "/usr/share/hypr/wall2.png" -m fill &

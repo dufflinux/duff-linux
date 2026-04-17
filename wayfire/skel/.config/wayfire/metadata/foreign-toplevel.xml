@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<wayfire>
-	<plugin name="foreign-toplevel">
-		<_short>Foreign Toplevel Protocol</_short>
-		<_long>An implementation of the wlr-foreign-toplevel-management-v1 protocol.</_long>
-		<category>Utility</category>
-	</plugin>
-</wayfire>
