@@ -13,7 +13,7 @@ A personal/opinionated distro based off dani-77's d77void Linux distribution, wi
 - OctoXBPS as a graphical application to manage native packages
 - OctoXBPS Notifier to tell you when updates are available
 - Flatpak support with Discover out of the box
-- Minimal, very lightly themed (uses Plasma's dark mode)
+- Very lightly themed (uses Plasma's dark mode)
 
 <img src="https://github.com/duffnshmrt/duff-linux/blob/main/duff-linux.png?raw=true" width="300">
 
