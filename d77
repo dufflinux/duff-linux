@@ -103,11 +103,24 @@ include_plasma() {
     mkdir -p "$INCLUDEDIR"/etc/xdg/autostart
     mkdir -p "$INCLUDEDIR"/usr/share/polkit-1/rules.d
 
+    # 1. Autostart Calamares in the Live ISO
+    mkdir -p "$INCLUDEDIR"/etc/skel/.config/autostart
+    ln -sf /usr/share/applications/calamares.desktop "$INCLUDEDIR"/etc/skel/.config/autostart/calamares.desktop
+
     # 1. Create the system-wide Flatpak remotes directory
     mkdir -p "$INCLUDEDIR"/etc/flatpak/remotes.d
     
     # 2. Download the Flathub repo file directly into the ISO
     curl -L -o "$INCLUDEDIR"/etc/flatpak/remotes.d/flathub.flatpakrepo https://dl.flathub.org/repo/flathub.flatpakrepo
+
+    # 1. Create the SDDM configuration directory
+    mkdir -p "$INCLUDEDIR"/etc/sddm.conf.d
+
+    # 2. Generate the config file to set the theme to Breeze
+    cat <<EOF > "$INCLUDEDIR"/etc/sddm.conf.d/kde_theme.conf
+[Theme]
+Current=breeze
+EOF
 
     # 2. Keep functional configurations for the installer and audio
     cp -r ./common/calamares "$INCLUDEDIR"/etc/
@@ -182,7 +195,7 @@ build_variant() {
         ;;     
 	plasma)
 	    PLASMA=yes
-            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $D77_CORE $CALAMARES ark kde-plasma kde-baseapps sddm discover flatpak xdg-desktop-portal-kde"
+            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $D77_CORE $CALAMARES ark kde-plasma kde-baseapps sddm-kcm sddm discover flatpak xdg-desktop-portal-kde"
             SERVICES="$SERVICES dbus sddm NetworkManager polkitd power-profiles-daemon"
         ;;
         *)
