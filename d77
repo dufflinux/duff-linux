@@ -103,6 +103,20 @@ include_plasma() {
     mkdir -p "$INCLUDEDIR"/etc/xdg/autostart
     mkdir -p "$INCLUDEDIR"/usr/share/polkit-1/rules.d
 
+    # Create the XBPS hook directory
+    mkdir -p "$INCLUDEDIR"/etc/xbps.d/hooks
+
+# Create a pre-transaction hook for snapshots
+    cat <<EOF > "$INCLUDEDIR"/etc/xbps.d/hooks/pre-install-snapshot.sh
+#!/bin/sh
+if command -v snapper >/dev/null; then
+    snapper -c root create --description "Before XBPS transaction" --cleanup-algorithm number
+    # Manually update GRUB since the daemon is missing
+    grub-mkconfig -o /boot/grub/grub.cfg
+fi
+EOF
+    chmod 755 "$INCLUDEDIR"/etc/xbps.d/hooks/pre-install-snapshot.sh
+
     # 1. Autostart Calamares in the Live ISO
     mkdir -p "$INCLUDEDIR"/etc/skel/.config/autostart
     ln -sf /usr/share/applications/calamares.desktop "$INCLUDEDIR"/etc/skel/.config/autostart/calamares.desktop
@@ -195,8 +209,8 @@ build_variant() {
         ;;     
 	plasma)
 	    PLASMA=yes
-            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $D77_CORE $CALAMARES ark kde-plasma kde-baseapps sddm-kcm sddm discover flatpak xdg-desktop-portal-kde"
-            SERVICES="$SERVICES dbus sddm NetworkManager polkitd power-profiles-daemon"
+            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $D77_CORE $CALAMARES snapper cronie grub-btrfs inotify-tools ark kde-plasma kde-baseapps sddm-kcm sddm discover flatpak xdg-desktop-portal-kde"
+            SERVICES="$SERVICES dbus sddm NetworkManager polkitd power-profiles-daemon cronie"
         ;;
         *)
             >&2 echo "Unknown variant $variant"
