@@ -5,7 +5,15 @@
 > [!NOTE]
 > This project would not be possible without the use of d77void. Please go check it out here: https://github.com/dani-77/d77void
 
-A personal/opinionated distro based off dani-77's d77void Linux distribution, focused on KDE Plasma with BTRFS. Please note this is still heavily work-in-progress.
+A personal/opinionated distro based off dani-77's d77void Linux distribution, with the following notable features:
+- KDE Plasma as the desktop environment, uses latest version available
+- Linux kernel 7.0.0_1 instead of the default older version
+- Live environment with Calamares installer
+- BTRFS (snapper support WIP)
+- OctoXBPS as a graphical application to manage native packages
+- OctoXBPS Notifier to tell you when updates are available
+- Flatpak support with Discover out of the box
+- Minimal, very lightly themed (uses Plasma's dark mode)
 
 <img src="https://github.com/duffnshmrt/duff-linux/blob/main/duff-linux.png?raw=true" width="300">
 
