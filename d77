@@ -117,6 +117,49 @@ fi
 EOF
     chmod 755 "$INCLUDEDIR"/etc/xbps.d/hooks/pre-install-snapshot.sh
 
+# --- Btrfs Snapshot Read-Only Overlay (v3 - Session Fix) ---
+    mkdir -p "$INCLUDEDIR"/etc/runit/core-services
+    
+    cat <<'EOF' > "$INCLUDEDIR"/etc/runit/core-services/03-snapshot-overlay.sh
+#!/bin/sh
+# Duff-Linux: Advanced Snapshot Overlayfs Handler
+
+if [ ! -w / ]; then
+    msg "Snapshot boot detected. Preparing writable rescue environment..."
+    
+    # 1. Ensure /tmp is a clean, writable tmpfs (Critical for X11/Wayland sockets)
+    # We mount a fresh tmpfs here to ensure proper permissions (1777)
+    mount -t tmpfs -o mode=1777,nosuid,nodev tmpfs /tmp
+    
+    # 2. Define directories that MUST be writable for a KDE/NVIDIA session
+    # Including AccountsService and sddm state specifically
+    OVERLAY_DIRS="/var/lib/sddm /var/lib/AccountsService /var/cache /var/log /var/tmp /home"
+    
+    for dir in $OVERLAY_DIRS; do
+        if [ -d "$dir" ] && [ ! -w "$dir" ]; then
+            mkdir -p "/run/overlay${dir}/upper"
+            mkdir -p "/run/overlay${dir}/work"
+            
+            # Use 'upperdir' permissions from the original directory to stay safe
+            chmod --reference="$dir" "/run/overlay${dir}/upper"
+            
+            mount -t overlay overlay \
+                -o lowerdir="${dir}",upperdir="/run/overlay${dir}/upper",workdir="/run/overlay${dir}/work" \
+                "${dir}"
+        fi
+    done
+    
+    # 3. Special handling for /var/lib (if not fully overlayed)
+    # Some NVIDIA/Mesa drivers need access here
+    if [ ! -w /var/lib ]; then
+        mount -t tmpfs -o mode=0755 tmpfs /var/lib/nvidia 2>/dev/null
+    fi
+
+    msg "Rescue OverlayFS active. Desktop session should now initialize."
+fi
+EOF
+    chmod 755 "$INCLUDEDIR"/etc/runit/core-services/03-snapshot-overlay.sh
+
     # 1. Autostart Calamares in the Live ISO
     mkdir -p "$INCLUDEDIR"/etc/skel/.config/autostart
     ln -sf /usr/share/applications/calamares.desktop "$INCLUDEDIR"/etc/skel/.config/autostart/calamares.desktop
