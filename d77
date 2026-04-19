@@ -453,7 +453,7 @@ build_variant() {
         ;;     
 	plasma)
 	    PLASMA=yes
-            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $D77_CORE $CALAMARES cronie ark kde-plasma kde-baseapps sddm-kcm sddm discover flatpak xdg-desktop-portal-kde"
+            PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $D77_CORE $CALAMARES cronie ark kde-plasma kde-baseapps spectacle sddm-kcm sddm discover flatpak xdg-desktop-portal-kde"
             SERVICES="$SERVICES dbus sddm NetworkManager polkitd power-profiles-daemon cronie zramen"
         ;;
         *)
