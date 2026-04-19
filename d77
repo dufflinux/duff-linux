@@ -242,6 +242,31 @@ EOF
 
     # 4. Set OctoXBPS Notifier to autostart by default
     ln -sf /usr/share/applications/octoxbps-notifier.desktop "$INCLUDEDIR"/etc/xdg/autostart/
+
+    # 5. Fastfetch branding
+    mkdir -p "$INCLUDEDIR"/etc/fastfetch
+    cat <<'EOF' > "$INCLUDEDIR"/etc/fastfetch/duff-linux.txt
+      .-.
+     (, )O()
+    ( )O.( ')o.
+    |XXXXXXXX|O
+  __|//\\//\\|o
+ /.-|\\//\\//|
+||  |//\\//\\|
+ \'-|\\//\\//|
+  `"|//\\//\\|
+jgs |XXXXXXXX|
+    `""`""`""`
+EOF
+    cat <<'EOF' > "$INCLUDEDIR"/etc/fastfetch/config.jsonc
+{
+    "logo": {
+        "source": "/etc/fastfetch/duff-linux.txt",
+        "type": "file",
+        "color": { "1": "yellow" }
+    }
+}
+EOF
 }
 
 include_x11() {
@@ -266,7 +291,7 @@ build_variant() {
 			KERNEL_PKG="linux7.0"
             WANT_INSTALLER=yes
             TARGET_ARCH="$ARCH"
-	    D77_CORE="acpi alsa-plugins-pulseaudio alsa-utils bash-completion ca-certificates curl elogind git inxi nano NetworkManager octoxbps polkit power-profiles-daemon sddm udiskie ufw unzip usbutils util-linux void-repo-multilib void-repo-multilib-nonfree void-repo-nonfree wget xdg-user-dirs xdg-user-dirs-gtk xdg-utils xinit xorg xorg-server"
+	    D77_CORE="acpi alsa-plugins-pulseaudio alsa-utils bash-completion ca-certificates curl elogind fastfetch git inxi nano NetworkManager octoxbps polkit power-profiles-daemon sddm udiskie ufw unzip usbutils util-linux void-repo-multilib void-repo-multilib-nonfree void-repo-nonfree wget xdg-user-dirs xdg-user-dirs-gtk xdg-utils xinit xorg xorg-server"
 	    CALAMARES="calamares grub rsync"
 	    COMMON=
 	    PLASMA=
