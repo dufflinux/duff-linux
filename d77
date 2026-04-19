@@ -117,48 +117,95 @@ fi
 EOF
     chmod 755 "$INCLUDEDIR"/etc/xbps.d/hooks/pre-install-snapshot.sh
 
-# --- Btrfs Snapshot Read-Only Overlay (v3 - Session Fix) ---
+# --- 1. The Overlay Flag Script ---
     mkdir -p "$INCLUDEDIR"/etc/runit/core-services
-    
     cat <<'EOF' > "$INCLUDEDIR"/etc/runit/core-services/03-snapshot-overlay.sh
 #!/bin/sh
-# Duff-Linux: Advanced Snapshot Overlayfs Handler
-
-if [ ! -w / ]; then
-    msg "Snapshot boot detected. Preparing writable rescue environment..."
-    
-    # 1. Ensure /tmp is a clean, writable tmpfs (Critical for X11/Wayland sockets)
-    # We mount a fresh tmpfs here to ensure proper permissions (1777)
+# Duff-Linux: Snapshot Overlayfs Handler — fallback if auto-restore fails.
+# Uses btrfs property check instead of [ -w / ] so overlayfs can't fool it.
+if btrfs subvolume show / 2>/dev/null | grep -q 'Flags:.*readonly'; then
     mount -t tmpfs -o mode=1777,nosuid,nodev tmpfs /tmp
-    
-    # 2. Define directories that MUST be writable for a KDE/NVIDIA session
-    # Including AccountsService and sddm state specifically
     OVERLAY_DIRS="/var/lib/sddm /var/lib/AccountsService /var/cache /var/log /var/tmp /home"
-    
     for dir in $OVERLAY_DIRS; do
-        if [ -d "$dir" ] && [ ! -w "$dir" ]; then
-            mkdir -p "/run/overlay${dir}/upper"
-            mkdir -p "/run/overlay${dir}/work"
-            
-            # Use 'upperdir' permissions from the original directory to stay safe
-            chmod --reference="$dir" "/run/overlay${dir}/upper"
-            
-            mount -t overlay overlay \
-                -o lowerdir="${dir}",upperdir="/run/overlay${dir}/upper",workdir="/run/overlay${dir}/work" \
-                "${dir}"
+        if [ -d "$dir" ]; then
+            mkdir -p "/run/overlay${dir}/upper" "/run/overlay${dir}/work"
+            mount -t overlay overlay -o lowerdir="${dir}",upperdir="/run/overlay${dir}/upper",workdir="/run/overlay${dir}/work" "${dir}"
         fi
     done
-    
-    # 3. Special handling for /var/lib (if not fully overlayed)
-    # Some NVIDIA/Mesa drivers need access here
-    if [ ! -w /var/lib ]; then
-        mount -t tmpfs -o mode=0755 tmpfs /var/lib/nvidia 2>/dev/null
-    fi
-
-    msg "Rescue OverlayFS active. Desktop session should now initialize."
 fi
 EOF
     chmod 755 "$INCLUDEDIR"/etc/runit/core-services/03-snapshot-overlay.sh
+
+    # --- Auto-Restore Runit Service (runs before SDDM, no user interaction needed) ---
+    cat <<'EOF' > "$INCLUDEDIR"/etc/runit/core-services/04-auto-restore.sh
+#!/bin/sh
+# Duff-Linux: Auto-restore snapshot chosen at GRUB boot.
+# Called directly from /etc/sv/sddm/run before SDDM starts.
+# Logs to /run/duff-restore.log for diagnostics.
+
+LOG=/run/duff-restore.log
+echo "$(date): duff-restore started" >> "$LOG"
+
+SNAP_PATH=$(/usr/bin/btrfs subvolume show / 2>/dev/null | head -1 | tr -d '\t ')
+echo "$(date): subvolume='$SNAP_PATH'" >> "$LOG"
+
+case "$SNAP_PATH" in
+    *snapshots/*/snapshot) ;;
+    *)
+        echo "$(date): normal boot, exiting" >> "$LOG"
+        exit 0
+        ;;
+esac
+
+ROOT_DEV=$(/usr/bin/findmnt -n -o SOURCE / | sed 's/\[.*//')
+echo "$(date): device=$ROOT_DEV  restoring..." >> "$LOG"
+
+mkdir -p /run/duff-mnt
+
+if ! /usr/bin/mount -o subvolid=5 "$ROOT_DEV" /run/duff-mnt; then
+    echo "$(date): ERROR: mount failed" >> "$LOG"; exit 1
+fi
+
+BACKUP="@_backup_$(date +%Y%m%d_%H%M%S)"
+
+if ! mv /run/duff-mnt/@ "/run/duff-mnt/$BACKUP"; then
+    echo "$(date): ERROR: rename @ failed" >> "$LOG"
+    /usr/bin/umount /run/duff-mnt; exit 1
+fi
+
+if ! /usr/bin/btrfs subvolume snapshot "/run/duff-mnt/$SNAP_PATH" /run/duff-mnt/@; then
+    echo "$(date): ERROR: snapshot failed, rolling back" >> "$LOG"
+    mv "/run/duff-mnt/$BACKUP" /run/duff-mnt/@
+    /usr/bin/umount /run/duff-mnt; exit 1
+fi
+
+/usr/bin/umount /run/duff-mnt
+echo "$(date): restore complete, rebooting" >> "$LOG"
+sleep 2
+/sbin/reboot
+EOF
+    chmod 755 "$INCLUDEDIR"/etc/runit/core-services/04-auto-restore.sh
+
+    # --- SDDM Run Script: call auto-restore before SDDM ever starts ---
+    mkdir -p "$INCLUDEDIR"/etc/sv/sddm
+    cat <<'EOF' > "$INCLUDEDIR"/etc/sv/sddm/run
+#!/bin/sh
+# Duff-Linux: on snapshot boot, restore and reboot before SDDM starts.
+# On normal boot, falls through immediately to exec sddm.
+/etc/runit/core-services/04-auto-restore.sh
+[ -r ./conf ] && . ./conf
+exec sddm
+EOF
+    chmod 755 "$INCLUDEDIR"/etc/sv/sddm/run
+
+    # --- Core Services Bootstrap (sources the above scripts from stage 1) ---
+    cat <<'EOF' > "$INCLUDEDIR"/etc/runit/run-core-services.sh
+#!/bin/sh
+for f in /etc/runit/core-services/*.sh; do
+    [ -x "$f" ] && . "$f"
+done
+EOF
+    chmod 755 "$INCLUDEDIR"/etc/runit/run-core-services.sh
 
     # 1. Autostart Calamares in the Live ISO
     mkdir -p "$INCLUDEDIR"/etc/skel/.config/autostart
