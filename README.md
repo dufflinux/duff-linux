@@ -30,7 +30,7 @@ cd void-packages
 ./xbps-src binary-bootstrap
 ```
 
-2. Step two is to add d77's "secret sauce". Go to this repo's folder and copy everything inside its /srcpkgs folder into the /srcpkgs folder of the void-packages repo you just cloned. This gives Void the "recipes" for things like Calamares (the installer) that might not be in the official repos. Once done, you can build Calamares.
+2. Step two is to add d77's "secret sauce". Go to this repo's folder and copy everything inside its /build/srcpkgs folder into the /srcpkgs folder of the void-packages repo you just cloned. This gives Void the "recipes" for things like Calamares (the installer) that might not be in the official repos. Once done, you can build Calamares.
 ```
 ./xbps-src pkg calamares
 ```

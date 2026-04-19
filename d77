@@ -2,7 +2,7 @@
 
 set -eu
 
-. ./lib.sh
+. ./build/lib.sh
 
 PROGNAME=$(basename "$0")
 ARCH=$(uname -m)
@@ -58,14 +58,14 @@ cleanup() {
 }
 
 include_installer() {
-    if [ -x installer.sh ]; then
+    if [ -x build/installer.sh ]; then
         MKLIVE_VERSION="$(PROGNAME='' version)"
         installer=$(mktemp)
-        sed "s/@@MKLIVE_VERSION@@/${MKLIVE_VERSION}/" installer.sh > "$installer"
+        sed "s/@@MKLIVE_VERSION@@/${MKLIVE_VERSION}/" build/installer.sh > "$installer"
         install -Dm755 "$installer" "$INCLUDEDIR"/usr/bin/d77void-installer
         rm "$installer"
     else
-        echo installer.sh not found >&2
+        echo build/installer.sh not found >&2
         exit 1
     fi
 }
@@ -91,10 +91,10 @@ setup_pipewire() {
 include_common() {
 	mkdir -p "$INCLUDEDIR"/etc
 	mkdir -p "$INCLUDEDIR"/usr/share/polkit-1/rules.d
-	cp -r ./common/calamares "$INCLUDEDIR"/etc/
-	cp -r $variant/skel "$INCLUDEDIR"/etc/
-	cp ./common/asound.conf "$INCLUDEDIR"/etc/
-	cp ./common/50-udisks.rules "$INCLUDEDIR"/usr/share/polkit-1/rules.d/
+	cp -r ./build/common/calamares "$INCLUDEDIR"/etc/
+	cp -r build/$variant/skel "$INCLUDEDIR"/etc/
+	cp ./build/common/asound.conf "$INCLUDEDIR"/etc/
+	cp ./build/common/50-udisks.rules "$INCLUDEDIR"/usr/share/polkit-1/rules.d/
 }
 
 include_plasma() {
@@ -229,9 +229,9 @@ Current=breeze
 EOF
 
     # 2. Keep functional configurations for the installer and audio
-    cp -r ./common/calamares "$INCLUDEDIR"/etc/
-    cp ./common/asound.conf "$INCLUDEDIR"/etc/
-    cp ./common/50-udisks.rules "$INCLUDEDIR"/usr/share/polkit-1/rules.d/
+    cp -r ./build/common/calamares "$INCLUDEDIR"/etc/
+    cp ./build/common/asound.conf "$INCLUDEDIR"/etc/
+    cp ./build/common/50-udisks.rules "$INCLUDEDIR"/usr/share/polkit-1/rules.d/
 
     # 3. Force Breeze Dark theme for the user profile
     cat <<EOF > "$INCLUDEDIR"/etc/skel/.config/kdeglobals
@@ -259,8 +259,8 @@ EOF
     # 6. KDE "About this System" icon
     mkdir -p "$INCLUDEDIR"/usr/share/pixmaps
     mkdir -p "$INCLUDEDIR"/usr/share/icons/hicolor/256x256/apps
-    cp ./common/calamares/branding/duff-linux/icon.png "$INCLUDEDIR"/usr/share/pixmaps/duff-linux.png
-    cp ./common/calamares/branding/duff-linux/icon.png "$INCLUDEDIR"/usr/share/icons/hicolor/256x256/apps/duff-linux.png
+    cp ./build/common/calamares/branding/duff-linux/icon.png "$INCLUDEDIR"/usr/share/pixmaps/duff-linux.png
+    cp ./build/common/calamares/branding/duff-linux/icon.png "$INCLUDEDIR"/usr/share/icons/hicolor/256x256/apps/duff-linux.png
 
     # 7. Fastfetch branding
     mkdir -p "$INCLUDEDIR"/etc/fastfetch
@@ -342,7 +342,7 @@ EOF
 
 include_x11() {
     	PKGS="$PKGS dunst redshift scrot slock st transset xautolock xcompmgr xterm"
-	cp ./common/wswap-X "$INCLUDEDIR"/usr/bin/
+	cp ./build/common/wswap-X "$INCLUDEDIR"/usr/bin/
 }		
 
 build_variant() {
@@ -430,15 +430,15 @@ build_variant() {
         setup_pipewire
     fi
 
-    ./mklive.sh -a "$TARGET_ARCH" -o "$IMG" -p "$PKGS" -S "$SERVICES" -I "$INCLUDEDIR" \
+    ./build/mklive.sh -a "$TARGET_ARCH" -o "$IMG" -p "$PKGS" -S "$SERVICES" -I "$INCLUDEDIR" \
 		-T "duff-linux" \
         ${KERNEL_PKG:+-v $KERNEL_PKG} ${REPO} "$@"
 
 	cleanup
 }
 
-if [ ! -x mklive.sh ]; then
-    echo mklive.sh not found >&2
+if [ ! -x build/mklive.sh ]; then
+    echo build/mklive.sh not found >&2
     exit 1
 fi
 

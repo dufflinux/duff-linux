@@ -34,7 +34,7 @@ trap 'printf "\nInterrupted! exiting...\n"; cleanup; exit 0' INT TERM HUP
 # functions makes it much easier to work with chroots and abstracts
 # away all the problems with running binaries with QEMU.
 # shellcheck source=./lib.sh
-. ./lib.sh
+. ./build/lib.sh
 
 # This script has a special cleanup() function since it needs to
 # unmount the rootfs as mounted on a loop device.  This function is

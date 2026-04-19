@@ -32,7 +32,7 @@ readonly REQTOOLS="xbps-install xbps-reconfigure tar xz"
 # functions makes it much easier to work with chroots and abstracts
 # away all the problems with running binaries with QEMU.
 # shellcheck source=./lib.sh
-. ./lib.sh
+. ./build/lib.sh
 
 # Die is a function provided in lib.sh which handles the cleanup of
 # the mounts and removal of temporary directories if the running

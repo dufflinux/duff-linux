@@ -33,7 +33,7 @@ readonly REQTOOLS="xbps-install xbps-reconfigure tar xz"
 # functions makes it much easier to work with chroots and abstracts
 # away all the problems with running binaries with QEMU.
 # shellcheck source=./lib.sh
-. ./lib.sh
+. ./build/lib.sh
 
 # Die is a function provided in lib.sh which handles the cleanup of
 # the mounts and removal of temporary directories if the running
@@ -134,7 +134,7 @@ ROOTFS=$(mktemp -d) || die "failed to create tempdir, exiting..."
 # tampered with.  Its much easier to use these since the will always
 # exist.
 mkdir -p "$ROOTFS/var/db/xbps/keys"
-cp keys/*.plist "$ROOTFS/var/db/xbps/keys"
+cp build/keys/*.plist "$ROOTFS/var/db/xbps/keys"
 
 # This sets up files that are important for XBPS to work on the new
 # filesystem.  It does not actually install anything.

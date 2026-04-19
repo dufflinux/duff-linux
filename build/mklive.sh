@@ -26,7 +26,7 @@
 #-
 umask 022
 
-. ./lib.sh
+. ./build/lib.sh
 
 REQUIRED_PKGS=(base-files libgcc dash coreutils sed tar gawk squashfs-tools xorriso)
 TARGET_PKGS=(base-files)
@@ -110,17 +110,17 @@ usage() {
 
 copy_void_keys() {
     mkdir -p "$1"/var/db/xbps/keys
-    cp keys/*.plist "$1"/var/db/xbps/keys
+    cp build/keys/*.plist "$1"/var/db/xbps/keys
 }
 
 copy_dracut_files() {
     mkdir -p "$1"/usr/lib/dracut/modules.d/01vmklive
-    cp dracut/vmklive/* "$1"/usr/lib/dracut/modules.d/01vmklive/
+    cp build/dracut/vmklive/* "$1"/usr/lib/dracut/modules.d/01vmklive/
 }
 
 copy_autoinstaller_files() {
     mkdir -p "$1"/usr/lib/dracut/modules.d/01autoinstaller
-    cp dracut/autoinstaller/* "$1"/usr/lib/dracut/modules.d/01autoinstaller/
+    cp build/dracut/autoinstaller/* "$1"/usr/lib/dracut/modules.d/01autoinstaller/
 }
 
 install_prereqs() {
@@ -257,7 +257,7 @@ generate_isolinux_boot() {
     cp -f "$SYSLINUX_DATADIR"/chain.c32 "$ISOLINUX_DIR"
     cp -f "$SYSLINUX_DATADIR"/reboot.c32 "$ISOLINUX_DIR"
     cp -f "$SYSLINUX_DATADIR"/poweroff.c32 "$ISOLINUX_DIR"
-    cp -f isolinux/isolinux.cfg.in "$ISOLINUX_DIR"/isolinux.cfg
+    cp -f build/isolinux/isolinux.cfg.in "$ISOLINUX_DIR"/isolinux.cfg
     cp -f ${SPLASH_IMAGE} "$ISOLINUX_DIR"
 
     sed -i  -e "s|@@SPLASHIMAGE@@|$(basename "${SPLASH_IMAGE}")|" \
@@ -276,9 +276,9 @@ generate_isolinux_boot() {
 }
 
 generate_grub_efi_boot() {
-    cp -f grub/grub.cfg "$GRUB_DIR"
+    cp -f build/grub/grub.cfg "$GRUB_DIR"
     cp -f "${SPLASH_IMAGE}" "$ISOLINUX_DIR"
-    cp -f grub/grub_void.cfg.pre "$GRUB_DIR"/grub_void.cfg
+    cp -f build/grub/grub_void.cfg.pre "$GRUB_DIR"/grub_void.cfg
 
     case "$TARGET_ARCH" in
         i686*|x86_64*) KERNEL_IMG=vmlinuz; WANT_MEMTEST=yes ;;
@@ -326,7 +326,7 @@ EOF
 
     for platform in "${PLATFORMS[@]}"; do
         (
-            . "platforms/${platform}.sh"
+            . "build/platforms/${platform}.sh"
 
             if [ -n "$PLATFORM_DTB" ]; then
                 mkdir -p "${BOOT_DIR}/dtbs/${PLATFORM_DTB%/*}"
@@ -373,7 +373,7 @@ menuentry "System shutdown" --hotkey p --id poweroff {
     halt
 }
 EOF
-    cat grub/grub_void.cfg.post >> "$GRUB_DIR"/grub_void.cfg
+    cat build/grub/grub_void.cfg.post >> "$GRUB_DIR"/grub_void.cfg
 
     sed -i -e "s|@@SPLASHIMAGE@@|$(basename "${SPLASH_IMAGE}")|" "$GRUB_DIR"/grub_void.cfg
 
@@ -558,8 +558,8 @@ case "$TARGET_ARCH" in
 		IMAGE_TYPE='efi'
 		TARGET_PKGS+=(grub-arm64-efi)
         for platform in "${PLATFORMS[@]}"; do
-            if [ -r "platforms/${platform}.sh" ]; then
-                . "platforms/${platform}.sh"
+            if [ -r "build/platforms/${platform}.sh" ]; then
+                . "build/platforms/${platform}.sh"
             else
                 die "unknown platform: ${platform}"
             fi
@@ -603,7 +603,7 @@ STEP_COUNT=10
 
 : ${SYSLINUX_DATADIR:="$VOIDTARGETDIR"/usr/lib/syslinux}
 : ${GRUB_DATADIR:="$VOIDTARGETDIR"/usr/share/grub}
-: ${SPLASH_IMAGE:=data/splash.png}
+: ${SPLASH_IMAGE:=build/data/splash.png}
 : ${XBPS_INSTALL_CMD:=xbps-install}
 : ${XBPS_REMOVE_CMD:=xbps-remove}
 : ${XBPS_QUERY_CMD:=xbps-query}
@@ -668,8 +668,8 @@ print_step "Installing software to generate the image: ${TARGET_PKGS[*]} ..."
 install_target_pkgs "${TARGET_PKGS[@]}"
 
 mkdir -p "$ROOTFS"/etc
-#[ -s data/motd ] && cp data/motd "$ROOTFS"/etc
-#[ -s data/issue ] && cp data/issue "$ROOTFS"/etc
+#[ -s build/data/motd ] && cp build/data/motd "$ROOTFS"/etc
+#[ -s build/data/issue ] && cp build/data/issue "$ROOTFS"/etc
 
 if [ "${#IGNORE_PKGS[@]}" -gt 0 ]; then
 	print_step "Ignoring packages in the rootfs: ${IGNORE_PKGS[*]} ..."

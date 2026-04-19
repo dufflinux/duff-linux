@@ -36,7 +36,7 @@ readonly CURDIR="$(pwd)"
 # functions makes it much easier to work with chroots and abstracts
 # away all the problems with running binaries with QEMU.
 # shellcheck source=./lib.sh
-. ./lib.sh
+. ./build/lib.sh
 
 # Die is a function provided in lib.sh which handles the cleanup of
 # the mounts and removal of temporary directories if the running
@@ -65,7 +65,7 @@ usage() {
 	 -l <locale>        Default locale to use (default: en_US.UTF-8)
 	 -C "<arg> ..."     Add additional kernel command line arguments
 	 -T <title>         Modify the bootloader title (default: Void Linux)
-	 -S <image>         Set a custom splash image for the bootloader (default: data/splash.png)
+	 -S <image>         Set a custom splash image for the bootloader (default: build/data/splash.png)
 	 -h                 Show this help and exit
 	 -V                 Show version and exit
 	EOH
@@ -136,20 +136,20 @@ info_msg "Install additional dracut modules"
 # the ROOTFS to build the PXE tarball.  This includes the netmenu
 # module and the autoinstaller
 mkdir -p "$ROOTFS/usr/lib/dracut/modules.d/05netmenu"
-cp dracut/netmenu/* "$ROOTFS/usr/lib/dracut/modules.d/05netmenu/"
+cp build/dracut/netmenu/* "$ROOTFS/usr/lib/dracut/modules.d/05netmenu/"
 
 # The netmenu can directly launch the manual installer from the
 # initrd.  This is the same installer that's on the live media with
 # all its quirks, oddities, and wierdness.  It's included here for
 # places where you might have a lab network and need to run manual
 # installs from the network.
-cp installer.sh "$ROOTFS/usr/lib/dracut/modules.d/05netmenu/"
+cp build/installer.sh "$ROOTFS/usr/lib/dracut/modules.d/05netmenu/"
 
 # Of course with a PXE environment unattended installs are the norm.
 # The autoinstaller is loaded as a very high priority dracut module
 # and will fail the build if it can't be installed.
 mkdir -p "$ROOTFS/usr/lib/dracut/modules.d/01autoinstaller"
-cp dracut/autoinstaller/* "$ROOTFS/usr/lib/dracut/modules.d/01autoinstaller/"
+cp build/dracut/autoinstaller/* "$ROOTFS/usr/lib/dracut/modules.d/01autoinstaller/"
 
 info_msg "Install kernel and additional required netboot packages"
 # The rootfs has no kernel in it, so it needs to have at the very
@@ -219,10 +219,10 @@ if [ ${bootloader_pkg} = "syslinux" ] ; then
 
     # Lastly we need the default pxelinux config and the splash image.
     # This is user configurable, but if that isn't set then we'll use the
-    # one from data/splash.png instead
+    # one from build/data/splash.png instead
     mkdir -p "$PXELINUX_DIR"
-    cp -f pxelinux.cfg/pxelinux.cfg.in "$PXELINUX_DIR/default"
-    cp -f "${SPLASH_IMAGE-data/splash.png}" "$BOOT_DIR"
+    cp -f build/pxelinux.cfg/pxelinux.cfg.in "$PXELINUX_DIR/default"
+    cp -f "${SPLASH_IMAGE-build/data/splash.png}" "$BOOT_DIR"
 
     # This sets all the variables in the default config file
     info_msg "Configuring pxelinux.0 default boot menu"

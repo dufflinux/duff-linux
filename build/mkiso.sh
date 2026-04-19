@@ -2,7 +2,7 @@
 
 set -eu
 
-. ./lib.sh
+. ./build/lib.sh
 
 PROGNAME=$(basename "$0")
 ARCH=$(uname -m)
@@ -57,14 +57,14 @@ cleanup() {
 }
 
 include_installer() {
-    if [ -x installer.sh ]; then
+    if [ -x build/installer.sh ]; then
         MKLIVE_VERSION="$(PROGNAME='' version)"
         installer=$(mktemp)
-        sed "s/@@MKLIVE_VERSION@@/${MKLIVE_VERSION}/" installer.sh > "$installer"
+        sed "s/@@MKLIVE_VERSION@@/${MKLIVE_VERSION}/" build/installer.sh > "$installer"
         install -Dm755 "$installer" "$INCLUDEDIR"/usr/bin/void-installer
         rm "$installer"
     else
-        echo installer.sh not found >&2
+        echo build/installer.sh not found >&2
         exit 1
     fi
 }
@@ -206,14 +206,14 @@ EOF
         setup_pipewire
     fi
 
-    ./mklive.sh -a "$TARGET_ARCH" -o "$IMG" -p "$PKGS" -S "$SERVICES" -I "$INCLUDEDIR" \
+    ./build/mklive.sh -a "$TARGET_ARCH" -o "$IMG" -p "$PKGS" -S "$SERVICES" -I "$INCLUDEDIR" \
         ${KERNEL_PKG:+-v $KERNEL_PKG} ${REPO} "$@"
 
 	cleanup
 }
 
-if [ ! -x mklive.sh ]; then
-    echo mklive.sh not found >&2
+if [ ! -x build/mklive.sh ]; then
+    echo build/mklive.sh not found >&2
     exit 1
 fi
 

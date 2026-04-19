@@ -7,11 +7,11 @@
 xbps-cache
 xbps-cachedir*
 stamps*
-!dracut/*/*.sh
-!packer/scripts/*.sh
+!build/dracut/*/*.sh
+!build/packer/scripts/*.sh
 void-live-*/
 distdir-*/
 release/
-packer/cloud-*/
-packer/vagrant-*/
+build/packer/cloud-*/
+build/packer/vagrant-*/
 mklive-build*/
