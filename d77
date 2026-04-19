@@ -106,21 +106,28 @@ include_installer() {
 }
 
 setup_pipewire() {
-    PKGS="$PKGS pipewire alsa-pipewire"
+    PKGS="$PKGS pipewire wireplumber alsa-pipewire"
     case "$ARCH" in
         asahi*)
             PKGS="$PKGS asahi-audio"
             SERVICES="$SERVICES speakersafetyd"
             ;;
     esac
-    mkdir -p "$INCLUDEDIR"/etc/xdg/autostart
-    ln -sf /usr/share/applications/pipewire.desktop "$INCLUDEDIR"/etc/xdg/autostart/
+
+    # Do not autostart PipeWire via XDG desktop autostart.
+    # Starting it this way can make Plasma show the volume OSD shortly after login.
+    # Let the session bring audio up normally instead.
     mkdir -p "$INCLUDEDIR"/etc/pipewire/pipewire.conf.d
-    ln -sf /usr/share/examples/wireplumber/10-wireplumber.conf "$INCLUDEDIR"/etc/pipewire/pipewire.conf.d/
-    ln -sf /usr/share/examples/pipewire/20-pipewire-pulse.conf "$INCLUDEDIR"/etc/pipewire/pipewire.conf.d/
+    ln -sf /usr/share/examples/wireplumber/10-wireplumber.conf \
+        "$INCLUDEDIR"/etc/pipewire/pipewire.conf.d/
+    ln -sf /usr/share/examples/pipewire/20-pipewire-pulse.conf \
+        "$INCLUDEDIR"/etc/pipewire/pipewire.conf.d/
+
     mkdir -p "$INCLUDEDIR"/etc/alsa/conf.d
-    ln -sf /usr/share/alsa/alsa.conf.d/50-pipewire.conf "$INCLUDEDIR"/etc/alsa/conf.d
-    ln -sf /usr/share/alsa/alsa.conf.d/99-pipewire-default.conf "$INCLUDEDIR"/etc/alsa/conf.d
+    ln -sf /usr/share/alsa/alsa.conf.d/50-pipewire.conf \
+        "$INCLUDEDIR"/etc/alsa/conf.d/
+    ln -sf /usr/share/alsa/alsa.conf.d/99-pipewire-default.conf \
+        "$INCLUDEDIR"/etc/alsa/conf.d/
 }
 
 include_common() {
@@ -133,7 +140,7 @@ include_common() {
 }
 
 include_plasma() {
-    # 1. Create essential directory structure
+    # Create essential directory structure
     mkdir -p "$INCLUDEDIR"/etc/skel/.config
     mkdir -p "$INCLUDEDIR"/etc/xdg/autostart
     mkdir -p "$INCLUDEDIR"/usr/share/polkit-1/rules.d
@@ -141,7 +148,7 @@ include_plasma() {
     # Create the XBPS hook directory
     mkdir -p "$INCLUDEDIR"/etc/xbps.d/hooks
 
-# Create a pre-transaction hook for snapshots
+    # Create a pre-transaction hook for snapshots
     cat <<'EOF' > "$INCLUDEDIR"/etc/xbps.d/hooks/pre-install-snapshot.sh
 #!/bin/sh
 if ! command -v snapper >/dev/null || ! command -v findmnt >/dev/null; then
@@ -166,7 +173,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 EOF
     chmod 755 "$INCLUDEDIR"/etc/xbps.d/hooks/pre-install-snapshot.sh
 
-# --- 1. The Overlay Flag Script ---
+    # Overlay Flag Script
     mkdir -p "$INCLUDEDIR"/etc/runit/core-services
     cat <<'EOF' > "$INCLUDEDIR"/etc/runit/core-services/03-snapshot-overlay.sh
 #!/bin/sh
@@ -185,7 +192,7 @@ fi
 EOF
     chmod 755 "$INCLUDEDIR"/etc/runit/core-services/03-snapshot-overlay.sh
 
-    # --- Auto-Restore Runit Service (runs before SDDM, no user interaction needed) ---
+    # Auto-Restore Runit Service (runs before SDDM, no user interaction needed)
     cat <<'EOF' > "$INCLUDEDIR"/etc/runit/core-services/04-auto-restore.sh
 #!/bin/sh
 # Duff-Linux: Auto-restore snapshot chosen at GRUB boot.
@@ -237,7 +244,7 @@ sleep 2
 EOF
     chmod 755 "$INCLUDEDIR"/etc/runit/core-services/04-auto-restore.sh
 
-    # --- SDDM Run Script: call auto-restore before SDDM ever starts ---
+    # SDDM Run Script: call auto-restore before SDDM ever starts
     mkdir -p "$INCLUDEDIR"/etc/sv/sddm
     cat <<'EOF' > "$INCLUDEDIR"/etc/sv/sddm/run
 #!/bin/sh
@@ -249,7 +256,7 @@ exec sddm
 EOF
     chmod 755 "$INCLUDEDIR"/etc/sv/sddm/run
 
-    # --- Core Services Bootstrap (sources the above scripts from stage 1) ---
+    # Core Services Bootstrap
     cat <<'EOF' > "$INCLUDEDIR"/etc/runit/run-core-services.sh
 #!/bin/sh
 for f in /etc/runit/core-services/*.sh; do
@@ -258,41 +265,41 @@ done
 EOF
     chmod 755 "$INCLUDEDIR"/etc/runit/run-core-services.sh
 
-    # 1. Autostart Calamares in the Live ISO
+    # Autostart Calamares in the Live ISO
     mkdir -p "$INCLUDEDIR"/etc/skel/.config/autostart
     ln -sf /usr/share/applications/calamares.desktop "$INCLUDEDIR"/etc/skel/.config/autostart/calamares.desktop
 
-    # 1. Create the system-wide Flatpak remotes directory
+    # Create the system-wide Flatpak remotes directory
     mkdir -p "$INCLUDEDIR"/etc/flatpak/remotes.d
     
-    # 2. Download the Flathub repo file directly into the ISO
+    # Download the Flathub repo file directly into the ISO
     curl -L -o "$INCLUDEDIR"/etc/flatpak/remotes.d/flathub.flatpakrepo https://dl.flathub.org/repo/flathub.flatpakrepo
 
-    # 1. Create the SDDM configuration directory
+    # Create the SDDM configuration directory
     mkdir -p "$INCLUDEDIR"/etc/sddm.conf.d
 
-    # 2. Generate the config file to set the theme to Breeze
+    # Generate the config file to set the theme to Breeze
     cat <<EOF > "$INCLUDEDIR"/etc/sddm.conf.d/kde_theme.conf
 [Theme]
 Current=breeze
 EOF
 
-    # 2. Keep functional configurations for the installer and audio
+    # Keep functional configurations for the installer and audio
     cp -r ./build/common/calamares "$INCLUDEDIR"/etc/
     cp ./build/common/asound.conf "$INCLUDEDIR"/etc/
     cp ./build/common/50-udisks.rules "$INCLUDEDIR"/usr/share/polkit-1/rules.d/
 
-    # 3. Force Breeze Dark theme for the user profile
+    # Force Breeze Dark theme for the user profile
     cat <<EOF > "$INCLUDEDIR"/etc/skel/.config/kdeglobals
 [General]
 ColorScheme=BreezeDark
 lookAndFeelPackage=org.kde.breezedark.desktop
 EOF
 
-    # 4. Set OctoXBPS Notifier to autostart by default
+    # Set OctoXBPS Notifier to autostart by default
     ln -sf /usr/share/applications/octoxbps-notifier.desktop "$INCLUDEDIR"/etc/xdg/autostart/
 
-    # 5. Duff Linux identity (live environment)
+    # Duff Linux identity (live environment)
     cat <<'EOF' > "$INCLUDEDIR"/etc/os-release
 NAME="Duff Linux"
 ID=duff-linux
@@ -305,13 +312,13 @@ BUG_REPORT_URL="https://github.com/duffnshmrt/duff-linux/issues"
 LOGO=duff-linux
 EOF
 
-    # 6. KDE "About this System" icon
+    # KDE "About this System" icon
     mkdir -p "$INCLUDEDIR"/usr/share/pixmaps
     mkdir -p "$INCLUDEDIR"/usr/share/icons/hicolor/256x256/apps
     cp ./build/common/calamares/branding/duff-linux/icon.png "$INCLUDEDIR"/usr/share/pixmaps/duff-linux.png
     cp ./build/common/calamares/branding/duff-linux/icon.png "$INCLUDEDIR"/usr/share/icons/hicolor/256x256/apps/duff-linux.png
 
-    # 7. Fastfetch branding
+    # Fastfetch branding
     mkdir -p "$INCLUDEDIR"/etc/fastfetch
     cat <<'EOF' > "$INCLUDEDIR"/etc/fastfetch/duff-linux.txt
       .-.
@@ -362,14 +369,14 @@ EOF
 }
 EOF
 
-    # 8. Auto-run fastfetch when a terminal opens (login shells via profile.d)
+    # Auto-run fastfetch when a terminal opens (login shells via profile.d)
     mkdir -p "$INCLUDEDIR"/etc/profile.d
     cat <<'EOF' > "$INCLUDEDIR"/etc/profile.d/fastfetch.sh
 #!/bin/sh
 [ -t 1 ] && fastfetch
 EOF
 
-    # 9. Skel .bashrc: proper defaults + fastfetch on terminal open
+    # Skel .bashrc: proper defaults + fastfetch on terminal open
     cat <<'EOF' > "$INCLUDEDIR"/etc/skel/.bashrc
 # ~/.bashrc
 [[ $- != *i* ]] && return

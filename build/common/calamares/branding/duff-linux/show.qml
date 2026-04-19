@@ -32,7 +32,7 @@ Presentation
         Text {
             anchors.centerIn: parent
             text: "🍻<br/><br/><b>Welcome to Duff Linux</b><br/><br/>" +
-                  "A personal, opinionated distro built on Void Linux.<br/>" +
+                  "An opinionated distro built on Void Linux.<br/>" +
                   "KDE Plasma · Btrfs Snapshots · Rolling Release"
             wrapMode: Text.WordWrap
             width: presentation.width * 0.8
