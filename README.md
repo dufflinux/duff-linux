@@ -1,4 +1,4 @@
-# Duff-Linux 🍺
+# Duff Linux 🍺
 
 [![Download Duff Linux](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/duff-linux/files/latest/download)
 
