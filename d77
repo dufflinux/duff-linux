@@ -320,35 +320,23 @@ EOF
 [ -t 1 ] && fastfetch
 EOF
 
-    # 9. KDE kickoff icon — autostart script patches plasma config on first login
-    mkdir -p "$INCLUDEDIR"/usr/local/bin
-    cat <<'EOF' > "$INCLUDEDIR"/usr/local/bin/duff-linux-setup
-#!/bin/sh
-sleep 5
-qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript \
-'var all = desktops().concat(panels());
-for (var i in all) {
-    var applets = all[i].applets();
-    for (var j in applets) {
-        if (applets[j].pluginName === "org.kde.plasma.kickoff") {
-            applets[j].currentConfigGroup = ["General"];
-            applets[j].writeConfig("icon", "duff-linux");
-            applets[j].reloadConfig();
-        }
-    }
-}' 2>/dev/null || true
-rm -f "$HOME/.config/autostart/duff-linux-setup.desktop"
-EOF
-    chmod 755 "$INCLUDEDIR"/usr/local/bin/duff-linux-setup
+    # 9. Skel .bashrc: proper defaults + fastfetch on terminal open
+    cat <<'EOF' > "$INCLUDEDIR"/etc/skel/.bashrc
+# ~/.bashrc
+[[ $- != *i* ]] && return
 
-    mkdir -p "$INCLUDEDIR"/etc/skel/.config/autostart
-    cat <<'EOF' > "$INCLUDEDIR"/etc/skel/.config/autostart/duff-linux-setup.desktop
-[Desktop Entry]
-Type=Application
-Name=Duff Linux Setup
-Exec=/usr/local/bin/duff-linux-setup
-OnlyShowIn=KDE;
-X-KDE-autostart-phase=2
+PS1='\[\e[01;32m\]\u@\h\[\e[00m\]:\[\e[01;34m\]\w\[\e[00m\]\$ '
+
+HISTCONTROL=ignoredups
+HISTSIZE=1000
+HISTFILESIZE=2000
+shopt -s histappend checkwinsize
+
+alias ls='ls --color=auto'
+alias ll='ls -la'
+alias grep='grep --color=auto'
+
+[ -t 1 ] && fastfetch
 EOF
 }
 

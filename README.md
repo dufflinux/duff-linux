@@ -15,6 +15,7 @@ A personal/opinionated distro based off dani-77's d77void Linux distribution, wi
 - Flatpak support with Discover out of the box
 - Lightly themed
 - ZRAM for swap
+- Void Linux under the hood
 
 <img src="https://github.com/duffnshmrt/duff-linux/blob/main/duff-linux.png?raw=true" width="300">
 
