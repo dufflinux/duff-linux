@@ -1,4 +1,4 @@
-# Duff-Linux 🍺 (WIP)
+# Duff-Linux 🍺
 
 [![Download Duff Linux](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/duff-linux/files/latest/download)
 
@@ -13,7 +13,8 @@ A personal/opinionated distro based off dani-77's d77void Linux distribution, wi
 - OctoXBPS as a graphical application to manage native packages
 - OctoXBPS Notifier to tell you when updates are available
 - Flatpak support with Discover out of the box
-- Very lightly themed (uses Plasma's dark mode)
+- Lightly themed
+- ZRAM for swap
 
 <img src="https://github.com/duffnshmrt/duff-linux/blob/main/duff-linux.png?raw=true" width="300">
 

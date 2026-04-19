@@ -258,7 +258,9 @@ EOF
 
     # 6. KDE "About this System" icon
     mkdir -p "$INCLUDEDIR"/usr/share/pixmaps
+    mkdir -p "$INCLUDEDIR"/usr/share/icons/hicolor/256x256/apps
     cp ./common/calamares/branding/duff-linux/icon.png "$INCLUDEDIR"/usr/share/pixmaps/duff-linux.png
+    cp ./common/calamares/branding/duff-linux/icon.png "$INCLUDEDIR"/usr/share/icons/hicolor/256x256/apps/duff-linux.png
 
     # 7. Fastfetch branding
     mkdir -p "$INCLUDEDIR"/etc/fastfetch
@@ -311,11 +313,42 @@ EOF
 }
 EOF
 
-    # 8. Auto-run fastfetch when a terminal opens
+    # 8. Auto-run fastfetch when a terminal opens (login shells via profile.d)
     mkdir -p "$INCLUDEDIR"/etc/profile.d
     cat <<'EOF' > "$INCLUDEDIR"/etc/profile.d/fastfetch.sh
 #!/bin/sh
 [ -t 1 ] && fastfetch
+EOF
+
+    # 9. KDE kickoff icon — autostart script patches plasma config on first login
+    mkdir -p "$INCLUDEDIR"/usr/local/bin
+    cat <<'EOF' > "$INCLUDEDIR"/usr/local/bin/duff-linux-setup
+#!/bin/sh
+sleep 5
+qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript \
+'var all = desktops().concat(panels());
+for (var i in all) {
+    var applets = all[i].applets();
+    for (var j in applets) {
+        if (applets[j].pluginName === "org.kde.plasma.kickoff") {
+            applets[j].currentConfigGroup = ["General"];
+            applets[j].writeConfig("icon", "duff-linux");
+            applets[j].reloadConfig();
+        }
+    }
+}' 2>/dev/null || true
+rm -f "$HOME/.config/autostart/duff-linux-setup.desktop"
+EOF
+    chmod 755 "$INCLUDEDIR"/usr/local/bin/duff-linux-setup
+
+    mkdir -p "$INCLUDEDIR"/etc/skel/.config/autostart
+    cat <<'EOF' > "$INCLUDEDIR"/etc/skel/.config/autostart/duff-linux-setup.desktop
+[Desktop Entry]
+Type=Application
+Name=Duff Linux Setup
+Exec=/usr/local/bin/duff-linux-setup
+OnlyShowIn=KDE;
+X-KDE-autostart-phase=2
 EOF
 }
 
@@ -341,7 +374,7 @@ build_variant() {
 			KERNEL_PKG="linux7.0"
             WANT_INSTALLER=yes
             TARGET_ARCH="$ARCH"
-	    D77_CORE="acpi alsa-plugins-pulseaudio alsa-utils bash-completion ca-certificates curl elogind fastfetch git inxi nano NetworkManager octoxbps polkit power-profiles-daemon sddm udiskie ufw unzip usbutils util-linux void-repo-multilib void-repo-multilib-nonfree void-repo-nonfree wget xdg-user-dirs xdg-user-dirs-gtk xdg-utils xinit xorg xorg-server"
+	    D77_CORE="acpi alsa-plugins-pulseaudio alsa-utils bash-completion ca-certificates curl elogind fastfetch git inxi nano NetworkManager octoxbps polkit power-profiles-daemon sddm udiskie ufw unzip usbutils util-linux void-repo-multilib void-repo-multilib-nonfree void-repo-nonfree wget xdg-user-dirs xdg-user-dirs-gtk xdg-utils xinit xorg xorg-server zramen"
 	    CALAMARES="calamares grub rsync"
 	    COMMON=
 	    PLASMA=
@@ -377,7 +410,7 @@ build_variant() {
 	plasma)
 	    PLASMA=yes
             PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $D77_CORE $CALAMARES snapper cronie grub-btrfs inotify-tools ark kde-plasma kde-baseapps sddm-kcm sddm discover flatpak xdg-desktop-portal-kde"
-            SERVICES="$SERVICES dbus sddm NetworkManager polkitd power-profiles-daemon cronie"
+            SERVICES="$SERVICES dbus sddm NetworkManager polkitd power-profiles-daemon cronie zramen"
         ;;
         *)
             >&2 echo "Unknown variant $variant"
