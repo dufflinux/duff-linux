@@ -453,6 +453,58 @@ EOF
     exit 1
 }
 
+ensure_nvidia_dkms_override() {
+    local template=/home/duff/Documents/GitHub/duff-linux/build/srcpkgs/dkms/template
+    local version=
+    local revision=
+    local repo=
+    local main_repo=
+
+    [ "$GPU_PROFILE" = "nvidia" ] || return 0
+
+    if [ ! -f "$template" ]; then
+        >&2 echo "Missing local dkms override template: $template"
+        exit 1
+    fi
+
+    version=$(sed -n 's/^version=\(.*\)$/\1/p' "$template" | head -n1)
+    revision=$(sed -n 's/^revision=\(.*\)$/\1/p' "$template" | head -n1)
+
+    [ -n "$version" ] && [ -n "$revision" ] || {
+        >&2 echo "Failed to determine expected dkms override version from $template"
+        exit 1
+    }
+
+    for repo in "${REPO_PATHS[@]}"; do
+        case "$repo" in
+            */binpkgs|*/binpkgs/)
+                main_repo="${repo%/}"
+                if find "$main_repo" -maxdepth 1 -type f -name "dkms-${version}_${revision}*.xbps" | grep -q .; then
+                    return 0
+                fi
+                cat >&2 <<EOF
+NVIDIA build selected, but the local repo is still missing the required dkms override.
+
+Expected local package:
+  dkms-${version}_${revision}
+
+The last build used the stock dkms package, which pulls in generic linux-headers
+and causes the unwanted 6.12 DKMS build path.
+
+Copy the updated dkms template into void-packages/srcpkgs, then rebuild it:
+
+  cd /home/\$USER/Documents/GitHub/void-packages
+  cp -r /home/\$USER/Documents/GitHub/duff-linux/build/srcpkgs/dkms srcpkgs/
+  ./xbps-src pkg dkms
+
+Then rerun the NVIDIA ISO build.
+EOF
+                exit 1
+                ;;
+        esac
+    done
+}
+
 write_gpu_profile() {
     mkdir -p "$INCLUDEDIR"/etc/duff-linux
     printf '%s\n' "$GPU_PROFILE" > "$INCLUDEDIR"/etc/duff-linux/gpu-profile
@@ -585,6 +637,7 @@ fi
 init_logging
 setup_build_shims
 ensure_nvidia_repo
+ensure_nvidia_dkms_override
 
 if [ -n "$TRIPLET" ]; then
     IFS=: read -r ARCH DATE VARIANT _ < <( echo "$TRIPLET" | sed -Ee 's/^(.+)-([0-9rc]+)-(.+)$/\1:\2:\3/' )
