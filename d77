@@ -255,10 +255,30 @@ EOF
 # Duff-Linux: on snapshot boot, restore and reboot before SDDM starts.
 # On normal boot, falls through immediately to exec sddm.
 /etc/runit/core-services/04-auto-restore.sh
+
+# runit starts all services concurrently. Wait for elogind to register on
+# D-Bus before starting SDDM; without this, SDDM's login1 query fails and
+# all power-management buttons (Shutdown/Restart/Sleep/Hibernate) stay greyed.
+i=0
+while [ $i -lt 30 ]; do
+    dbus-send --system --dest=org.freedesktop.login1 \
+        --type=method_call / \
+        org.freedesktop.DBus.Peer.Ping >/dev/null 2>&1 && break
+    sleep 1
+    i=$((i + 1))
+done
+
 [ -r ./conf ] && . ./conf
 exec sddm
 EOF
     chmod 755 "$INCLUDEDIR"/etc/sv/sddm/run
+
+    # SDDM locale env — runit never reads /etc/locale.conf, so SDDM inherits
+    # the C locale (HH:mm:ss). This conf file is sourced by the run script above.
+    cat <<'EOF' > "$INCLUDEDIR"/etc/sv/sddm/conf
+export LANG=en_US.UTF-8
+export LC_TIME=en_US.UTF-8
+EOF
 
     # Core Services Bootstrap
     cat <<'EOF' > "$INCLUDEDIR"/etc/runit/run-core-services.sh
@@ -282,10 +302,23 @@ EOF
     # Create the SDDM configuration directory
     mkdir -p "$INCLUDEDIR"/etc/sddm.conf.d
 
-    # Generate the config file to set the theme to Breeze
+    # Generate the config file to set the theme to Breeze and ensure the
+    # installed user (UID 1000) is always visible without AccountsService.
     cat <<EOF > "$INCLUDEDIR"/etc/sddm.conf.d/kde_theme.conf
 [Theme]
 Current=breeze
+
+[Users]
+MinimumUid=1000
+MaximumUid=60000
+RememberLastUser=true
+EOF
+
+    # Set LC_TIME so SDDM's login-screen clock uses 12-hour without seconds.
+    # Without this the C locale produces HH:mm:ss (24-hour with seconds).
+    mkdir -p "$INCLUDEDIR"/etc
+    cat <<'EOF' > "$INCLUDEDIR"/etc/locale.conf
+LC_TIME=en_US.UTF-8
 EOF
 
     # Keep functional configurations for the installer and audio
@@ -293,15 +326,54 @@ EOF
     cp ./build/common/asound.conf "$INCLUDEDIR"/etc/
     cp ./build/common/50-udisks.rules "$INCLUDEDIR"/usr/share/polkit-1/rules.d/
 
-    # Force Breeze Dark theme for the user profile
-    cat <<EOF > "$INCLUDEDIR"/etc/skel/.config/kdeglobals
+    # Seed a complete Breeze Dark Plasma profile for new users.
+    # The lock screen inherits these Plasma defaults; storing the
+    # look-and-feel package under [KDE] is required for Plasma to
+    # recognize it consistently.
+    cat <<'EOF' > "$INCLUDEDIR"/etc/skel/.config/kdeglobals
 [General]
+Name=Breeze Dark
+shadeSortColumn=true
+widgetStyle=Breeze
+
+[KDE]
 ColorScheme=BreezeDark
-lookAndFeelPackage=org.kde.breezedark.desktop
+LookAndFeelPackage=org.kde.breezedark.desktop
+contrast=4
 EOF
 
-    # Set OctoXBPS Notifier to autostart by default
-    ln -sf /usr/share/applications/octoxbps-notifier.desktop "$INCLUDEDIR"/etc/xdg/autostart/
+    cat <<'EOF' > "$INCLUDEDIR"/etc/skel/.config/kcminputrc
+[Mouse]
+cursorTheme=breeze_cursors
+EOF
+
+    cat <<'EOF' > "$INCLUDEDIR"/etc/skel/.config/ksplashrc
+[KSplash]
+Theme=org.kde.breeze.desktop
+EOF
+
+    # Force KDE's own locale layer to use 12-hour time without seconds for
+    # both the lock screen and the desktop clock.
+    cat <<'EOF' > "$INCLUDEDIR"/etc/skel/.config/plasma-localerc
+[Formats]
+LC_TIME=en_US.UTF-8
+EOF
+
+    # Set OctoXBPS Notifier to autostart with a short delay. On first boot on
+    # real hardware, KDE's system tray isn't ready when XDG autostart fires,
+    # causing the notifier to crash. A 20-second sleep covers the cold-boot
+    # case without being noticeable on subsequent (cache-warm) logins.
+    mkdir -p "$INCLUDEDIR"/etc/xdg/autostart
+    cat <<'EOF' > "$INCLUDEDIR"/etc/xdg/autostart/octoxbps-notifier.desktop
+[Desktop Entry]
+Type=Application
+Name=OctoXBPS Notifier
+Comment=OctoXBPS system tray notifier
+Exec=sh -c 'sleep 20 && exec octoxbps-notifier'
+Icon=octoxbps
+Terminal=false
+Hidden=false
+EOF
 
     # Duff Linux identity (live environment)
     cat <<'EOF' > "$INCLUDEDIR"/etc/os-release
@@ -588,7 +660,7 @@ build_variant() {
 	plasma)
 	    PLASMA=yes
             PKGS="$PKGS $XORG_PKGS $WAYLAND_PKGS $D77_CORE $CALAMARES cronie ark kde-plasma kde-baseapps spectacle sddm-kcm sddm discover flatpak xdg-desktop-portal-kde"
-            SERVICES="$SERVICES dbus sddm NetworkManager polkitd power-profiles-daemon cronie zramen"
+            SERVICES="$SERVICES dbus elogind sddm NetworkManager polkitd power-profiles-daemon cronie zramen"
         ;;
         *)
             >&2 echo "Unknown variant $variant"
