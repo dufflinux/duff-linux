@@ -1,6 +1,8 @@
 # Duff Linux 🍺
 
 [![Download Duff Linux](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/duff-linux/files/latest/download)
+[![Download Duff Linux](https://img.shields.io/sourceforge/dt/duff-linux.svg)](https://sourceforge.net/projects/duff-linux/files/latest/download)
+[![Download Duff Linux](https://img.shields.io/sourceforge/dm/duff-linux.svg)](https://sourceforge.net/projects/duff-linux/files/latest/download)
 
 > [!NOTE]
 > This project would not be possible without the use of d77void. Please go check it out here: https://github.com/dani-77/d77void
