@@ -61,7 +61,5 @@ sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs/ -r /home/$USER/void-pac
 
 ---
 
-![Total Downloads](https://img.shields.io/sourceforge/dt/duff-linux?label=Total%20Downloads&style=for-the-badge)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/H2H7V02MM) ![Total Downloads](https://img.shields.io/sourceforge/dt/duff-linux?label=Total%20Downloads&style=for-the-badge)
 ![Monthly Downloads](https://img.shields.io/sourceforge/dm/duff-linux?label=Monthly%20Downloads&style=for-the-badge)
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/H2H7V02MM)
