@@ -20,46 +20,5 @@ An opinionated distro based off dani-77's d77void Linux distribution, with the f
 <img src="https://github.com/duffnshmrt/duff-linux/blob/main/duff-linux.png?raw=true" width="300">
 
 ---
-
-# ISO Generation Guide
-
-1. Clone this repo and Void's `void-packages` repo, then bootstrap `void-packages`. This creates the local build environment that produces the package repositories used by `d77`.
-
-```
-git clone https://github.com/duffnshmrt/duff-linux
-git clone https://github.com/void-linux/void-packages
-cd void-packages
-./xbps-src binary-bootstrap
-```
-
-2. Copy the custom package templates from this repo into `void-packages/srcpkgs`, then build the local packages this project depends on. `calamares` provides the installer, and the local `dkms` override prevents NVIDIA ISO builds from pulling in the default Void kernel headers.
-```
-./xbps-src pkg calamares dkms
-```
-
-3. Build the ISO from this repo.
-
-### AMD / default ISO:
-
-```
-sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs/ -b plasma --
-```
-
-### NVIDIA ISO:
-
-The proprietary `nvidia` package is a restricted package in Void and is built into a separate local `nonfree` repository. Enable restricted builds, build the package, then point `d77` at both your main and `nonfree` repos.
-
-```
-cd /home/$USER/void-packages
-echo XBPS_ALLOW_RESTRICTED=yes >> etc/conf
-./xbps-src pkg dkms
-./xbps-src pkg nvidia
-
-cd /home/$USER/duff-linux
-sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs/ -r /home/$USER/void-packages/hostdir/binpkgs/nonfree/ -g nvidia -b plasma --
-```
-
-> `d77` defaults to the AMD profile, so `-g amd` is optional. If the local `nonfree` repo already exists, `d77` will now add it automatically for NVIDIA builds when you pass only `/hostdir/binpkgs/`.
----
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/H2H7V02MM) ![Total Downloads](https://img.shields.io/sourceforge/dt/duff-linux?label=Total%20Downloads&style=for-the-badge)
 ![Monthly Downloads](https://img.shields.io/sourceforge/dm/duff-linux?label=Monthly%20Downloads&style=for-the-badge)
