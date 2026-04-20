@@ -58,3 +58,8 @@ sudo ./d77 -r /home/$USER/void-packages/hostdir/binpkgs/ -r /home/$USER/void-pac
 ```
 
 `d77` defaults to the AMD profile, so `-g amd` is optional. If the local `nonfree` repo already exists, `d77` will now add it automatically for NVIDIA builds when you pass only `/hostdir/binpkgs/`.
+
+---
+
+![Total Downloads](https://img.shields.io/sourceforge/dt/duff-linux?label=Total%20Downloads&style=for-the-badge)
+![Monthly Downloads](https://img.shields.io/sourceforge/dm/duff-linux?label=Monthly%20Downloads&style=for-the-badge)
