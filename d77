@@ -369,7 +369,7 @@ EOF
 Type=Application
 Name=OctoXBPS Notifier
 Comment=OctoXBPS system tray notifier
-Exec=sh -c 'sleep 20 && exec octoxbps-notifier'
+Exec=sh -c 'sleep 5 && exec octoxbps-notifier'
 Icon=octoxbps
 Terminal=false
 Hidden=false
