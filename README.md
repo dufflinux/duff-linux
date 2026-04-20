@@ -20,7 +20,7 @@ An opinionated distro based off dani-77's d77void Linux distribution, with the f
 <img src="https://github.com/duffnshmrt/duff-linux/blob/main/duff-linux.png?raw=true" width="300">
 
 > [!TIP]
-> Still curious and/or need help? Check the repository's wiki (https://github.com/duffnshmrt/duff-linux/wiki) and if that fails, feel free to raise an issue (https://github.com/duffnshmrt/duff-linux/issues) for anything else you need help with.
+> Still curious and/or need help? Check the repository's wiki (https://github.com/duffnshmrt/duff-linux/wiki) and if that fails, feel free to raise an issue (https://github.com/duffnshmrt/duff-linux/issues) for anything else related to the project.
 
 ---
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/H2H7V02MM) ![Total Downloads](https://img.shields.io/sourceforge/dt/duff-linux?label=Total%20Downloads&style=for-the-badge)
