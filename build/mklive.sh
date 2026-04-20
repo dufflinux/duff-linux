@@ -234,6 +234,29 @@ array_contains() {
 }
 
 cleanup_rootfs() {
+    if [ "${PRUNE_EXTRA_KERNELS:-no}" = yes ]; then
+        local -a extra_kernel_pkgs=()
+        local state pkgver pkgname
+
+        while read -r state pkgver _; do
+            [ "$state" = "ii" ] || continue
+            pkgname=$($XBPS_UHELPER_CMD getpkgname "$pkgver")
+            case "$pkgname" in
+                "$LINUX_VERSION"|"$LINUX_VERSION"-headers|linux-base)
+                    ;;
+                linux|linux-headers|linux[0-9]*|linux[0-9]*-headers)
+                    extra_kernel_pkgs+=("$pkgname")
+                    ;;
+            esac
+        done < <(XBPS_ARCH=$BASE_ARCH $XBPS_QUERY_CMD -r "$ROOTFS" -l)
+
+        if [ "${#extra_kernel_pkgs[@]}" -gt 0 ]; then
+            info_msg "Pruning extra kernel packages from rootfs: ${extra_kernel_pkgs[*]}"
+            "$XBPS_REMOVE_CMD" -r "$ROOTFS" -Ry "${extra_kernel_pkgs[@]}" >/dev/null 2>&1 || \
+                die "Failed to prune extra kernel packages: ${extra_kernel_pkgs[*]}"
+        fi
+    fi
+
     for f in "${INITRAMFS_PKGS[@]}"; do
         if ! array_contains PACKAGE_LIST $f; then
             revdeps=$(xbps-query -r "$ROOTFS" -X $f)

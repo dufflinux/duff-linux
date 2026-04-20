@@ -30,9 +30,9 @@ cd void-packages
 ./xbps-src binary-bootstrap
 ```
 
-2. Copy the custom package templates from this repo into `void-packages/srcpkgs`, then build Calamares so your local repo has the installer package used by the ISO build.
+2. Copy the custom package templates from this repo into `void-packages/srcpkgs`, then build the local packages this project depends on. `calamares` provides the installer, and the local `dkms` override prevents NVIDIA ISO builds from pulling in the default Void kernel headers.
 ```
-./xbps-src pkg calamares
+./xbps-src pkg calamares dkms
 ```
 
 3. Build the ISO from this repo.
@@ -50,6 +50,7 @@ The proprietary `nvidia` package is a restricted package in Void and is built in
 ```
 cd /home/$USER/void-packages
 echo XBPS_ALLOW_RESTRICTED=yes >> etc/conf
+./xbps-src pkg dkms
 ./xbps-src pkg nvidia
 
 cd /home/$USER/duff-linux
