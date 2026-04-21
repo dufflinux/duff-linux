@@ -430,6 +430,8 @@ restart_state_dir="${XDG_RUNTIME_DIR:-/tmp}/duff-plasma-tray-fix"
 pending_restart_pid_file="$restart_state_dir/pending-restart.pid"
 last_restart_file="$restart_state_dir/last-restart"
 last_display_state_file="$restart_state_dir/last-display-state"
+startup_activity_file="$restart_state_dir/startup-activity"
+startup_settled_file="$restart_state_dir/startup-settled"
 
 ensure_restart_state_dir() {
     mkdir -p "$restart_state_dir"
@@ -469,6 +471,22 @@ set_last_display_state() {
     printf '%s\n' "$1" > "$last_display_state_file"
 }
 
+mark_startup_activity() {
+    : > "$startup_activity_file"
+}
+
+startup_activity_seen() {
+    [ -e "$startup_activity_file" ]
+}
+
+mark_startup_settled() {
+    : > "$startup_settled_file"
+}
+
+startup_settled() {
+    [ -e "$startup_settled_file" ]
+}
+
 clear_pending_restart() {
     rm -f "$pending_restart_pid_file"
 }
@@ -504,8 +522,12 @@ handle_display_change_event() {
     last_restart_at=$(get_last_restart_at)
     current_display_state=$(get_display_state || true)
     previous_display_state=$(get_last_display_state)
+    watcher_age=$((now - watcher_started_at))
 
     if [ -n "$current_display_state" ] && [ "$current_display_state" = "$previous_display_state" ]; then
+        if [ "$watcher_age" -lt "$startup_grace_seconds" ]; then
+            mark_startup_activity
+        fi
         log_message "display change event ignored because display state is unchanged"
         return 1
     fi
@@ -517,8 +539,18 @@ handle_display_change_event() {
     # Plasma/KScreen often emit setup noise during login while outputs are
     # still coming online. Learn the settled layout during a short warm-up
     # window, then only react to real post-login layout changes.
-    if [ $((now - watcher_started_at)) -lt "$startup_grace_seconds" ]; then
+    if [ "$watcher_age" -lt "$startup_grace_seconds" ]; then
+        mark_startup_activity
         log_message "display change event ignored during startup stabilization"
+        return 1
+    fi
+
+    # Some hardware emits one last real layout change shortly after the early
+    # startup burst. If we already saw startup activity, absorb the first new
+    # post-startup state as the settled baseline instead of restarting Plasma.
+    if startup_activity_seen && ! startup_settled; then
+        mark_startup_settled
+        log_message "display change event absorbed as post-startup settled display state"
         return 1
     fi
 
@@ -573,6 +605,7 @@ watch_display_changes() {
     else
         rm -f "$last_display_state_file"
     fi
+    rm -f "$startup_activity_file" "$startup_settled_file"
 
     if command -v kscreen-console >/dev/null 2>&1; then
         kscreen-console monitor 2>/dev/null |
