@@ -408,6 +408,7 @@ wait_for_plasma_tray() {
 log_file="${XDG_RUNTIME_DIR:-/tmp}/duff-plasma-tray-fix.log"
 log_max_bytes=262144
 log_keep_lines=200
+startup_grace_seconds=8
 
 trim_log_file() {
     [ -f "$log_file" ] || return 0
@@ -428,6 +429,7 @@ log_message() {
 restart_state_dir="${XDG_RUNTIME_DIR:-/tmp}/duff-plasma-tray-fix"
 pending_restart_pid_file="$restart_state_dir/pending-restart.pid"
 last_restart_file="$restart_state_dir/last-restart"
+last_display_state_file="$restart_state_dir/last-display-state"
 
 ensure_restart_state_dir() {
     mkdir -p "$restart_state_dir"
@@ -439,6 +441,32 @@ get_last_restart_at() {
     else
         printf '0\n'
     fi
+}
+
+get_display_state() {
+    if command -v kscreen-doctor >/dev/null 2>&1; then
+        kscreen-doctor -j 2>/dev/null | cksum | awk '{print $1 ":" $2}'
+        return 0
+    fi
+
+    if command -v kscreen-console >/dev/null 2>&1; then
+        kscreen-console outputs 2>/dev/null | cksum | awk '{print $1 ":" $2}'
+        return 0
+    fi
+
+    return 1
+}
+
+get_last_display_state() {
+    if [ -r "$last_display_state_file" ]; then
+        cat "$last_display_state_file"
+    else
+        printf '\n'
+    fi
+}
+
+set_last_display_state() {
+    printf '%s\n' "$1" > "$last_display_state_file"
 }
 
 clear_pending_restart() {
@@ -474,12 +502,23 @@ handle_display_change_event() {
     now=$(date +%s)
     watcher_started_at=$2
     last_restart_at=$(get_last_restart_at)
+    current_display_state=$(get_display_state || true)
+    previous_display_state=$(get_last_display_state)
+
+    if [ -n "$current_display_state" ] && [ "$current_display_state" = "$previous_display_state" ]; then
+        log_message "display change event ignored because display state is unchanged"
+        return 1
+    fi
+
+    if [ -n "$current_display_state" ]; then
+        set_last_display_state "$current_display_state"
+    fi
 
     # Plasma/KScreen often emit setup noise during login while outputs are
-    # still coming online. Ignore that warm-up window so we only react to
-    # actual post-login monitor changes.
-    if [ $((now - watcher_started_at)) -lt 10 ]; then
-        log_message "display change event ignored during startup grace period"
+    # still coming online. Learn the settled layout during a short warm-up
+    # window, then only react to real post-login layout changes.
+    if [ $((now - watcher_started_at)) -lt "$startup_grace_seconds" ]; then
+        log_message "display change event ignored during startup stabilization"
         return 1
     fi
 
@@ -527,6 +566,13 @@ watch_display_changes() {
     notifier_pid=$1
     watcher_started_at=$(date +%s)
     ensure_restart_state_dir
+
+    initial_display_state=$(get_display_state || true)
+    if [ -n "$initial_display_state" ]; then
+        set_last_display_state "$initial_display_state"
+    else
+        rm -f "$last_display_state_file"
+    fi
 
     if command -v kscreen-console >/dev/null 2>&1; then
         kscreen-console monitor 2>/dev/null |
