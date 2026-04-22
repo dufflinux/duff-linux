@@ -25,7 +25,7 @@ BUILD_HELPER_LOG=${BUILD_HELPER_LOG:-"$DUFF_DIR/build-iso-helper.log"}
 
 usage() {
     cat <<EOF
-Usage: $(basename "$0") --gpu amd|nvidia --kernel 6.19|7.0 [-- extra d77 args]
+Usage: $(basename "$0") --gpu amd|nvidia --kernel 6.19|7.0 [-- extra duff args]
 
 Environment variables:
   WORKSPACE_DIR       Parent directory containing the repos
@@ -69,7 +69,7 @@ done
 
 [ -n "$GPU_PROFILE" ] || die "Missing --gpu"
 [ -n "$KERNEL_VERSION" ] || die "Missing --kernel"
-[ -x "$DUFF_DIR/d77" ] || die "Missing executable d77 at $DUFF_DIR/d77"
+[ -x "$DUFF_DIR/duff" ] || die "Missing executable duff at $DUFF_DIR/duff"
 
 case "$GPU_PROFILE" in
     amd|nvidia) ;;
@@ -154,9 +154,9 @@ ensure_local_repositories() {
     return "$status"
 }
 
-run_d77_build() {
+run_duff_build() {
     cd "$DUFF_DIR"
-    sudo -n ./d77 "${D77_ARGS[@]}"
+    sudo -n ./duff "${D77_ARGS[@]}"
 }
 
 ensure_sudo_session() {
@@ -164,7 +164,7 @@ ensure_sudo_session() {
         return
     fi
 
-    printf 'Sudo authentication is required to run d77.\n'
+    printf 'Sudo authentication is required to run duff.\n'
     sudo -v
 }
 
@@ -199,7 +199,7 @@ fi
 
 ensure_sudo_session
 
-run_step 1 1 "Building Duff Linux ISO" "$BUILD_HELPER_LOG" run_d77_build
+run_step 1 1 "Building Duff Linux ISO" "$BUILD_HELPER_LOG" run_duff_build
 
 cat <<EOF
 
@@ -207,5 +207,5 @@ Build complete.
 
 void-packages:   $VOID_PACKAGES_DIR
 ISO helper log: $BUILD_HELPER_LOG
-d77 build log:  $DUFF_DIR/d77-build.log
+duff build log: $DUFF_DIR/duff-build.log
 EOF
