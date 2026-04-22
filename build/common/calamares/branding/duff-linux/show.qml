@@ -14,6 +14,20 @@ import calamares.slideshow 1.0;
 Presentation
 {
     id: presentation
+    property color slideTextColor: "#f3f5f7"
+
+    textColor: slideTextColor
+    titleColor: slideTextColor
+    fontFamily: "Noto Sans"
+
+    Rectangle {
+        anchors.fill: parent
+        z: -1
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: "#161b22" }
+            GradientStop { position: 1.0; color: "#0f141a" }
+        }
+    }
 
     function nextSlide() {
         console.log("QML Component (default slideshow) Next slide");
@@ -38,6 +52,8 @@ Presentation
             width: presentation.width * 0.8
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: 14
+            color: presentation.slideTextColor
+            textFormat: Text.RichText
         }
     }
 
@@ -51,6 +67,8 @@ Presentation
             width: presentation.width * 0.8
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: 14
+            color: presentation.slideTextColor
+            textFormat: Text.RichText
         }
     }
 
@@ -64,6 +82,8 @@ Presentation
             width: presentation.width * 0.8
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: 14
+            color: presentation.slideTextColor
+            textFormat: Text.RichText
         }
     }
 
@@ -77,6 +97,8 @@ Presentation
             width: presentation.width * 0.8
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: 14
+            color: presentation.slideTextColor
+            textFormat: Text.RichText
         }
     }
 

@@ -3,94 +3,213 @@
  * SPDX-License-Identifier: CC0-1.0
  */
 
-/*
-A branding component can ship a stylesheet (like this one)
-which is applied to parts of the Calamares user-interface.
-In principle, all parts can be styled through CSS.
-Missing parts should be filed as issues.
+QWidget,
+QDialog,
+QMainWindow,
+QFrame,
+QScrollArea,
+QStackedWidget,
+QWizard,
+QWizardPage {
+    background-color: #14191f;
+    color: #f3f5f7;
+}
 
-The IDs are based on the object names in the C++ code.
-You can use the Debug Dialog to find out object names:
-  - Open the debug dialog
-  - Choose tab *Tools*
-  - Click *Widget Tree* button
-The list of object names is printed in the log.
+#mainApp {
+    background-color: #14191f;
+}
 
-Documentation for styling Qt Widgets through a stylesheet
-can be found at
-    https://doc.qt.io/qt-5/stylesheet-examples.html
-    https://doc.qt.io/qt-5/stylesheet-reference.html
-In Calamares, styling widget classes is supported (e.g.
-using `QComboBox` as a selector).
+#sidebarApp {
+    background-color: #292f34;
+}
 
-This example stylesheet has all the actual styling commented out.
-The examples are not exhaustive.
+#logoApp {
+    background-color: transparent;
+}
 
-*/
+QLabel,
+QCheckBox,
+QRadioButton,
+QGroupBox,
+QAbstractItemView,
+QHeaderView::section {
+    color: #f3f5f7;
+}
 
-/*** Generic Widgets.
- *
- * You can style **all** widgets of a given class by selecting
- * the class name. Some widgets have specialized sub-selectors.
- */
+QGroupBox {
+    border: 1px solid #313942;
+    border-radius: 8px;
+    margin-top: 0.8em;
+    padding: 1em 0.8em 0.8em 0.8em;
+}
 
-/*
-QPushButton { background-color: green; }
-*/
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 12px;
+    padding: 0 4px;
+}
 
-/*** Main application window.
- *
- * The main application window has the sidebar, which in turn
- * contains a logo and a list of items -- note that the list
- * can **not** be styled, since it has its own custom C++
- * delegate code.
- */
+QLineEdit,
+QPlainTextEdit,
+QTextEdit,
+QComboBox,
+QSpinBox,
+QDoubleSpinBox,
+QAbstractSpinBox,
+QTimeEdit,
+QDateEdit,
+QDateTimeEdit,
+QListView,
+QTreeView,
+QTableView {
+    background-color: #1b222a;
+    color: #f3f5f7;
+    border: 1px solid #3c4652;
+    border-radius: 6px;
+    selection-background-color: #d35400;
+    selection-color: #ffffff;
+}
 
-/*
-#mainApp { }
-#sidebarApp { }
-#logoApp { }
-*/
+QLineEdit:focus,
+QPlainTextEdit:focus,
+QTextEdit:focus,
+QComboBox:focus,
+QSpinBox:focus,
+QDoubleSpinBox:focus,
+QAbstractSpinBox:focus,
+QTimeEdit:focus,
+QDateEdit:focus,
+QDateTimeEdit:focus,
+QListView:focus,
+QTreeView:focus,
+QTableView:focus {
+    border: 1px solid #d35400;
+}
 
-/*** Welcome module.
- *
- * There are plenty of parts, but the buttons are the most interesting
- * ones (donate, release notes, ...). The little icon image can be
- * styled through *qproperty-icon*, which is a little obscure.
- * URLs can reference the QRC paths of the Calamares application
- * or loaded via plugins or within the filesystem. There is no
- * comprehensive list of available icons, though.
- */
+QComboBox::drop-down {
+    border: 0;
+    width: 28px;
+}
 
-/*
-QPushButton#aboutButton { qproperty-icon: url(:/data/images/release.svg); }
-#donateButton,
-#supportButton,
-#releaseNotesButton,
-#knownIssuesButton { qproperty-icon: url(:/data/images/help.svg); }
-*/
+QComboBox::down-arrow {
+    image: none;
+}
 
-/*** Partitioning module.
- *
- * Many moving parts, which you will need to experiment with.
- */
+QPushButton,
+QToolButton {
+    background-color: #252d36;
+    color: #ffffff;
+    border: 1px solid #3c4652;
+    border-radius: 6px;
+    padding: 8px 14px;
+}
 
-/*
-#bootInfoIcon { }
-#bootInfoLable { }
-#deviceInfoIcon { }
-#defineInfoLabel { }
-#scrollAreaWidgetContents { }
-#partitionBarView { }
-*/
+QPushButton:hover,
+QToolButton:hover {
+    background-color: #2d3742;
+    border-color: #d35400;
+}
 
-/*** Licensing module.
- *
- * The licensing module paints individual widgets for each of
- * the licenses. The item can be collapsed or expanded.
- */
+QPushButton:pressed,
+QToolButton:pressed {
+    background-color: #202831;
+}
 
-/*
-#licenseItem {  }
-#licenseItemFullText {  }
-*/
+QPushButton:disabled,
+QToolButton:disabled,
+QLineEdit:disabled,
+QPlainTextEdit:disabled,
+QTextEdit:disabled,
+QComboBox:disabled,
+QSpinBox:disabled,
+QDoubleSpinBox:disabled,
+QAbstractSpinBox:disabled {
+    color: #8f99a3;
+    border-color: #2d343d;
+    background-color: #171c22;
+}
+
+QProgressBar {
+    background-color: #1b222a;
+    color: #f3f5f7;
+    border: 1px solid #313942;
+    border-radius: 6px;
+    text-align: center;
+}
+
+QProgressBar::chunk {
+    background-color: #d35400;
+    border-radius: 5px;
+}
+
+QHeaderView::section {
+    background-color: #1b222a;
+    border: 0;
+    border-right: 1px solid #313942;
+    border-bottom: 1px solid #313942;
+    padding: 6px;
+}
+
+QTableCornerButton::section {
+    background-color: #1b222a;
+    border: 0;
+}
+
+QScrollBar:vertical,
+QScrollBar:horizontal {
+    background: #14191f;
+    border: 0;
+    margin: 0;
+}
+
+QScrollBar:vertical {
+    width: 12px;
+}
+
+QScrollBar:horizontal {
+    height: 12px;
+}
+
+QScrollBar::handle:vertical,
+QScrollBar::handle:horizontal {
+    background: #3c4652;
+    border-radius: 6px;
+    min-height: 28px;
+    min-width: 28px;
+}
+
+QScrollBar::handle:vertical:hover,
+QScrollBar::handle:horizontal:hover {
+    background: #d35400;
+}
+
+QScrollBar::add-line,
+QScrollBar::sub-line,
+QScrollBar::add-page,
+QScrollBar::sub-page {
+    background: transparent;
+    border: 0;
+}
+
+QAbstractItemView {
+    alternate-background-color: #171c22;
+    gridline-color: #313942;
+}
+
+QAbstractItemView::item:selected {
+    background-color: #d35400;
+    color: #ffffff;
+}
+
+QTabBar::tab {
+    background-color: #1b222a;
+    color: #d7dde4;
+    border: 1px solid #313942;
+    padding: 8px 12px;
+}
+
+QTabBar::tab:selected {
+    background-color: #252d36;
+    color: #ffffff;
+    border-bottom-color: #252d36;
+}

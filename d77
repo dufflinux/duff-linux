@@ -133,8 +133,15 @@ SHIMDIR=
 trap "cleanup" INT TERM EXIT
 
 cleanup() {
-    [ -n "${INCLUDEDIR:-}" ] && rm -rf "$INCLUDEDIR"
-    [ -n "${SHIMDIR:-}" ] && rm -rf "$SHIMDIR"
+    if [ -n "${INCLUDEDIR:-}" ]; then
+        rm -rf "$INCLUDEDIR"
+    fi
+
+    if [ -n "${SHIMDIR:-}" ]; then
+        rm -rf "$SHIMDIR"
+    fi
+
+    return 0
 }
 
 create_build_workdirs() {
