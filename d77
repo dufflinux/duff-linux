@@ -11,6 +11,8 @@ GPU_PROFILE="amd"
 TRIPLET=
 REPO=
 REPO_PATHS=()
+KERNEL_PACKAGES=()
+CUSTOM_KERNEL_SELECTION=no
 DATE=$(date -u +%Y%m%d)
 BUILD_LOG="$(pwd)/d77-build.log"
 WORKDIR_OWNER_UID=$(stat -c '%u' .)
@@ -30,6 +32,9 @@ usage() {
 	 -b <variant>  Only "plasma" is supported here. (WIP)
                May be specified multiple times to build multiple variants.
 	 -g <gpu>      Set GPU profile: amd (default) or nvidia
+	 -k <kernel>   Set kernel package/version to build.
+	               Accepts values like 6.19, 7.0, linux6.19, linux7.0.
+	               May be specified multiple times to build multiple kernels.
 	 -d <date>     Override the datestamp on the generated image (YYYYMMDD format)
 	 -t <arch-date-variant>
 	               Equivalent to setting -a, -b, and -d
@@ -42,12 +47,78 @@ usage() {
 	EOH
 }
 
-while getopts "a:b:d:g:t:hr:V" opt; do
+default_kernel_pkg() {
+    case "$1" in
+        asahi*) printf '%s\n' "linux-asahi" ;;
+        *) printf '%s\n' "linux7.0" ;;
+    esac
+}
+
+normalize_kernel_pkg() {
+    case "$1" in
+        linux|linux-asahi|linux-lts|linux-mainline|linux[0-9]*)
+            printf '%s\n' "$1"
+            ;;
+        [0-9]*)
+            printf 'linux%s\n' "$1"
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+validate_kernel_pkg_for_arch() {
+    case "$ARCH:$1" in
+        asahi*:linux-asahi|x86_64*:linux[0-9]*|i686*:linux[0-9]*|aarch64*:linux[0-9]*)
+            ;;
+        asahi*:*)
+            echo "Kernel $1 is not supported on $ARCH; use linux-asahi" >&2
+            return 1
+            ;;
+        *:linux-asahi)
+            echo "Kernel $1 is only supported on asahi targets" >&2
+            return 1
+            ;;
+        *)
+            ;;
+    esac
+}
+
+kernel_headers_pkg() {
+    case "$1" in
+        linux|linux-lts|linux-mainline|linux[0-9]*)
+            printf '%s-headers\n' "$1"
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+kernel_suffix() {
+    case "$1" in
+        linux[0-9]*) printf '%s\n' "${1#linux}" ;;
+        linux-*) printf '%s\n' "${1#linux-}" ;;
+        linux) printf '%s\n' "default" ;;
+        *) printf '%s\n' "$1" ;;
+    esac
+}
+
+while getopts "a:b:d:g:k:t:hr:V" opt; do
 case $opt in
     a) ARCH="$OPTARG";;
     b) IMAGES="$OPTARG";;
     d) DATE="$OPTARG";;
     g) GPU_PROFILE="$OPTARG";;
+    k)
+        kernel_pkg=$(normalize_kernel_pkg "$OPTARG") || {
+            echo "Unsupported kernel value: $OPTARG" >&2
+            exit 1
+        }
+        KERNEL_PACKAGES+=("$kernel_pkg")
+        CUSTOM_KERNEL_SELECTION=yes
+        ;;
     r) REPO="-r $OPTARG $REPO"; REPO_PATHS+=("$OPTARG");;
     t) TRIPLET="$OPTARG";;
     V) version; exit 0;;
@@ -57,13 +128,18 @@ esac
 done
 shift $((OPTIND - 1))
 
-INCLUDEDIR=$(mktemp -d)
-SHIMDIR=$(mktemp -d)
-trap "cleanup" INT TERM
+INCLUDEDIR=
+SHIMDIR=
+trap "cleanup" INT TERM EXIT
 
 cleanup() {
-    rm -rf "$INCLUDEDIR"
-    rm -rf "$SHIMDIR"
+    [ -n "${INCLUDEDIR:-}" ] && rm -rf "$INCLUDEDIR"
+    [ -n "${SHIMDIR:-}" ] && rm -rf "$SHIMDIR"
+}
+
+create_build_workdirs() {
+    INCLUDEDIR=$(mktemp -d)
+    SHIMDIR=$(mktemp -d)
 }
 
 restore_ownership() {
@@ -904,8 +980,18 @@ write_gpu_profile() {
 
 build_variant() {
     variant="$1"
+    selected_kernel_pkg="$2"
     shift
+    shift
+
+    cleanup
+    create_build_workdirs
+    setup_build_shims
+
     IMG=duff-linux-live-${ARCH}-${DATE}-${variant}-${GPU_PROFILE}.iso
+    if [ "$CUSTOM_KERNEL_SELECTION" = yes ] || [ "${#KERNEL_PACKAGES[@]}" -gt 1 ]; then
+        IMG=duff-linux-live-${ARCH}-${DATE}-${variant}-${GPU_PROFILE}-$(kernel_suffix "$selected_kernel_pkg").iso
+    fi
 
     # el-cheapo installer is unsupported on arm because arm doesn't install a kernel by default
     # and to work around that would add too much complexity to it
@@ -930,7 +1016,6 @@ build_variant() {
                     exit 1
                     ;;
             esac
-			KERNEL_PKG="linux7.0"
             WANT_INSTALLER=yes
             TARGET_ARCH="$ARCH"
 	    D77_CORE="acpi alsa-plugins-pulseaudio alsa-utils bash-completion ca-certificates curl elogind fastfetch git inxi nano NetworkManager octoxbps polkit power-profiles-daemon sddm udiskie ufw unzip usbutils util-linux void-repo-multilib void-repo-multilib-nonfree void-repo-nonfree wget xdg-user-dirs xdg-user-dirs-gtk xdg-utils xinit zramen"
@@ -944,7 +1029,6 @@ build_variant() {
             GFX_PKGS="xorg-video-drivers"
             GFX_WL_PKGS="mesa-dri"
             GPU_DRIVER_PKGS=
-			KERNEL_PKG="linux7.0"
             TARGET_ARCH="$ARCH"
             if [ "$GPU_PROFILE" != "amd" ]; then
                 >&2 echo "GPU profile $GPU_PROFILE is not supported on $ARCH"
@@ -956,7 +1040,6 @@ build_variant() {
             GFX_PKGS="mesa-asahi-dri"
             GFX_WL_PKGS="mesa-asahi-dri"
             GPU_DRIVER_PKGS=
-            KERNEL_PKG="linux-asahi"
             TARGET_ARCH="aarch64${ARCH#asahi}"
             if [ "$GPU_PROFILE" != "amd" ]; then
                 >&2 echo "GPU profile $GPU_PROFILE is not supported on $ARCH"
@@ -965,8 +1048,15 @@ build_variant() {
             ;;
     esac
 
+    KERNEL_PKG="$selected_kernel_pkg"
+    validate_kernel_pkg_for_arch "$KERNEL_PKG" || exit 1
+    KERNEL_HEADERS_PKG=
+    if KERNEL_HEADERS_PKG=$(kernel_headers_pkg "$KERNEL_PKG"); then
+        :
+    fi
+
     A11Y_PKGS="espeakup void-live-audio"
-    PKGS="linux7.0-headers dialog cryptsetup lvm2 mdadm void-docs-browse xtools-minimal xmirror chrony tmux $A11Y_PKGS $GRUB_PKGS $GPU_DRIVER_PKGS"
+    PKGS="$KERNEL_HEADERS_PKG dialog cryptsetup lvm2 mdadm void-docs-browse xtools-minimal xmirror chrony tmux $A11Y_PKGS $GRUB_PKGS $GPU_DRIVER_PKGS"
     FONTS="font-misc-misc terminus-font dejavu-fonts-ttf"
     WAYLAND_PKGS="$GFX_WL_PKGS $FONTS"
     XORG_PKGS="$GFX_PKGS $FONTS xorg-minimal xorg-input-drivers setxkbmap xauth"
@@ -1027,15 +1117,24 @@ if [ ! -x build/mklive.sh ]; then
 fi
 
 init_logging
-setup_build_shims
 ensure_nvidia_repo
 ensure_nvidia_dkms_override
 
 if [ -n "$TRIPLET" ]; then
     IFS=: read -r ARCH DATE VARIANT _ < <( echo "$TRIPLET" | sed -Ee 's/^(.+)-([0-9rc]+)-(.+)$/\1:\2:\3/' )
-    build_variant "$VARIANT" "$@"
+    if [ "${#KERNEL_PACKAGES[@]}" -eq 0 ]; then
+        KERNEL_PACKAGES=("$(default_kernel_pkg "$ARCH")")
+    fi
+    for kernel_pkg in "${KERNEL_PACKAGES[@]}"; do
+        build_variant "$VARIANT" "$kernel_pkg" "$@"
+    done
 else
+    if [ "${#KERNEL_PACKAGES[@]}" -eq 0 ]; then
+        KERNEL_PACKAGES=("$(default_kernel_pkg "$ARCH")")
+    fi
     for image in $IMAGES; do
-        build_variant "$image" "$@"
+        for kernel_pkg in "${KERNEL_PACKAGES[@]}"; do
+            build_variant "$image" "$kernel_pkg" "$@"
+        done
     done
 fi
