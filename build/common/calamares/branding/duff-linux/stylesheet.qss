@@ -66,8 +66,8 @@ QTableView {
     color: #f3f5f7;
     border: 1px solid #3c4652;
     border-radius: 6px;
-    min-height: 26px;
-    padding: 3px 7px;
+    min-height: 24px;
+    padding: 2px 6px;
     selection-background-color: #d35400;
     selection-color: #ffffff;
 }

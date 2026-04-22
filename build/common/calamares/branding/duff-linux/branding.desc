@@ -12,13 +12,13 @@ sidebar: widget
 navigation: widget
 
 strings:
-    productName:         "${NAME}"
-    shortProductName:    duff-linux
+    productName:         "Duff Linux"
+    shortProductName:    "Duff Linux"
     version:             Rolling
     shortVersion:        Rolling
-    versionedName:       duff-linux
-    shortVersionedName:  duff-linux
-    bootloaderEntryName: duff-linux
+    versionedName:       "Duff Linux"
+    shortVersionedName:  "Duff Linux"
+    bootloaderEntryName: "Duff Linux"
 
     productUrl:          https://github.com/duffnshmrt/duff-linux
     supportUrl:          https://github.com/duffnshmrt/duff-linux
