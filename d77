@@ -914,6 +914,7 @@ ensure_nvidia_repo() {
     local repo=
     local main_repo=
     local nonfree_repo=
+    local repo_root=
 
     [ "$GPU_PROFILE" = "nvidia" ] || return 0
 
@@ -933,6 +934,7 @@ ensure_nvidia_repo() {
             */binpkgs|*/binpkgs/)
                 main_repo="${repo%/}"
                 nonfree_repo="${main_repo}/nonfree"
+                repo_root="${main_repo%/hostdir/binpkgs}"
                 if [ -d "$nonfree_repo" ]; then
                     REPO="-r $nonfree_repo $REPO"
                     REPO_PATHS+=("$nonfree_repo")
@@ -949,21 +951,26 @@ NVIDIA build selected, but no XBPS nonfree repository was found.
 The proprietary NVIDIA package is built into a separate nonfree repo in void-packages.
 Build it first, then rerun d77 with both repositories:
 
-  cd /home/\$USER/Documents/GitHub/void-packages
+  cd ${repo_root:-/path/to/void-packages}
   echo XBPS_ALLOW_RESTRICTED=yes >> etc/conf
   ./xbps-src pkg nvidia
-  sudo ./d77 -r /home/\$USER/Documents/GitHub/void-packages/hostdir/binpkgs/ -r /home/\$USER/Documents/GitHub/void-packages/hostdir/binpkgs/nonfree/ -g nvidia -b plasma --
+  sudo ./d77 -r ${main_repo:-/path/to/void-packages/hostdir/binpkgs} -r ${nonfree_repo:-/path/to/void-packages/hostdir/binpkgs/nonfree} -g nvidia -b plasma --
 
 EOF
     exit 1
 }
 
 ensure_nvidia_dkms_override() {
-    local template=/home/duff/Documents/GitHub/duff-linux/build/srcpkgs/dkms/template
+    local d77_dir=
+    local template=
     local version=
     local revision=
     local repo=
     local main_repo=
+    local repo_root=
+
+    d77_dir=$(cd -- "$(dirname -- "$0")" && pwd)
+    template="$d77_dir/build/srcpkgs/dkms/template"
 
     [ "$GPU_PROFILE" = "nvidia" ] || return 0
 
@@ -984,6 +991,7 @@ ensure_nvidia_dkms_override() {
         case "$repo" in
             */binpkgs|*/binpkgs/)
                 main_repo="${repo%/}"
+                repo_root="${main_repo%/hostdir/binpkgs}"
                 if find "$main_repo" -maxdepth 1 -type f -name "dkms-${version}_${revision}*.xbps" | grep -q .; then
                     return 0
                 fi
@@ -998,8 +1006,8 @@ and causes the unwanted 6.12 DKMS build path.
 
 Copy the updated dkms template into void-packages/srcpkgs, then rebuild it:
 
-  cd /home/\$USER/Documents/GitHub/void-packages
-  cp -r /home/\$USER/Documents/GitHub/duff-linux/build/srcpkgs/dkms srcpkgs/
+  cd ${repo_root:-/path/to/void-packages}
+  cp -r ${d77_dir}/build/srcpkgs/dkms srcpkgs/
   ./xbps-src pkg dkms
 
 Then rerun the NVIDIA ISO build.
