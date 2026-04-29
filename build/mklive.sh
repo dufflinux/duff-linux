@@ -402,12 +402,12 @@ EOF
     modprobe -q loop || :
 
     # Create EFI vfat image.
-    truncate -s 32M "$GRUB_DIR"/efiboot.img >/dev/null 2>&1
-    mkfs.vfat -F12 -S 512 -n "grub_uefi" "$GRUB_DIR/efiboot.img" >/dev/null 2>&1
+    truncate -s 32M "$GRUB_DIR"/efiboot.img >/dev/null 2>&1 || die "Failed to create EFI boot image"
+    mkfs.vfat -F12 -S 512 -n "grub_uefi" "$GRUB_DIR/efiboot.img" >/dev/null 2>&1 || die "Failed to format EFI boot image"
 
     GRUB_EFI_TMPDIR="$(mktemp --tmpdir="$BUILDDIR" -dt grub-efi.XXXXX)"
-    LOOP_DEVICE="$(losetup --show --find "${GRUB_DIR}"/efiboot.img)"
-    mount -o rw,flush -t vfat "${LOOP_DEVICE}" "${GRUB_EFI_TMPDIR}" >/dev/null 2>&1
+    LOOP_DEVICE="$(losetup --show --find "${GRUB_DIR}"/efiboot.img)" || die "Failed to allocate loop device for EFI boot image"
+    mount -o rw,flush -t vfat "${LOOP_DEVICE}" "${GRUB_EFI_TMPDIR}" >/dev/null 2>&1 || die "Failed to mount EFI boot image"
 
 	build_grub_image() {
 		local GRUB_ARCH="$1" EFI_ARCH="$2"
@@ -455,14 +455,17 @@ generate_squashfs() {
     truncate -s "$((ROOTFS_SIZE+ROOTFS_SIZE))M" \
 	    "$BUILDDIR"/tmp/LiveOS/ext3fs.img >/dev/null 2>&1
     mkdir -p "$BUILDDIR/tmp-rootfs"
-    mkfs.ext3 -F -m1 "$BUILDDIR/tmp/LiveOS/ext3fs.img" >/dev/null 2>&1
-    mount -o loop "$BUILDDIR/tmp/LiveOS/ext3fs.img" "$BUILDDIR/tmp-rootfs"
+    mkfs.ext3 -F -m1 "$BUILDDIR/tmp/LiveOS/ext3fs.img" >/dev/null 2>&1 || die "Failed to format live root filesystem image"
+    mount -o loop "$BUILDDIR/tmp/LiveOS/ext3fs.img" "$BUILDDIR/tmp-rootfs" || die "Failed to mount live root filesystem image"
     cp -a "$ROOTFS"/* "$BUILDDIR"/tmp-rootfs/
-    umount -f "$BUILDDIR/tmp-rootfs"
+    umount -f "$BUILDDIR/tmp-rootfs" || die "Failed to unmount live root filesystem image"
     mkdir -p "$IMAGEDIR/LiveOS"
 
     "$VOIDHOSTDIR"/usr/bin/mksquashfs "$BUILDDIR/tmp" "$IMAGEDIR/LiveOS/squashfs.img" \
         -comp "${SQUASHFS_COMPRESSION}" || die "Failed to generate squashfs image"
+    if [ "$(stat -c '%s' "$IMAGEDIR/LiveOS/squashfs.img")" -lt 104857600 ]; then
+        die "Generated squashfs image is unexpectedly small; refusing to create a broken ISO"
+    fi
     chmod 444 "$IMAGEDIR/LiveOS/squashfs.img"
 
     # Remove rootfs and temporary dirs, we don't need them anymore.

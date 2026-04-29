@@ -17,7 +17,7 @@ CONTAINER_ACTION=
 
 usage() {
     cat <<EOF
-Usage: $(basename "$0") [options] [shell|setup|build-amd-6.19|build-amd-7.0|build-nvidia-6.19|build-nvidia-7.0|-- command ...]
+Usage: $(basename "$0") [options] [shell|setup|build-amd-6.19|build-amd-7.0|build-nvidia-6.19|build-nvidia-7.0|clean|-- command ...]
 
 Runs Duff Linux build commands inside a Void Linux container while keeping the
 host distribution clean.
@@ -28,6 +28,8 @@ Common examples:
   $(basename "$0") shell
   $(basename "$0") setup
   $(basename "$0") build-amd-7.0
+  $(basename "$0") clean
+  $(basename "$0") --rootful clean
   $(basename "$0") -- ./scripts/build-iso.sh --gpu amd --kernel 7.0 -- -K
 
 Options:
@@ -110,6 +112,10 @@ container_command_for() {
             CONTAINER_ACTION=build
             CONTAINER_COMMAND=("./scripts/${command_name}.sh" "$@")
             ;;
+        clean)
+            CONTAINER_ACTION=clean
+            CONTAINER_COMMAND=()
+            ;;
         --)
             [ "$#" -gt 0 ] || {
                 printf 'Missing command after --\n' >&2
@@ -179,11 +185,21 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
-if [ "${#CONTAINER_COMMAND[@]}" -eq 0 ]; then
+if [ "${#CONTAINER_COMMAND[@]}" -eq 0 ] && [ -z "$CONTAINER_ACTION" ]; then
     container_command_for shell
 fi
 
 ENGINE=$(find_engine)
+if [ "$CONTAINER_ACTION" = clean ]; then
+    if [ "$ROOTFUL" = yes ]; then
+        ENGINE_CMD=(sudo "$ENGINE")
+    else
+        ENGINE_CMD=("$ENGINE")
+    fi
+    "${ENGINE_CMD[@]}" image rm -f "$IMAGE"
+    exit 0
+fi
+
 if [ "$ENGINE" = podman ] && [ "$CONTAINER_ACTION" = build ] && [ "$ROOTFUL" = no ]; then
     printf 'ISO assembly needs loop devices, mknod, mounts, and unmounts; switching Podman to rootful mode.\n'
     ROOTFUL=yes
@@ -227,6 +243,14 @@ RUN_ARGS=(
 
 if [ "$ENGINE" = podman ] && [ "$ROOTFUL" = no ]; then
     RUN_ARGS+=(--userns=keep-id --user root:root)
+fi
+
+if [ "$ENGINE" = podman ] && [ "$ROOTFUL" = yes ]; then
+    sudo modprobe loop 2>/dev/null || true
+    for device in /dev/loop-control /dev/loop[0-9]*; do
+        [ -e "$device" ] || continue
+        RUN_ARGS+=(--device "$device")
+    done
 fi
 
 if [ "${VOID_PACKAGES_DIR+x}" = x ]; then
